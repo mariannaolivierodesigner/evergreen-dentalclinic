@@ -57,7 +57,10 @@ function AuthPage() {
       password: String(fd.get("password") ?? ""),
     });
     setBusy(false);
-    if (error) return toast.error("Credenziali non valide.");
+    if (error) {
+      toast.error("Credenziali non valide.");
+      return;
+    }
     navigate({ to: target, replace: true });
   }
 
@@ -65,7 +68,10 @@ function AuthPage() {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const password = String(fd.get("password") ?? "");
-    if (password.length < 8) return toast.error("La password deve avere almeno 8 caratteri.");
+    if (password.length < 8) {
+      toast.error("La password deve avere almeno 8 caratteri.");
+      return;
+    }
     setBusy(true);
     const { error } = await supabase.auth.signUp({
       email: String(fd.get("email") ?? ""),
@@ -76,7 +82,10 @@ function AuthPage() {
       },
     });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Ti abbiamo inviato una email di conferma: apri il link per attivare l'account.");
   }
 
@@ -84,7 +93,10 @@ function AuthPage() {
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
     });
-    if (result.error) return toast.error("Accesso con Google non riuscito.");
+    if (result.error) {
+      toast.error("Accesso con Google non riuscito.");
+      return;
+    }
     if (result.redirected) return;
     navigate({ to: target, replace: true });
   }
