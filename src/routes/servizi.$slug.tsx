@@ -50,7 +50,9 @@ export const Route = createFileRoute("/servizi/$slug")({
   ),
 });
 
-const FAQ = [
+type Faq = { q: string; a: string };
+
+const DEFAULT_FAQ: Faq[] = [
   {
     q: "Il trattamento è doloroso?",
     a: "Lavoriamo sempre in anestesia locale quando serve e, su richiesta, con sedazione cosciente. Se durante la seduta senti fastidio ci fermiamo: concordiamo un segnale con la mano prima di iniziare.",
@@ -69,10 +71,20 @@ const FAQ = [
   },
 ];
 
+function parseFaq(value: unknown): Faq[] {
+  if (!Array.isArray(value)) return DEFAULT_FAQ;
+  const items = value.filter(
+    (v): v is Faq =>
+      typeof v === "object" && v !== null && "q" in v && "a" in v,
+  );
+  return items.length ? items : DEFAULT_FAQ;
+}
+
 function ServiceDetail() {
   const { slug } = Route.useParams();
   const { data: service } = useSuspenseQuery(serviceQuery(slug));
   if (!service) return null;
+  const faq = parseFaq(service.faq);
 
   return (
     <SiteLayout>
@@ -85,13 +97,16 @@ function ServiceDetail() {
         <div>
           <Reveal>
             <div className="text-base leading-relaxed whitespace-pre-line">
-              {service.description}
+              {service.long_description}
             </div>
           </Reveal>
 
           <Reveal delay={80}>
-            <h2 className="mt-12 text-2xl font-semibold">Come si svolge</h2>
-            <ol className="mt-5 space-y-4">
+            <h2 className="mt-12 text-2xl font-semibold">Cosa aspettarti</h2>
+            <p className="text-muted-foreground mt-4 leading-relaxed whitespace-pre-line">
+              {service.what_to_expect}
+            </p>
+            <ol className="mt-6 space-y-4">
               {[
                 "Visita di valutazione con foto e radiografia digitale.",
                 "Piano di cura scritto, con alternative e preventivo dettagliato.",
@@ -111,7 +126,7 @@ function ServiceDetail() {
           <Reveal delay={120}>
             <h2 className="mt-12 text-2xl font-semibold">Domande frequenti</h2>
             <Accordion type="single" collapsible className="mt-4">
-              {FAQ.map((f) => (
+              {faq.map((f) => (
                 <AccordionItem key={f.q} value={f.q}>
                   <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
                   <AccordionContent className="text-muted-foreground leading-relaxed">

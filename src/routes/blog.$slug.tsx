@@ -50,11 +50,11 @@ function PostPage() {
       <PageHeader
         eyebrow={post.category}
         title={post.title}
-        description={post.published_at ? `Pubblicato il ${formatDate(post.published_at)}` : undefined}
+        description={`Pubblicato il ${formatDate(post.published_at)} · ${post.read_minutes} min di lettura`}
       />
       <article className="mx-auto max-w-3xl px-5 py-16">
         <p className="text-muted-foreground text-lg leading-relaxed">{post.excerpt}</p>
-        <div className="mt-8 leading-relaxed whitespace-pre-line">{post.content}</div>
+        <div className="mt-8 leading-relaxed whitespace-pre-line">{post.body}</div>
         <div className="border-border mt-12 border-t pt-8">
           <Button variant="hero" asChild>
             <Link to="/prenota">Prenota una visita di controllo</Link>
