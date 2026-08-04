@@ -10,11 +10,14 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChiSiamoRouteImport } from './routes/chi-siamo'
 import { Route as ContattiRouteImport } from './routes/contatti'
 import { Route as PrenotaRouteImport } from './routes/prenota'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as AuthenticatedAreaPersonaleRouteImport } from './routes/_authenticated/area-personale'
+import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ServiziIndexRouteImport } from './routes/servizi.index'
@@ -23,6 +26,10 @@ import { Route as ServiziSlugRouteImport } from './routes/servizi.$slug'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -49,6 +56,17 @@ const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAreaPersonaleRoute =
+  AuthenticatedAreaPersonaleRouteImport.update({
+    id: '/area-personale',
+    path: '/area-personale',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedStaffRoute = AuthenticatedStaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
@@ -78,6 +96,8 @@ export interface FileRoutesByFullPath {
   '/contatti': typeof ContattiRoute
   '/prenota': typeof PrenotaRoute
   '/privacy': typeof PrivacyRoute
+  '/area-personale': typeof AuthenticatedAreaPersonaleRoute
+  '/staff': typeof AuthenticatedStaffRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/servizi/$slug': typeof ServiziSlugRoute
   '/blog/': typeof BlogIndexRoute
@@ -90,6 +110,8 @@ export interface FileRoutesByTo {
   '/contatti': typeof ContattiRoute
   '/prenota': typeof PrenotaRoute
   '/privacy': typeof PrivacyRoute
+  '/area-personale': typeof AuthenticatedAreaPersonaleRoute
+  '/staff': typeof AuthenticatedStaffRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/servizi/$slug': typeof ServiziSlugRoute
   '/blog': typeof BlogIndexRoute
@@ -98,11 +120,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/chi-siamo': typeof ChiSiamoRoute
   '/contatti': typeof ContattiRoute
   '/prenota': typeof PrenotaRoute
   '/privacy': typeof PrivacyRoute
+  '/_authenticated/area-personale': typeof AuthenticatedAreaPersonaleRoute
+  '/_authenticated/staff': typeof AuthenticatedStaffRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/servizi/$slug': typeof ServiziSlugRoute
   '/blog/': typeof BlogIndexRoute
@@ -117,6 +142,8 @@ export interface FileRouteTypes {
     | '/contatti'
     | '/prenota'
     | '/privacy'
+    | '/area-personale'
+    | '/staff'
     | '/blog/$slug'
     | '/servizi/$slug'
     | '/blog/'
@@ -129,6 +156,8 @@ export interface FileRouteTypes {
     | '/contatti'
     | '/prenota'
     | '/privacy'
+    | '/area-personale'
+    | '/staff'
     | '/blog/$slug'
     | '/servizi/$slug'
     | '/blog'
@@ -136,11 +165,14 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/auth'
     | '/chi-siamo'
     | '/contatti'
     | '/prenota'
     | '/privacy'
+    | '/_authenticated/area-personale'
+    | '/_authenticated/staff'
     | '/blog/$slug'
     | '/servizi/$slug'
     | '/blog/'
@@ -149,6 +181,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ChiSiamoRoute: typeof ChiSiamoRoute
   ContattiRoute: typeof ContattiRoute
@@ -167,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -204,6 +244,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/area-personale': {
+      id: '/_authenticated/area-personale'
+      path: '/area-personale'
+      fullPath: '/area-personale'
+      preLoaderRoute: typeof AuthenticatedAreaPersonaleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/staff': {
+      id: '/_authenticated/staff'
+      path: '/staff'
+      fullPath: '/staff'
+      preLoaderRoute: typeof AuthenticatedStaffRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -235,8 +289,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAreaPersonaleRoute: typeof AuthenticatedAreaPersonaleRoute
+  AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAreaPersonaleRoute: AuthenticatedAreaPersonaleRoute,
+  AuthenticatedStaffRoute: AuthenticatedStaffRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ChiSiamoRoute: ChiSiamoRoute,
   ContattiRoute: ContattiRoute,
