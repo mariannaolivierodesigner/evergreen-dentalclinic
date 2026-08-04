@@ -10,33 +10,187 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ChiSiamoRouteImport } from './routes/chi-siamo'
+import { Route as ContattiRouteImport } from './routes/contatti'
+import { Route as PrenotaRouteImport } from './routes/prenota'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as AuthenticatedAreaPersonaleRouteImport } from './routes/_authenticated/area-personale'
+import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ServiziIndexRouteImport } from './routes/servizi.index'
+import { Route as ServiziSlugRouteImport } from './routes/servizi.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChiSiamoRoute = ChiSiamoRouteImport.update({
+  id: '/chi-siamo',
+  path: '/chi-siamo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContattiRoute = ContattiRouteImport.update({
+  id: '/contatti',
+  path: '/contatti',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrenotaRoute = PrenotaRouteImport.update({
+  id: '/prenota',
+  path: '/prenota',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAreaPersonaleRoute =
+  AuthenticatedAreaPersonaleRouteImport.update({
+    id: '/area-personale',
+    path: '/area-personale',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedStaffRoute = AuthenticatedStaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServiziIndexRoute = ServiziIndexRouteImport.update({
+  id: '/servizi/',
+  path: '/servizi/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServiziSlugRoute = ServiziSlugRouteImport.update({
+  id: '/servizi/$slug',
+  path: '/servizi/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/chi-siamo': typeof ChiSiamoRoute
+  '/contatti': typeof ContattiRoute
+  '/prenota': typeof PrenotaRoute
+  '/privacy': typeof PrivacyRoute
+  '/area-personale': typeof AuthenticatedAreaPersonaleRoute
+  '/staff': typeof AuthenticatedStaffRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/servizi/$slug': typeof ServiziSlugRoute
+  '/blog/': typeof BlogIndexRoute
+  '/servizi/': typeof ServiziIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/chi-siamo': typeof ChiSiamoRoute
+  '/contatti': typeof ContattiRoute
+  '/prenota': typeof PrenotaRoute
+  '/privacy': typeof PrivacyRoute
+  '/area-personale': typeof AuthenticatedAreaPersonaleRoute
+  '/staff': typeof AuthenticatedStaffRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/servizi/$slug': typeof ServiziSlugRoute
+  '/blog': typeof BlogIndexRoute
+  '/servizi': typeof ServiziIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/chi-siamo': typeof ChiSiamoRoute
+  '/contatti': typeof ContattiRoute
+  '/prenota': typeof PrenotaRoute
+  '/privacy': typeof PrivacyRoute
+  '/_authenticated/area-personale': typeof AuthenticatedAreaPersonaleRoute
+  '/_authenticated/staff': typeof AuthenticatedStaffRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/servizi/$slug': typeof ServiziSlugRoute
+  '/blog/': typeof BlogIndexRoute
+  '/servizi/': typeof ServiziIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/chi-siamo'
+    | '/contatti'
+    | '/prenota'
+    | '/privacy'
+    | '/area-personale'
+    | '/staff'
+    | '/blog/$slug'
+    | '/servizi/$slug'
+    | '/blog/'
+    | '/servizi/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/chi-siamo'
+    | '/contatti'
+    | '/prenota'
+    | '/privacy'
+    | '/area-personale'
+    | '/staff'
+    | '/blog/$slug'
+    | '/servizi/$slug'
+    | '/blog'
+    | '/servizi'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/chi-siamo'
+    | '/contatti'
+    | '/prenota'
+    | '/privacy'
+    | '/_authenticated/area-personale'
+    | '/_authenticated/staff'
+    | '/blog/$slug'
+    | '/servizi/$slug'
+    | '/blog/'
+    | '/servizi/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ChiSiamoRoute: typeof ChiSiamoRoute
+  ContattiRoute: typeof ContattiRoute
+  PrenotaRoute: typeof PrenotaRoute
+  PrivacyRoute: typeof PrivacyRoute
+  BlogSlugRoute: typeof BlogSlugRoute
+  ServiziSlugRoute: typeof ServiziSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+  ServiziIndexRoute: typeof ServiziIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +202,119 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chi-siamo': {
+      id: '/chi-siamo'
+      path: '/chi-siamo'
+      fullPath: '/chi-siamo'
+      preLoaderRoute: typeof ChiSiamoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contatti': {
+      id: '/contatti'
+      path: '/contatti'
+      fullPath: '/contatti'
+      preLoaderRoute: typeof ContattiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prenota': {
+      id: '/prenota'
+      path: '/prenota'
+      fullPath: '/prenota'
+      preLoaderRoute: typeof PrenotaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/area-personale': {
+      id: '/_authenticated/area-personale'
+      path: '/area-personale'
+      fullPath: '/area-personale'
+      preLoaderRoute: typeof AuthenticatedAreaPersonaleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/staff': {
+      id: '/_authenticated/staff'
+      path: '/staff'
+      fullPath: '/staff'
+      preLoaderRoute: typeof AuthenticatedStaffRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/servizi/': {
+      id: '/servizi/'
+      path: '/servizi'
+      fullPath: '/servizi/'
+      preLoaderRoute: typeof ServiziIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/servizi/$slug': {
+      id: '/servizi/$slug'
+      path: '/servizi/$slug'
+      fullPath: '/servizi/$slug'
+      preLoaderRoute: typeof ServiziSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAreaPersonaleRoute: typeof AuthenticatedAreaPersonaleRoute
+  AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAreaPersonaleRoute: AuthenticatedAreaPersonaleRoute,
+  AuthenticatedStaffRoute: AuthenticatedStaffRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ChiSiamoRoute: ChiSiamoRoute,
+  ContattiRoute: ContattiRoute,
+  PrenotaRoute: PrenotaRoute,
+  PrivacyRoute: PrivacyRoute,
+  BlogSlugRoute: BlogSlugRoute,
+  ServiziSlugRoute: ServiziSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
+  ServiziIndexRoute: ServiziIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
