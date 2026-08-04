@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChiSiamoRouteImport } from './routes/chi-siamo'
 import { Route as ContattiRouteImport } from './routes/contatti'
+import { Route as PrenotaRouteImport } from './routes/prenota'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -37,6 +38,11 @@ const ChiSiamoRoute = ChiSiamoRouteImport.update({
 const ContattiRoute = ContattiRouteImport.update({
   id: '/contatti',
   path: '/contatti',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrenotaRoute = PrenotaRouteImport.update({
+  id: '/prenota',
+  path: '/prenota',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/chi-siamo': typeof ChiSiamoRoute
   '/contatti': typeof ContattiRoute
+  '/prenota': typeof PrenotaRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/servizi/$slug': typeof ServiziSlugRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/chi-siamo': typeof ChiSiamoRoute
   '/contatti': typeof ContattiRoute
+  '/prenota': typeof PrenotaRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/servizi/$slug': typeof ServiziSlugRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/chi-siamo': typeof ChiSiamoRoute
   '/contatti': typeof ContattiRoute
+  '/prenota': typeof PrenotaRoute
   '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/servizi/$slug': typeof ServiziSlugRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/chi-siamo'
     | '/contatti'
+    | '/prenota'
     | '/privacy'
     | '/blog/$slug'
     | '/servizi/$slug'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/chi-siamo'
     | '/contatti'
+    | '/prenota'
     | '/privacy'
     | '/blog/$slug'
     | '/servizi/$slug'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/chi-siamo'
     | '/contatti'
+    | '/prenota'
     | '/privacy'
     | '/blog/$slug'
     | '/servizi/$slug'
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ChiSiamoRoute: typeof ChiSiamoRoute
   ContattiRoute: typeof ContattiRoute
+  PrenotaRoute: typeof PrenotaRoute
   PrivacyRoute: typeof PrivacyRoute
   BlogSlugRoute: typeof BlogSlugRoute
   ServiziSlugRoute: typeof ServiziSlugRoute
@@ -175,6 +188,13 @@ declare module '@tanstack/react-router' {
       path: '/contatti'
       fullPath: '/contatti'
       preLoaderRoute: typeof ContattiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prenota': {
+      id: '/prenota'
+      path: '/prenota'
+      fullPath: '/prenota'
+      preLoaderRoute: typeof PrenotaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -220,6 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ChiSiamoRoute: ChiSiamoRoute,
   ContattiRoute: ContattiRoute,
+  PrenotaRoute: PrenotaRoute,
   PrivacyRoute: PrivacyRoute,
   BlogSlugRoute: BlogSlugRoute,
   ServiziSlugRoute: ServiziSlugRoute,
