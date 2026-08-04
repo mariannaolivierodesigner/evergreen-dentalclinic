@@ -39,10 +39,10 @@ export type Busy = { starts_at: string; ends_at: string };
 export function computeSlots(day: string, durationMin: number, busy: Busy[]): string[] {
     const dow = new Date(`${day}T12:00:00`).getDay();
   const ranges = OPENING[dow] ?? [];
-  const busyRanges = busy.map((b) => [
-    new Date(b.starts_at).getTime(),
-    new Date(b.ends_at).getTime(),
-  ]);
+  const busyRanges: { start: number; end: number }[] = busy.map((b) => ({
+    start: new Date(b.starts_at).getTime(),
+    end: new Date(b.ends_at).getTime(),
+  }));
   const now = Date.now();
   const out: string[] = [];
 
@@ -52,7 +52,7 @@ export function computeSlots(day: string, durationMin: number, busy: Busy[]): st
     for (let t = start; t + durationMin * 60000 <= end; t += SLOT_STEP_MIN * 60000) {
       const slotEnd = t + durationMin * 60000;
       if (t < now + 60 * 60000) continue;
-      const overlaps = busyRanges.some(([bs, be]) => t < be && slotEnd > bs);
+      const overlaps = busyRanges.some((b) => t < b.end && slotEnd > b.start);
       if (!overlaps) out.push(new Date(t).toISOString());
     }
   }
