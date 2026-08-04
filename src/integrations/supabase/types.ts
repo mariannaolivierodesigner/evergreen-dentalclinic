@@ -414,34 +414,17 @@ export type Database = {
       }
     }
     Views: {
-      busy_slots: {
-        Row: {
-          doctor_id: string | null
-          ends_at: string | null
-          starts_at: string | null
-        }
-        Insert: {
-          doctor_id?: string | null
-          ends_at?: string | null
-          starts_at?: string | null
-        }
-        Update: {
-          doctor_id?: string | null
-          ends_at?: string | null
-          starts_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "appointments_doctor_id_fkey"
-            columns: ["doctor_id"]
-            isOneToOne: false
-            referencedRelation: "doctors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
+      [_ in never]: never
     }
     Functions: {
+      get_busy_slots: {
+        Args: { _doctor_id: string; _from: string; _to: string }
+        Returns: {
+          doctor_id: string
+          ends_at: string
+          starts_at: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
