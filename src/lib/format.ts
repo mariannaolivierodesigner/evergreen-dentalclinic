@@ -15,11 +15,10 @@ export const STUDIO = {
 };
 
 export function formatPrice(cents: number) {
-  return new Intl.NumberFormat("it-IT", {
-    style: "currency",
-    currency: "EUR",
-    maximumFractionDigits: 0,
-  }).format(cents / 100);
+  // Formattazione deterministica: evita differenze ICU tra server e browser.
+  const euros = Math.round(cents / 100);
+  const grouped = String(Math.abs(euros)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return `${euros < 0 ? "-" : ""}${grouped}\u00a0€`;
 }
 
 export function formatDuration(minutes: number) {
