@@ -18,6 +18,7 @@ import { Route as PrenotaRouteImport } from './routes/prenota'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as AuthenticatedAreaPersonaleRouteImport } from './routes/_authenticated/area-personale'
 import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
+import { Route as AuthenticatedStaffRuoliRouteImport } from './routes/_authenticated/staff-ruoli'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ServiziIndexRouteImport } from './routes/servizi.index'
@@ -68,6 +69,11 @@ const AuthenticatedStaffRoute = AuthenticatedStaffRouteImport.update({
   path: '/staff',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedStaffRuoliRoute = AuthenticatedStaffRuoliRouteImport.update({
+  id: '/staff-ruoli',
+  path: '/staff-ruoli',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/area-personale': typeof AuthenticatedAreaPersonaleRoute
   '/staff': typeof AuthenticatedStaffRoute
+  '/staff-ruoli': typeof AuthenticatedStaffRuoliRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/servizi/$slug': typeof ServiziSlugRoute
   '/blog/': typeof BlogIndexRoute
@@ -112,6 +119,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/area-personale': typeof AuthenticatedAreaPersonaleRoute
   '/staff': typeof AuthenticatedStaffRoute
+  '/staff-ruoli': typeof AuthenticatedStaffRuoliRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/servizi/$slug': typeof ServiziSlugRoute
   '/blog': typeof BlogIndexRoute
@@ -128,6 +136,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/_authenticated/area-personale': typeof AuthenticatedAreaPersonaleRoute
   '/_authenticated/staff': typeof AuthenticatedStaffRoute
+  '/_authenticated/staff-ruoli': typeof AuthenticatedStaffRuoliRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/servizi/$slug': typeof ServiziSlugRoute
   '/blog/': typeof BlogIndexRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/area-personale'
     | '/staff'
+    | '/staff-ruoli'
     | '/blog/$slug'
     | '/servizi/$slug'
     | '/blog/'
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/area-personale'
     | '/staff'
+    | '/staff-ruoli'
     | '/blog/$slug'
     | '/servizi/$slug'
     | '/blog'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/_authenticated/area-personale'
     | '/_authenticated/staff'
+    | '/_authenticated/staff-ruoli'
     | '/blog/$slug'
     | '/servizi/$slug'
     | '/blog/'
@@ -258,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedStaffRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/staff-ruoli': {
+      id: '/_authenticated/staff-ruoli'
+      path: '/staff-ruoli'
+      fullPath: '/staff-ruoli'
+      preLoaderRoute: typeof AuthenticatedStaffRuoliRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -292,11 +311,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAreaPersonaleRoute: typeof AuthenticatedAreaPersonaleRoute
   AuthenticatedStaffRoute: typeof AuthenticatedStaffRoute
+  AuthenticatedStaffRuoliRoute: typeof AuthenticatedStaffRuoliRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAreaPersonaleRoute: AuthenticatedAreaPersonaleRoute,
   AuthenticatedStaffRoute: AuthenticatedStaffRoute,
+  AuthenticatedStaffRuoliRoute: AuthenticatedStaffRuoliRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -318,13 +339,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

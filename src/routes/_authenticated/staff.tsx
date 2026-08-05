@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader, SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ const STATUSES = ["pending", "confirmed", "completed", "cancelled", "no_show"] a
 
 function StaffPage() {
   const { user } = useSession();
-  const { isStaff, isPending } = useRoles(user?.id);
+  const { isStaff, isAdmin, isPending } = useRoles(user?.id);
   const queryClient = useQueryClient();
   const [day, setDay] = useState(isoDay(new Date()));
 
@@ -103,6 +103,15 @@ function StaffPage() {
       />
 
       <div className="mx-auto max-w-6xl px-5 py-12">
+        {isAdmin ? (
+          <div className="mb-6">
+            <Button asChild variant="outline">
+              <Link to="/staff-ruoli">
+                <ShieldCheck /> Gestisci ruoli e permessi
+              </Link>
+            </Button>
+          </div>
+        ) : null}
         <Tabs defaultValue="agenda">
           <TabsList>
             <TabsTrigger value="agenda">Agenda</TabsTrigger>
