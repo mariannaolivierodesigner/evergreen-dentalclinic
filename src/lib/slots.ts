@@ -1,65 +1,69 @@
-/** Fasce di apertura per giorno della settimana (0 = domenica). */
-const OPENING: Record<number, [string, string][]> = {
-  0: [],
-  1: [
-    ["09:00", "13:00"],
-    ["14:00", "19:00"],
-  ],
-  2: [
-    ["09:00", "13:00"],
-    ["14:00", "19:00"],
-  ],
-  3: [
-    ["09:00", "13:00"],
-    ["14:00", "19:00"],
-  ],
-  4: [
-    ["09:00", "13:00"],
-    ["14:00", "19:00"],
-  ],
-  5: [
-    ["09:00", "13:00"],
-    ["14:00", "17:00"],
-  ],
-  6: [["09:00", "13:00"]],
-};
-
-export const SLOT_STEP_MIN = 30;
-
-function at(day: string, hhmm: string) {
-  return new Date(`${day}T${hhmm}:00`);
-}
+/** Fascia oraria di lavoro di un medico in un giorno (orario locale studio). */
+export type Range = { start_time: string; end_time: string };
 
 export type Busy = { starts_at: string; ends_at: string };
 
+export const SLOT_STEP_MIN = 30;
+
+const TZ = "Europe/Rome";
+
+/** Millisecondi UTC corrispondenti a `day` + `hh:mm` nel fuso dello studio. */
+function atLocal(day: string, hhmm: string): number {
+  const [h, m] = hhmm.split(":").map(Number);
+  const naive = Date.UTC(
+    Number(day.slice(0, 4)),
+    Number(day.slice(5, 7)) - 1,
+    Number(day.slice(8, 10)),
+    h ?? 0,
+    m ?? 0,
+  );
+  // Offset del fuso studio in quel momento (gestisce ora legale).
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: TZ,
+    hour12: false,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).formatToParts(new Date(naive));
+  const get = (t: string) => Number(parts.find((p) => p.type === t)?.value ?? 0);
+  const asUtc = Date.UTC(get("year"), get("month") - 1, get("day"), get("hour"), get("minute"));
+  return naive - (asUtc - naive);
+}
+
+/** Giorno della settimana (0 = domenica) di una data ISO `YYYY-MM-DD`. */
+export function weekdayOf(day: string): number {
+  return new Date(`${day}T12:00:00Z`).getUTCDay();
+}
+
 /**
  * Genera gli slot liberi di una giornata per un trattamento di `durationMin`,
- * escludendo gli intervalli occupati e gli orari già passati.
+ * partendo dalle fasce di disponibilità del medico ed escludendo gli intervalli
+ * occupati (appuntamenti + indisponibilità) e gli orari già passati.
  */
-export function computeSlots(day: string, durationMin: number, busy: Busy[]): string[] {
-    const dow = new Date(`${day}T12:00:00`).getDay();
-  const ranges = OPENING[dow] ?? [];
-  const busyRanges: { start: number; end: number }[] = busy.map((b) => ({
+export function computeSlots(
+  day: string,
+  durationMin: number,
+  ranges: Range[],
+  busy: Busy[],
+): string[] {
+  const busyRanges = busy.map((b) => ({
     start: new Date(b.starts_at).getTime(),
     end: new Date(b.ends_at).getTime(),
   }));
   const now = Date.now();
   const out: string[] = [];
 
-  for (const [from, to] of ranges) {
-    const start = at(day, from).getTime();
-    const end = at(day, to).getTime();
+  for (const r of ranges) {
+    const start = atLocal(day, r.start_time.slice(0, 5));
+    const end = atLocal(day, r.end_time.slice(0, 5));
     for (let t = start; t + durationMin * 60000 <= end; t += SLOT_STEP_MIN * 60000) {
       const slotEnd = t + durationMin * 60000;
       if (t < now + 60 * 60000) continue;
-      const overlaps = busyRanges.some((b) => t < b.end && slotEnd > b.start);
-      if (!overlaps) out.push(new Date(t).toISOString());
+      if (busyRanges.some((b) => t < b.end && slotEnd > b.start)) continue;
+      out.push(new Date(t).toISOString());
     }
   }
-  return out;
-}
-
-export function isClosed(day: string) {
-  const dow = new Date(`${day}T12:00:00`).getDay();
-  return (OPENING[dow] ?? []).length === 0;
+  return out.sort();
 }
