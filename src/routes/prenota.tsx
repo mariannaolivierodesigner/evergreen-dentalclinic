@@ -243,6 +243,17 @@ function Prenota() {
                     <Skeleton key={i} className="h-10 w-20 rounded-full" />
                   ))}
                 </div>
+              ) : availability.isError ? (
+                <p className="text-destructive text-sm">
+                  Non riusciamo a caricare gli orari liberi.{" "}
+                  <button
+                    type="button"
+                    className="underline underline-offset-4"
+                    onClick={() => availability.refetch()}
+                  >
+                    Riprova
+                  </button>
+                </p>
               ) : availability.data?.closed ? (
                 <p className="text-muted-foreground text-sm">
                   Il medico selezionato non riceve in questa data: scegli un altro giorno.
