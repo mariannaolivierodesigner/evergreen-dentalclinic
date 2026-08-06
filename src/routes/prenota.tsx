@@ -15,7 +15,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { doctorsQuery, servicesQuery } from "@/lib/public-queries";
 import { getAvailability, bookAppointment } from "@/lib/booking.functions";
 import { formatDateShort, formatDuration, formatPrice, formatTime, isoDay } from "@/lib/format";
-import { isClosed } from "@/lib/slots";
 import { useSession } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 
