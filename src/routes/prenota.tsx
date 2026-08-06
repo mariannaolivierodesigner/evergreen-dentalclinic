@@ -15,7 +15,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { doctorsQuery, servicesQuery } from "@/lib/public-queries";
 import { getAvailability, bookAppointment } from "@/lib/booking.functions";
 import { formatDateShort, formatDuration, formatPrice, formatTime, isoDay } from "@/lib/format";
-import { isClosed } from "@/lib/slots";
 import { useSession } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 
@@ -75,7 +74,7 @@ function Prenota() {
 
   const availability = useQuery({
     queryKey: ["availability", doctorId, day, service?.duration_min],
-    enabled: !!doctorId && !!service && !isClosed(day),
+    enabled: !!doctorId && !!service,
     queryFn: () =>
       getAvailability({
         data: { doctorId: doctorId!, day, durationMin: service!.duration_min },
@@ -198,12 +197,10 @@ function Prenota() {
               <ul className="flex flex-1 gap-2 overflow-x-auto pb-1">
                 {days.map((d) => {
                   const key = isoDay(d);
-                  const closed = isClosed(key);
                   return (
                     <li key={key}>
                       <button
                         type="button"
-                        disabled={closed}
                         onClick={() => {
                           setDay(key);
                           setSlot(null);
@@ -214,7 +211,6 @@ function Prenota() {
                           day === key
                             ? "border-primary bg-primary text-primary-foreground"
                             : "border-border hover:bg-secondary",
-                          closed && "opacity-40",
                         )}
                       >
                         <span className="block text-xs capitalize">
@@ -241,17 +237,19 @@ function Prenota() {
                 <p className="text-muted-foreground text-sm">
                   Seleziona prima trattamento e medico per vedere gli orari liberi.
                 </p>
-              ) : isClosed(day) ? (
-                <p className="text-muted-foreground text-sm">Lo studio è chiuso in questa data.</p>
               ) : availability.isPending ? (
                 <div className="flex flex-wrap gap-2">
                   {Array.from({ length: 8 }).map((_, i) => (
                     <Skeleton key={i} className="h-10 w-20 rounded-full" />
                   ))}
                 </div>
-              ) : availability.data && availability.data.length > 0 ? (
+              ) : availability.data?.closed ? (
+                <p className="text-muted-foreground text-sm">
+                  Il medico selezionato non riceve in questa data: scegli un altro giorno.
+                </p>
+              ) : availability.data && availability.data.slots.length > 0 ? (
                 <ul className="flex flex-wrap gap-2">
-                  {availability.data.map((iso) => (
+                  {availability.data.slots.map((iso) => (
                     <li key={iso}>
                       <button
                         type="button"
