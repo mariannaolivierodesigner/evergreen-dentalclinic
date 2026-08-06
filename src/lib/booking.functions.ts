@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { computeSlots } from "./slots";
+import { computeSlots, weekdayOf } from "./slots";
 
 export const getAvailability = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) =>
@@ -15,13 +15,29 @@ export const getAvailability = createServerFn({ method: "GET" })
   )
   .handler(async ({ data }) => {
     const { publicClient } = await import("./supabase-public.server");
-    const { data: busy, error } = await publicClient().rpc("get_busy_slots", {
-      _doctor_id: data.doctorId,
-      _from: `${data.day}T00:00:00Z`,
-      _to: `${data.day}T23:59:59Z`,
-    });
+    const client = publicClient();
+
+    const [{ data: ranges, error: rErr }, { data: busy, error }] = await Promise.all([
+      client
+        .from("doctor_availability")
+        .select("start_time, end_time")
+        .eq("doctor_id", data.doctorId)
+        .eq("weekday", weekdayOf(data.day))
+        .order("start_time"),
+      client.rpc("get_busy_slots", {
+        _doctor_id: data.doctorId,
+        // margine di un giorno per intercettare gli impegni a cavallo della mezzanotte
+        _from: `${data.day}T00:00:00Z`,
+        _to: `${data.day}T23:59:59Z`,
+      }),
+    ]);
+    if (rErr) throw new Error(rErr.message);
     if (error) throw new Error(error.message);
-    return computeSlots(data.day, data.durationMin, busy ?? []);
+
+    return {
+      closed: (ranges ?? []).length === 0,
+      slots: computeSlots(data.day, data.durationMin, ranges ?? [], busy ?? []),
+    };
   });
 
 export const bookAppointment = createServerFn({ method: "POST" })
