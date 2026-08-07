@@ -369,6 +369,101 @@ function Prenota() {
           </div>
         </aside>
       </div>
+
+      <Dialog open={confirmOpen} onOpenChange={(o) => !mutation.isPending && setConfirmOpen(o)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Conferma il tuo appuntamento</DialogTitle>
+            <DialogDescription>
+              Controlla i dettagli: dopo la conferma riceverai l'appuntamento nella tua area
+              personale.
+            </DialogDescription>
+          </DialogHeader>
+
+          <dl className="divide-border divide-y text-sm">
+            <div className="flex items-start justify-between gap-4 py-2.5">
+              <dt className="text-muted-foreground">Trattamento</dt>
+              <dd className="text-right font-medium">
+                {service?.name ?? "—"}
+                {service && (
+                  <span className="text-muted-foreground block text-xs font-normal">
+                    {formatDuration(service.duration_min)}
+                  </span>
+                )}
+              </dd>
+            </div>
+            <div className="flex items-start justify-between gap-4 py-2.5">
+              <dt className="text-muted-foreground">Medico</dt>
+              <dd className="text-right font-medium">
+                {doctors.find((d) => d.id === doctorId)?.full_name ?? "—"}
+                <span className="text-muted-foreground block text-xs font-normal">
+                  {doctors.find((d) => d.id === doctorId)?.specialization}
+                </span>
+              </dd>
+            </div>
+            <div className="flex items-start justify-between gap-4 py-2.5">
+              <dt className="text-muted-foreground">Data e orario</dt>
+              <dd className="text-right font-medium">
+                {slot
+                  ? `${new Date(slot).toLocaleDateString("it-IT", {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "long",
+                    })} · ${formatTime(slot)}`
+                  : "—"}
+              </dd>
+            </div>
+            {service && (
+              <div className="flex items-start justify-between gap-4 py-2.5">
+                <dt className="text-muted-foreground">Prezzo indicativo</dt>
+                <dd className="text-right font-medium">da {formatPrice(service.price_cents)}</dd>
+              </div>
+            )}
+            {note.trim() && (
+              <div className="py-2.5">
+                <dt className="text-muted-foreground">Nota per il medico</dt>
+                <dd className="mt-1 whitespace-pre-line">{note.trim()}</dd>
+              </div>
+            )}
+          </dl>
+
+          <p className="text-muted-foreground text-xs">
+            Puoi spostare o annullare gratuitamente fino a 24 ore prima.
+          </p>
+
+          <DialogFooter className="gap-2 sm:gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setConfirmOpen(false)}
+              disabled={mutation.isPending}
+            >
+              Modifica
+            </Button>
+            <Button
+              variant="hero"
+              disabled={!canBook || mutation.isPending}
+              onClick={() =>
+                mutation.mutate({
+                  data: {
+                    doctorId: doctorId!,
+                    serviceId: serviceId!,
+                    startsAt: slot!,
+                    note,
+                  },
+                })
+              }
+            >
+              {mutation.isPending ? (
+                "Prenotazione…"
+              ) : (
+                <>
+                  <Check aria-hidden="true" /> Conferma e prenota
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </SiteLayout>
   );
 }
