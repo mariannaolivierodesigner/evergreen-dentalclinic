@@ -344,24 +344,9 @@ function Prenota() {
                 size="lg"
                 className="mt-6 w-full"
                 disabled={!canBook || mutation.isPending}
-                onClick={() =>
-                  mutation.mutate({
-                    data: {
-                      doctorId: doctorId!,
-                      serviceId: serviceId!,
-                      startsAt: slot!,
-                      note,
-                    },
-                  })
-                }
+                onClick={() => setConfirmOpen(true)}
               >
-                {mutation.isPending ? (
-                  "Prenotazione…"
-                ) : (
-                  <>
-                    <CalendarPlus aria-hidden="true" /> Conferma prenotazione
-                  </>
-                )}
+                <CalendarPlus aria-hidden="true" /> Vai al riepilogo
               </Button>
             ) : (
               <div className="mt-6">
