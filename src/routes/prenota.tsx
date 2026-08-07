@@ -12,6 +12,14 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { doctorsQuery, servicesQuery } from "@/lib/public-queries";
 import { getAvailability, bookAppointment } from "@/lib/booking.functions";
 import { formatDateShort, formatDuration, formatPrice, formatTime, isoDay } from "@/lib/format";
@@ -68,6 +76,7 @@ function Prenota() {
   const [day, setDay] = useState<string>(isoDay(new Date()));
   const [slot, setSlot] = useState<string | null>(null);
   const [note, setNote] = useState("");
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const service = services.find((s) => s.id === serviceId) ?? null;
   const days = useMemo(() => nextDays(7, offset), [offset]);
@@ -85,6 +94,7 @@ function Prenota() {
   const mutation = useMutation({
     mutationFn: book,
     onSuccess: () => {
+      setConfirmOpen(false);
       toast.success("Appuntamento richiesto! Lo trovi nella tua area personale.");
       navigate({ to: "/area-personale" });
     },
