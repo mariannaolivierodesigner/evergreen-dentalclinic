@@ -286,6 +286,15 @@ function AreaPersonale() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {rescheduling && (
+        <RescheduleDialog
+          key={rescheduling.id}
+          open
+          onOpenChange={(o) => !o && setRescheduleId(null)}
+          appointment={rescheduling}
+        />
+      )}
     </SiteLayout>
   );
 }
