@@ -1,13 +1,26 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { CalendarPlus, Download, FileText } from "lucide-react";
+import { CalendarPlus, CalendarClock, Download, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader, SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { RescheduleDialog } from "@/components/site/RescheduleDialog";
 import {
   cancelAppointment,
   listMyAppointments,
@@ -46,6 +59,7 @@ function AreaPersonale() {
   const { user } = useSession();
   const { data: profile } = useProfile(user?.id);
   const queryClient = useQueryClient();
+  const [rescheduleId, setRescheduleId] = useState<string | null>(null);
 
   const fetchAppointments = useServerFn(listMyAppointments);
   const fetchDocuments = useServerFn(listMyDocuments);
@@ -62,8 +76,10 @@ function AreaPersonale() {
     onSuccess: () => {
       toast.success("Appuntamento annullato.");
       queryClient.invalidateQueries({ queryKey: ["my-appointments"] });
+      queryClient.invalidateQueries({ queryKey: ["availability"] });
     },
-    onError: () => toast.error("Non è stato possibile annullare l'appuntamento."),
+    onError: (e: Error) =>
+      toast.error(e.message || "Non è stato possibile annullare l'appuntamento."),
   });
 
   const now = Date.now();
@@ -74,6 +90,7 @@ function AreaPersonale() {
   const past = rows.filter(
     (a) => new Date(a.starts_at).getTime() < now || a.status === "cancelled",
   );
+  const rescheduling = rows.find((a) => a.id === rescheduleId) ?? null;
 
   return (
     <SiteLayout>
@@ -129,14 +146,49 @@ function AreaPersonale() {
                           <Badge variant={STATUS_VARIANT[a.status] ?? "secondary"}>
                             {STATUS_LABEL[a.status]}
                           </Badge>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            disabled={!isCancellable(a.starts_at) || cancelMutation.isPending}
-                            onClick={() => cancelMutation.mutate({ data: { id: a.id } })}
-                          >
-                            Annulla
-                          </Button>
+                          <div className="flex flex-wrap gap-2">
+                            <Button
+                              variant="soft"
+                              size="sm"
+                              disabled={!isCancellable(a.starts_at)}
+                              onClick={() => setRescheduleId(a.id)}
+                            >
+                              <CalendarClock aria-hidden="true" /> Sposta
+                            </Button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  disabled={!isCancellable(a.starts_at) || cancelMutation.isPending}
+                                >
+                                  Annulla
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Annullare l'appuntamento?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    {a.services?.name} del {formatDateTime(a.starts_at)}. Puoi
+                                    sempre prenotare di nuovo o spostarlo a un altro orario.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Mantieni</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => cancelMutation.mutate({ data: { id: a.id } })}
+                                  >
+                                    Annulla appuntamento
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                          {!isCancellable(a.starts_at) && (
+                            <p className="text-muted-foreground w-full text-xs">
+                              Mancano meno di 24 ore: chiamaci per modifiche.
+                            </p>
+                          )}
                         </li>
                       ))}
                     </ul>
