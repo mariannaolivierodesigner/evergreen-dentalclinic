@@ -12,6 +12,14 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { doctorsQuery, servicesQuery } from "@/lib/public-queries";
 import { getAvailability, bookAppointment } from "@/lib/booking.functions";
 import { formatDateShort, formatDuration, formatPrice, formatTime, isoDay } from "@/lib/format";
@@ -68,6 +76,7 @@ function Prenota() {
   const [day, setDay] = useState<string>(isoDay(new Date()));
   const [slot, setSlot] = useState<string | null>(null);
   const [note, setNote] = useState("");
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const service = services.find((s) => s.id === serviceId) ?? null;
   const days = useMemo(() => nextDays(7, offset), [offset]);
@@ -85,6 +94,7 @@ function Prenota() {
   const mutation = useMutation({
     mutationFn: book,
     onSuccess: () => {
+      setConfirmOpen(false);
       toast.success("Appuntamento richiesto! Lo trovi nella tua area personale.");
       navigate({ to: "/area-personale" });
     },
@@ -334,24 +344,9 @@ function Prenota() {
                 size="lg"
                 className="mt-6 w-full"
                 disabled={!canBook || mutation.isPending}
-                onClick={() =>
-                  mutation.mutate({
-                    data: {
-                      doctorId: doctorId!,
-                      serviceId: serviceId!,
-                      startsAt: slot!,
-                      note,
-                    },
-                  })
-                }
+                onClick={() => setConfirmOpen(true)}
               >
-                {mutation.isPending ? (
-                  "Prenotazione…"
-                ) : (
-                  <>
-                    <CalendarPlus aria-hidden="true" /> Conferma prenotazione
-                  </>
-                )}
+                <CalendarPlus aria-hidden="true" /> Vai al riepilogo
               </Button>
             ) : (
               <div className="mt-6">
@@ -374,6 +369,101 @@ function Prenota() {
           </div>
         </aside>
       </div>
+
+      <Dialog open={confirmOpen} onOpenChange={(o) => !mutation.isPending && setConfirmOpen(o)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Conferma il tuo appuntamento</DialogTitle>
+            <DialogDescription>
+              Controlla i dettagli: dopo la conferma riceverai l'appuntamento nella tua area
+              personale.
+            </DialogDescription>
+          </DialogHeader>
+
+          <dl className="divide-border divide-y text-sm">
+            <div className="flex items-start justify-between gap-4 py-2.5">
+              <dt className="text-muted-foreground">Trattamento</dt>
+              <dd className="text-right font-medium">
+                {service?.name ?? "—"}
+                {service && (
+                  <span className="text-muted-foreground block text-xs font-normal">
+                    {formatDuration(service.duration_min)}
+                  </span>
+                )}
+              </dd>
+            </div>
+            <div className="flex items-start justify-between gap-4 py-2.5">
+              <dt className="text-muted-foreground">Medico</dt>
+              <dd className="text-right font-medium">
+                {doctors.find((d) => d.id === doctorId)?.full_name ?? "—"}
+                <span className="text-muted-foreground block text-xs font-normal">
+                  {doctors.find((d) => d.id === doctorId)?.specialization}
+                </span>
+              </dd>
+            </div>
+            <div className="flex items-start justify-between gap-4 py-2.5">
+              <dt className="text-muted-foreground">Data e orario</dt>
+              <dd className="text-right font-medium">
+                {slot
+                  ? `${new Date(slot).toLocaleDateString("it-IT", {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "long",
+                    })} · ${formatTime(slot)}`
+                  : "—"}
+              </dd>
+            </div>
+            {service && (
+              <div className="flex items-start justify-between gap-4 py-2.5">
+                <dt className="text-muted-foreground">Prezzo indicativo</dt>
+                <dd className="text-right font-medium">da {formatPrice(service.price_cents)}</dd>
+              </div>
+            )}
+            {note.trim() && (
+              <div className="py-2.5">
+                <dt className="text-muted-foreground">Nota per il medico</dt>
+                <dd className="mt-1 whitespace-pre-line">{note.trim()}</dd>
+              </div>
+            )}
+          </dl>
+
+          <p className="text-muted-foreground text-xs">
+            Puoi spostare o annullare gratuitamente fino a 24 ore prima.
+          </p>
+
+          <DialogFooter className="gap-2 sm:gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setConfirmOpen(false)}
+              disabled={mutation.isPending}
+            >
+              Modifica
+            </Button>
+            <Button
+              variant="hero"
+              disabled={!canBook || mutation.isPending}
+              onClick={() =>
+                mutation.mutate({
+                  data: {
+                    doctorId: doctorId!,
+                    serviceId: serviceId!,
+                    startsAt: slot!,
+                    note,
+                  },
+                })
+              }
+            >
+              {mutation.isPending ? (
+                "Prenotazione…"
+              ) : (
+                <>
+                  <Check aria-hidden="true" /> Conferma e prenota
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </SiteLayout>
   );
 }
