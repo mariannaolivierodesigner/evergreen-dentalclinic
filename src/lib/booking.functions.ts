@@ -107,7 +107,7 @@ export const listMyAppointments = createServerFn({ method: "GET" })
     const { data, error } = await context.supabase
       .from("appointments")
       .select(
-        "id, starts_at, ends_at, status, patient_note, services(name, slug, price_cents), doctors(full_name, specialization)",
+        "id, starts_at, ends_at, status, patient_note, doctor_id, service_id, services(name, slug, price_cents, duration_min), doctors(full_name, specialization)",
       )
       .order("starts_at", { ascending: false });
     if (error) throw new Error(error.message);
@@ -118,12 +118,82 @@ export const cancelAppointment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
+    const { data: appt, error: aErr } = await context.supabase
+      .from("appointments")
+      .select("id, starts_at, status")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (aErr) throw new Error(aErr.message);
+    if (!appt) throw new Error("Appuntamento non trovato.");
+    if (appt.status === "cancelled") throw new Error("Appuntamento già annullato.");
+    if (new Date(appt.starts_at).getTime() - Date.now() <= 24 * 60 * 60 * 1000)
+      throw new Error("Puoi annullare fino a 24 ore prima. Chiamaci per assistenza.");
+
     const { error } = await context.supabase
       .from("appointments")
       .update({ status: "cancelled" })
       .eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true as const };
+  });
+
+export const rescheduleAppointment = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        id: z.string().uuid(),
+        startsAt: z.string().min(10),
+        note: z.string().trim().max(600).optional().or(z.literal("")),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
+
+    const { data: appt, error: aErr } = await supabase
+      .from("appointments")
+      .select("id, doctor_id, starts_at, status, services(duration_min)")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (aErr) throw new Error(aErr.message);
+    if (!appt) throw new Error("Appuntamento non trovato.");
+    if (appt.status === "cancelled" || appt.status === "completed")
+      throw new Error("Questo appuntamento non è più modificabile.");
+    if (new Date(appt.starts_at).getTime() - Date.now() <= 24 * 60 * 60 * 1000)
+      throw new Error("Puoi riprogrammare fino a 24 ore prima. Chiamaci per assistenza.");
+
+    const duration = appt.services?.duration_min ?? 30;
+    const starts = new Date(data.startsAt);
+    if (Number.isNaN(starts.getTime())) throw new Error("Orario non valido.");
+    if (starts.getTime() <= Date.now()) throw new Error("Scegli un orario futuro.");
+    const ends = new Date(starts.getTime() + duration * 60000);
+
+    const { data: clash, error: cErr } = await supabase.rpc("get_busy_slots", {
+      _doctor_id: appt.doctor_id,
+      _from: starts.toISOString(),
+      _to: ends.toISOString(),
+    });
+    if (cErr) throw new Error(cErr.message);
+    const overlapping = (clash ?? []).some(
+      (b) =>
+        new Date(b.starts_at) < ends &&
+        new Date(b.ends_at) > starts &&
+        new Date(b.starts_at).toISOString() !== new Date(appt.starts_at).toISOString(),
+    );
+    if (overlapping) throw new Error("Questo orario è appena stato occupato. Scegline un altro.");
+
+    const { error } = await supabase
+      .from("appointments")
+      .update({
+        starts_at: starts.toISOString(),
+        ends_at: ends.toISOString(),
+        status: "pending",
+        ...(data.note ? { patient_note: data.note } : {}),
+      })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true as const, starts_at: starts.toISOString() };
   });
 
 export const listMyDocuments = createServerFn({ method: "GET" })
