@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { z } from "zod";
-import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { CalendarPlus, Check, ChevronLeft, ChevronRight, LogIn } from "lucide-react";
 import { toast } from "sonner";
@@ -91,10 +91,16 @@ function Prenota() {
   });
 
   const book = useServerFn(bookAppointment);
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: book,
     onSuccess: () => {
       setConfirmOpen(false);
+      setSlot(null);
+      setNote("");
+      void queryClient.invalidateQueries({ queryKey: ["availability"] });
+      void queryClient.invalidateQueries({ queryKey: ["my-appointments"] });
+      void availability.refetch();
       toast.success("Appuntamento richiesto! Lo trovi nella tua area personale.");
       navigate({ to: "/area-personale" });
     },
