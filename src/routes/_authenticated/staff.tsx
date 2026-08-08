@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { listAgenda, listMessages, listPatients, setAppointmentStatus } from "@/lib/staff.functions";
+import { BlockedSlotsManager } from "@/components/site/BlockedSlotsManager";
 import { useRoles, useSession } from "@/hooks/useAuth";
 import { STATUS_LABEL, formatDate, formatPrice, formatTime, isoDay } from "@/lib/format";
 
@@ -116,6 +117,7 @@ function StaffPage() {
           <TabsList>
             <TabsTrigger value="agenda">Agenda</TabsTrigger>
             <TabsTrigger value="pazienti">Pazienti</TabsTrigger>
+            <TabsTrigger value="indisponibilita">Ferie e permessi</TabsTrigger>
             <TabsTrigger value="messaggi">Messaggi</TabsTrigger>
           </TabsList>
 
@@ -220,6 +222,7 @@ function StaffPage() {
           </TabsContent>
 
           <TabsContent value="messaggi" className="mt-6">
+            {null}
             {messages.isPending ? (
               <Skeleton className="h-40 w-full rounded-3xl" />
             ) : (messages.data ?? []).length === 0 ? (
