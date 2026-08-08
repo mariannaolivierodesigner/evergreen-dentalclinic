@@ -8,7 +8,7 @@ export const SLOT_STEP_MIN = 30;
 const TZ = "Europe/Rome";
 
 /** Millisecondi UTC corrispondenti a `day` + `hh:mm` nel fuso dello studio. */
-function atLocal(day: string, hhmm: string): number {
+export function atLocal(day: string, hhmm: string): number {
   const [h, m] = hhmm.split(":").map(Number);
   const naive = Date.UTC(
     Number(day.slice(0, 4)),
@@ -35,6 +35,11 @@ function atLocal(day: string, hhmm: string): number {
 /** Giorno della settimana (0 = domenica) di una data ISO `YYYY-MM-DD`. */
 export function weekdayOf(day: string): number {
   return new Date(`${day}T12:00:00Z`).getUTCDay();
+}
+
+/** ISO UTC di `day` + `hh:mm` interpretati nel fuso dello studio. */
+export function localToIso(day: string, hhmm: string): string {
+  return new Date(atLocal(day, hhmm)).toISOString();
 }
 
 /**
