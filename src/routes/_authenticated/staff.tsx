@@ -221,8 +221,11 @@ function StaffPage() {
             )}
           </TabsContent>
 
+          <TabsContent value="indisponibilita" className="mt-6">
+            <BlockedSlotsManager />
+          </TabsContent>
+
           <TabsContent value="messaggi" className="mt-6">
-            {null}
             {messages.isPending ? (
               <Skeleton className="h-40 w-full rounded-3xl" />
             ) : (messages.data ?? []).length === 0 ? (
