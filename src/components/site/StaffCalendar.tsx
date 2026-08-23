@@ -80,10 +80,8 @@ export function StaffCalendar() {
   }, [data]);
 
   const byDay = useMemo(() => {
-    const map = new Map<
-      string,
-      { appointments: typeof data extends undefined ? never[] : NonNullable<typeof data>["appointments"]; blocked: NonNullable<typeof data>["blocked"] }
-    >();
+    type Data = NonNullable<typeof data>;
+    const map = new Map<string, { appointments: Data["appointments"]; blocked: Data["blocked"] }>();
     for (const d of days) map.set(d, { appointments: [], blocked: [] });
     if (!data) return map;
     for (const a of data.appointments) {
