@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { listAgenda, listMessages, listPatients, setAppointmentStatus } from "@/lib/staff.functions";
 import { BlockedSlotsManager } from "@/components/site/BlockedSlotsManager";
+import { StaffCalendar } from "@/components/site/StaffCalendar";
 import { useRoles, useSession } from "@/hooks/useAuth";
 import { STATUS_LABEL, formatDate, formatPrice, formatTime, isoDay } from "@/lib/format";
 
@@ -116,6 +117,7 @@ function StaffPage() {
         <Tabs defaultValue="agenda">
           <TabsList>
             <TabsTrigger value="agenda">Agenda</TabsTrigger>
+            <TabsTrigger value="calendario">Calendario</TabsTrigger>
             <TabsTrigger value="pazienti">Pazienti</TabsTrigger>
             <TabsTrigger value="indisponibilita">Ferie e permessi</TabsTrigger>
             <TabsTrigger value="messaggi">Messaggi</TabsTrigger>
@@ -192,6 +194,10 @@ function StaffPage() {
                 </ul>
               )}
             </div>
+          </TabsContent>
+
+          <TabsContent value="calendario" className="mt-6">
+            <StaffCalendar />
           </TabsContent>
 
           <TabsContent value="pazienti" className="mt-6">
