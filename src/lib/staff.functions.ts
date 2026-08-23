@@ -181,6 +181,65 @@ export const saveBlockedSlot = createServerFn({ method: "POST" })
     return { ok: true as const, conflicts: [] };
   });
 
+/** Appuntamenti + indisponibilità di un intervallo, per la vista calendario. */
+export const listCalendar = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        from: z.string().min(1),
+        to: z.string().min(1),
+        doctor_id: z.string().uuid().optional(),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertStaff(context);
+
+    let apptQuery = context.supabase
+      .from("appointments")
+      .select(
+        "id, starts_at, ends_at, status, doctor_id, services(name), doctors(full_name, color), profiles(full_name)",
+      )
+      .lt("starts_at", data.to)
+      .gt("ends_at", data.from)
+      .order("starts_at");
+    if (data.doctor_id) apptQuery = apptQuery.eq("doctor_id", data.doctor_id);
+
+    let blockedQuery = context.supabase
+      .from("blocked_slots")
+      .select("id, doctor_id, starts_at, ends_at, reason, doctors(full_name, color)")
+      .lt("starts_at", data.to)
+      .gt("ends_at", data.from)
+      .order("starts_at");
+    if (data.doctor_id) blockedQuery = blockedQuery.eq("doctor_id", data.doctor_id);
+
+    const [appts, blocked] = await Promise.all([apptQuery, blockedQuery]);
+    if (appts.error) throw new Error(appts.error.message);
+    if (blocked.error) throw new Error(blocked.error.message);
+
+    return {
+      appointments: (appts.data ?? []) as Array<{
+        id: string;
+        starts_at: string;
+        ends_at: string;
+        status: string;
+        doctor_id: string;
+        services: { name: string } | null;
+        doctors: { full_name: string; color: string } | null;
+        profiles: { full_name: string } | null;
+      }>,
+      blocked: (blocked.data ?? []) as Array<{
+        id: string;
+        doctor_id: string;
+        starts_at: string;
+        ends_at: string;
+        reason: string;
+        doctors: { full_name: string; color: string } | null;
+      }>,
+    };
+  });
+
 export const deleteBlockedSlot = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
