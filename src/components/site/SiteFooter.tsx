@@ -83,7 +83,7 @@ export function SiteFooter() {
 
       <div className="border-border border-t">
         <div className="text-muted-foreground mx-auto flex max-w-6xl flex-col gap-3 px-5 py-6 text-xs sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Studio Dentistico Evergreen · P.IVA 09876543210</p>
+          <p>{`© ${new Date().getFullYear()} Studio Dentistico Evergreen · P.IVA 09876543210`}</p>
           <nav aria-label="Note legali" className="flex gap-4">
             <Link to="/privacy" className="hover:text-primary">
               Privacy policy
