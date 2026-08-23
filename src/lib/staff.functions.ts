@@ -249,3 +249,48 @@ export const deleteBlockedSlot = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true as const };
   });
+/** Registro modifiche ferie/permessi (solo admin). */
+export const listBlockedSlotsAudit = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertStaff(context);
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) return { allowed: false as const, rows: [] };
+
+    const { data, error } = await context.supabase
+      .from("blocked_slots_audit_log")
+      .select(
+        "id, action, created_at, actor_user_id, doctor_id, old_starts_at, old_ends_at, old_reason, new_starts_at, new_ends_at, new_reason",
+      )
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (error) throw new Error(error.message);
+
+    const rows = data ?? [];
+    const actorIds = [...new Set(rows.map((r: any) => r.actor_user_id).filter(Boolean))];
+    const doctorIds = [...new Set(rows.map((r: any) => r.doctor_id).filter(Boolean))];
+
+    const [actors, docs] = await Promise.all([
+      actorIds.length
+        ? context.supabase.from("profiles").select("user_id, full_name").in("user_id", actorIds)
+        : Promise.resolve({ data: [] }),
+      doctorIds.length
+        ? context.supabase.from("doctors").select("id, full_name").in("id", doctorIds)
+        : Promise.resolve({ data: [] }),
+    ]);
+
+    const actorMap = new Map((actors.data ?? []).map((p: any) => [p.user_id, p.full_name]));
+    const doctorMap = new Map((docs.data ?? []).map((d: any) => [d.id, d.full_name]));
+
+    return {
+      allowed: true as const,
+      rows: rows.map((r: any) => ({
+        ...r,
+        actor_name: (actorMap.get(r.actor_user_id) as string | undefined) ?? "Sistema",
+        doctor_name: (doctorMap.get(r.doctor_id) as string | undefined) ?? "—",
+      })),
+    };
+  });

@@ -89,6 +89,7 @@ export type Database = {
           id: string
           reason: string
           starts_at: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -97,6 +98,7 @@ export type Database = {
           id?: string
           reason?: string
           starts_at: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -105,6 +107,7 @@ export type Database = {
           id?: string
           reason?: string
           starts_at?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -115,6 +118,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      blocked_slots_audit_log: {
+        Row: {
+          action: string
+          actor_user_id: string | null
+          blocked_slot_id: string
+          created_at: string
+          doctor_id: string | null
+          id: string
+          new_ends_at: string | null
+          new_reason: string | null
+          new_starts_at: string | null
+          old_ends_at: string | null
+          old_reason: string | null
+          old_starts_at: string | null
+        }
+        Insert: {
+          action: string
+          actor_user_id?: string | null
+          blocked_slot_id: string
+          created_at?: string
+          doctor_id?: string | null
+          id?: string
+          new_ends_at?: string | null
+          new_reason?: string | null
+          new_starts_at?: string | null
+          old_ends_at?: string | null
+          old_reason?: string | null
+          old_starts_at?: string | null
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string | null
+          blocked_slot_id?: string
+          created_at?: string
+          doctor_id?: string | null
+          id?: string
+          new_ends_at?: string | null
+          new_reason?: string | null
+          new_starts_at?: string | null
+          old_ends_at?: string | null
+          old_reason?: string | null
+          old_starts_at?: string | null
+        }
+        Relationships: []
       }
       contact_messages: {
         Row: {
