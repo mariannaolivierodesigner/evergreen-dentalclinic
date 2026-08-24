@@ -118,7 +118,7 @@ async function findConflicts(
 ) {
   const { data, error } = await context.supabase
     .from("appointments")
-    .select("id, starts_at, ends_at, profiles(full_name)")
+    .select("id, patient_id, starts_at, ends_at, profiles(full_name)")
     .eq("doctor_id", input.doctor_id)
     .in("status", ["pending", "confirmed"])
     .lt("starts_at", input.ends_at)
@@ -127,10 +127,21 @@ async function findConflicts(
   if (error) throw new Error(error.message);
   return (data ?? []) as Array<{
     id: string;
+    patient_id: string;
     starts_at: string;
     ends_at: string;
     profiles: { full_name: string } | null;
   }>;
+}
+
+function dateLabel(iso: string) {
+  return new Intl.DateTimeFormat("it-IT", {
+    timeZone: "Europe/Rome",
+    day: "2-digit",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(iso));
 }
 
 export const checkBlockedConflicts = createServerFn({ method: "POST" })
@@ -166,11 +177,9 @@ export const saveBlockedSlot = createServerFn({ method: "POST" })
       reason: data.reason,
     };
 
-    if (!data.force) {
-      const conflicts = await findConflicts(context, payload);
-      if (conflicts.length > 0) {
-        return { ok: false as const, conflicts };
-      }
+    const conflicts = await findConflicts(context, payload);
+    if (!data.force && conflicts.length > 0) {
+      return { ok: false as const, conflicts, notified: 0 };
     }
 
     const query = data.id
@@ -178,8 +187,24 @@ export const saveBlockedSlot = createServerFn({ method: "POST" })
       : context.supabase.from("blocked_slots").insert(payload);
     const { error } = await query;
     if (error) throw new Error(error.message);
-    return { ok: true as const, conflicts: [] };
+
+    // Avvisa i pazienti i cui appuntamenti ricadono nel periodo di indisponibilità.
+    let notified = 0;
+    if (conflicts.length > 0) {
+      const rows = conflicts.map((c) => ({
+        patient_id: c.patient_id,
+        appointment_id: c.id,
+        type: "conflict",
+        title: "Il tuo appuntamento va riprogrammato",
+        body: `L'appuntamento del ${dateLabel(c.starts_at)} ricade in un periodo di indisponibilità del medico (${data.reason}). Ti invitiamo a spostarlo dall'area personale o a contattare lo studio.`,
+      }));
+      const { error: nErr } = await context.supabase.from("notifications").insert(rows);
+      if (!nErr) notified = rows.length;
+    }
+
+    return { ok: true as const, conflicts: [], notified };
   });
+
 
 /** Appuntamenti + indisponibilità di un intervallo, per la vista calendario. */
 export const listCalendar = createServerFn({ method: "GET" })
