@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { localToIso } from "@/lib/slots";
 
 async function assertStaff(context: { supabase: any; userId: string }) {
   const { data, error } = await context.supabase.rpc("is_staff", { _user_id: context.userId });
@@ -79,11 +80,68 @@ const blockedInput = z
     starts_at: z.string().min(1),
     ends_at: z.string().min(1),
     reason: z.string().trim().min(3).max(200),
+    recurrence: z.enum(["none", "monthly", "yearly"]).default("none"),
+    recurrence_count: z.number().int().min(1).max(24).default(1),
   })
   .refine((v) => new Date(v.ends_at).getTime() > new Date(v.starts_at).getTime(), {
     message: "La data di fine deve essere successiva a quella di inizio.",
     path: ["ends_at"],
   });
+
+/** Giorno/ora locali (fuso studio) di un timestamp ISO. */
+function splitRome(iso: string) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Rome",
+    hour12: false,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).formatToParts(new Date(iso));
+  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "00";
+  return {
+    year: Number(get("year")),
+    month: Number(get("month")),
+    day: Number(get("day")),
+    time: `${get("hour") === "24" ? "00" : get("hour")}:${get("minute")}`,
+  };
+}
+
+/** Sposta un ISO di `n` mesi o anni mantenendo l'ora locale dello studio. */
+function shiftIso(iso: string, unit: "monthly" | "yearly", n: number) {
+  const s = splitRome(iso);
+  const base = new Date(Date.UTC(s.year, s.month - 1, 1));
+  if (unit === "monthly") base.setUTCMonth(base.getUTCMonth() + n);
+  else base.setUTCFullYear(base.getUTCFullYear() + n);
+  const y = base.getUTCFullYear();
+  const m = base.getUTCMonth() + 1;
+  const lastDay = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  const day = Math.min(s.day, lastDay);
+  const iso10 = `${y}-${String(m).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  return localToIso(iso10, s.time);
+}
+
+/** Espande un periodo nelle sue occorrenze ricorrenti. */
+function expandOccurrences(input: {
+  starts_at: string;
+  ends_at: string;
+  recurrence: "none" | "monthly" | "yearly";
+  recurrence_count: number;
+}) {
+  const count = input.recurrence === "none" ? 1 : input.recurrence_count;
+  const durationMs = new Date(input.ends_at).getTime() - new Date(input.starts_at).getTime();
+  const out: Array<{ starts_at: string; ends_at: string }> = [];
+  for (let i = 0; i < count; i++) {
+    if (i === 0 || input.recurrence === "none") {
+      out.push({ starts_at: input.starts_at, ends_at: input.ends_at });
+      continue;
+    }
+    const starts = shiftIso(input.starts_at, input.recurrence, i);
+    out.push({ starts_at: starts, ends_at: new Date(new Date(starts).getTime() + durationMs).toISOString() });
+  }
+  return out;
+}
 
 export const listBlockedSlots = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -91,7 +149,9 @@ export const listBlockedSlots = createServerFn({ method: "GET" })
     await assertStaff(context);
     const { data, error } = await context.supabase
       .from("blocked_slots")
-      .select("id, doctor_id, starts_at, ends_at, reason, doctors(full_name, color)")
+      .select(
+        "id, doctor_id, starts_at, ends_at, reason, recurrence, recurrence_count, recurrence_group_id, doctors(full_name, color)",
+      )
       .gte("ends_at", new Date(Date.now() - 30 * 24 * 3600_000).toISOString())
       .order("starts_at");
     if (error) throw new Error(error.message);
@@ -170,23 +230,46 @@ export const saveBlockedSlot = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertStaff(context);
-    const payload = {
-      doctor_id: data.doctor_id,
-      starts_at: data.starts_at,
-      ends_at: data.ends_at,
-      reason: data.reason,
-    };
 
-    const conflicts = await findConflicts(context, payload);
+    const occurrences = data.id
+      ? [{ starts_at: data.starts_at, ends_at: data.ends_at }]
+      : expandOccurrences(data);
+
+    // Conflitti su tutte le occorrenze generate.
+    const conflictLists = await Promise.all(
+      occurrences.map((o) => findConflicts(context, { doctor_id: data.doctor_id, ...o })),
+    );
+    const conflicts = conflictLists.flat();
     if (!data.force && conflicts.length > 0) {
-      return { ok: false as const, conflicts, notified: 0 };
+      return { ok: false as const, conflicts, notified: 0, created: 0 };
     }
 
-    const query = data.id
-      ? context.supabase.from("blocked_slots").update(payload).eq("id", data.id)
-      : context.supabase.from("blocked_slots").insert(payload);
-    const { error } = await query;
-    if (error) throw new Error(error.message);
+    if (data.id) {
+      const { error } = await context.supabase
+        .from("blocked_slots")
+        .update({
+          doctor_id: data.doctor_id,
+          starts_at: data.starts_at,
+          ends_at: data.ends_at,
+          reason: data.reason,
+        })
+        .eq("id", data.id);
+      if (error) throw new Error(error.message);
+    } else {
+      const groupId =
+        data.recurrence !== "none" && occurrences.length > 1 ? crypto.randomUUID() : null;
+      const rows = occurrences.map((o) => ({
+        doctor_id: data.doctor_id,
+        starts_at: o.starts_at,
+        ends_at: o.ends_at,
+        reason: data.reason,
+        recurrence: data.recurrence,
+        recurrence_count: data.recurrence === "none" ? 1 : data.recurrence_count,
+        recurrence_group_id: groupId,
+      }));
+      const { error } = await context.supabase.from("blocked_slots").insert(rows);
+      if (error) throw new Error(error.message);
+    }
 
     // Avvisa i pazienti i cui appuntamenti ricadono nel periodo di indisponibilità.
     let notified = 0;
@@ -202,9 +285,8 @@ export const saveBlockedSlot = createServerFn({ method: "POST" })
       if (!nErr) notified = rows.length;
     }
 
-    return { ok: true as const, conflicts: [], notified };
+    return { ok: true as const, conflicts: [], notified, created: occurrences.length };
   });
-
 
 /** Appuntamenti + indisponibilità di un intervallo, per la vista calendario. */
 export const listCalendar = createServerFn({ method: "GET" })
@@ -224,7 +306,7 @@ export const listCalendar = createServerFn({ method: "GET" })
     let apptQuery = context.supabase
       .from("appointments")
       .select(
-        "id, starts_at, ends_at, status, doctor_id, services(name), doctors(full_name, color), profiles(full_name)",
+        "id, starts_at, ends_at, status, doctor_id, patient_id, services(name), doctors(full_name, color), profiles(full_name, email, phone)",
       )
       .lt("starts_at", data.to)
       .gt("ends_at", data.from)
@@ -233,7 +315,7 @@ export const listCalendar = createServerFn({ method: "GET" })
 
     let blockedQuery = context.supabase
       .from("blocked_slots")
-      .select("id, doctor_id, starts_at, ends_at, reason, doctors(full_name, color)")
+      .select("id, doctor_id, starts_at, ends_at, reason, recurrence, doctors(full_name, color)")
       .lt("starts_at", data.to)
       .gt("ends_at", data.from)
       .order("starts_at");
@@ -250,9 +332,10 @@ export const listCalendar = createServerFn({ method: "GET" })
         ends_at: string;
         status: string;
         doctor_id: string;
+        patient_id: string;
         services: { name: string } | null;
         doctors: { full_name: string; color: string } | null;
-        profiles: { full_name: string } | null;
+        profiles: { full_name: string; email: string | null; phone: string | null } | null;
       }>,
       blocked: (blocked.data ?? []) as Array<{
         id: string;
@@ -260,6 +343,7 @@ export const listCalendar = createServerFn({ method: "GET" })
         starts_at: string;
         ends_at: string;
         reason: string;
+        recurrence: string;
         doctors: { full_name: string; color: string } | null;
       }>,
     };
@@ -267,34 +351,176 @@ export const listCalendar = createServerFn({ method: "GET" })
 
 export const deleteBlockedSlot = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .inputValidator((d: unknown) =>
+    z.object({ id: z.string().uuid(), whole_series: z.boolean().optional() }).parse(d),
+  )
   .handler(async ({ data, context }) => {
     await assertStaff(context);
+
+    if (data.whole_series) {
+      const { data: row } = await context.supabase
+        .from("blocked_slots")
+        .select("recurrence_group_id")
+        .eq("id", data.id)
+        .maybeSingle();
+      const groupId = row?.recurrence_group_id as string | null | undefined;
+      if (groupId) {
+        const { error } = await context.supabase
+          .from("blocked_slots")
+          .delete()
+          .eq("recurrence_group_id", groupId);
+        if (error) throw new Error(error.message);
+        return { ok: true as const };
+      }
+    }
+
     const { error } = await context.supabase.from("blocked_slots").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true as const };
   });
-/** Registro modifiche ferie/permessi (solo admin). */
+
+/** Libera uno slot in conflitto: annulla l'appuntamento e avvisa il paziente. */
+export const releaseConflictingAppointment = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        id: z.string().uuid(),
+        mode: z.enum(["cancel", "notify"]),
+        reason: z.string().trim().max(200).optional(),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertStaff(context);
+
+    const { data: appt, error } = await context.supabase
+      .from("appointments")
+      .select("id, patient_id, starts_at")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!appt) throw new Error("Appuntamento non trovato.");
+
+    if (data.mode === "cancel") {
+      const { error: uErr } = await context.supabase
+        .from("appointments")
+        .update({ status: "cancelled" })
+        .eq("id", data.id);
+      if (uErr) throw new Error(uErr.message);
+    }
+
+    const title =
+      data.mode === "cancel"
+        ? "Appuntamento annullato dallo studio"
+        : "Il tuo appuntamento va riprogrammato";
+    const body =
+      data.mode === "cancel"
+        ? `L'appuntamento del ${dateLabel(appt.starts_at)} è stato annullato${data.reason ? ` (${data.reason})` : ""}. Puoi prenotare un nuovo orario dall'area personale.`
+        : `L'appuntamento del ${dateLabel(appt.starts_at)} è in conflitto con un'indisponibilità del medico${data.reason ? ` (${data.reason})` : ""}. Ti chiediamo di spostarlo dall'area personale.`;
+
+    const { error: nErr } = await context.supabase.from("notifications").insert({
+      patient_id: appt.patient_id,
+      appointment_id: appt.id,
+      type: "conflict",
+      title,
+      body,
+    });
+    if (nErr) throw new Error(nErr.message);
+
+    return { ok: true as const };
+  });
+
+/** Sposta un appuntamento su un nuovo orario (staff), con avviso al paziente. */
+export const staffRescheduleAppointment = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        id: z.string().uuid(),
+        starts_at: z.string().min(1),
+        ends_at: z.string().min(1),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertStaff(context);
+
+    const { data: appt, error } = await context.supabase
+      .from("appointments")
+      .select("id, patient_id, doctor_id")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!appt) throw new Error("Appuntamento non trovato.");
+
+    const clashes = await findConflicts(context, {
+      doctor_id: appt.doctor_id,
+      starts_at: data.starts_at,
+      ends_at: data.ends_at,
+    });
+    if (clashes.some((c) => c.id !== data.id)) {
+      return { ok: false as const, reason: "Il nuovo orario è già occupato." };
+    }
+
+    const { error: uErr } = await context.supabase
+      .from("appointments")
+      .update({ starts_at: data.starts_at, ends_at: data.ends_at, status: "pending" })
+      .eq("id", data.id);
+    if (uErr) throw new Error(uErr.message);
+
+    await context.supabase.from("notifications").insert({
+      patient_id: appt.patient_id,
+      appointment_id: appt.id,
+      type: "reschedule",
+      title: "Appuntamento riprogrammato",
+      body: `Il tuo appuntamento è stato spostato al ${dateLabel(data.starts_at)}. Se l'orario non ti è comodo, contattaci o riprogrammalo dall'area personale.`,
+    });
+
+    return { ok: true as const };
+  });
+
+/** Registro modifiche ferie/permessi (solo admin), con filtri e paginazione. */
 export const listBlockedSlotsAudit = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        action: z.enum(["all", "created", "updated", "deleted"]).default("all"),
+        doctor_id: z.string().uuid().optional(),
+        from: z.string().optional(),
+        to: z.string().optional(),
+        page: z.number().int().min(1).default(1),
+        page_size: z.number().int().min(5).max(100).default(10),
+      })
+      .parse(d ?? {}),
+  )
+  .handler(async ({ data, context }) => {
     await assertStaff(context);
     const { data: isAdmin } = await context.supabase.rpc("has_role", {
       _user_id: context.userId,
       _role: "admin",
     });
-    if (!isAdmin) return { allowed: false as const, rows: [] };
+    if (!isAdmin) return { allowed: false as const, rows: [], total: 0 };
 
-    const { data, error } = await context.supabase
+    let query = context.supabase
       .from("blocked_slots_audit_log")
       .select(
         "id, action, created_at, actor_user_id, doctor_id, old_starts_at, old_ends_at, old_reason, new_starts_at, new_ends_at, new_reason",
+        { count: "exact" },
       )
-      .order("created_at", { ascending: false })
-      .limit(100);
+      .order("created_at", { ascending: false });
+
+    if (data.action !== "all") query = query.eq("action", data.action);
+    if (data.doctor_id) query = query.eq("doctor_id", data.doctor_id);
+    if (data.from) query = query.gte("created_at", data.from);
+    if (data.to) query = query.lte("created_at", data.to);
+
+    const start = (data.page - 1) * data.page_size;
+    const { data: rows0, error, count } = await query.range(start, start + data.page_size - 1);
     if (error) throw new Error(error.message);
 
-    const rows = data ?? [];
+    const rows = rows0 ?? [];
     const actorIds = [...new Set(rows.map((r: any) => r.actor_user_id).filter(Boolean))];
     const doctorIds = [...new Set(rows.map((r: any) => r.doctor_id).filter(Boolean))];
 
@@ -312,6 +538,7 @@ export const listBlockedSlotsAudit = createServerFn({ method: "GET" })
 
     return {
       allowed: true as const,
+      total: count ?? 0,
       rows: rows.map((r: any) => ({
         ...r,
         actor_name: (actorMap.get(r.actor_user_id) as string | undefined) ?? "Sistema",
