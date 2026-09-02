@@ -413,6 +413,9 @@ export type Database = {
           id: string
           marketing_consent: boolean
           notes: string | null
+          notify_email: boolean
+          notify_in_app: boolean
+          notify_sms: boolean
           onboarded: boolean
           phone: string | null
           privacy_consent: boolean
@@ -429,6 +432,9 @@ export type Database = {
           id?: string
           marketing_consent?: boolean
           notes?: string | null
+          notify_email?: boolean
+          notify_in_app?: boolean
+          notify_sms?: boolean
           onboarded?: boolean
           phone?: string | null
           privacy_consent?: boolean
@@ -445,6 +451,9 @@ export type Database = {
           id?: string
           marketing_consent?: boolean
           notes?: string | null
+          notify_email?: boolean
+          notify_in_app?: boolean
+          notify_sms?: boolean
           onboarded?: boolean
           phone?: string | null
           privacy_consent?: boolean
