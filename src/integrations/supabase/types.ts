@@ -88,6 +88,9 @@ export type Database = {
           ends_at: string
           id: string
           reason: string
+          recurrence: string
+          recurrence_count: number
+          recurrence_group_id: string | null
           starts_at: string
           updated_at: string
         }
@@ -97,6 +100,9 @@ export type Database = {
           ends_at: string
           id?: string
           reason?: string
+          recurrence?: string
+          recurrence_count?: number
+          recurrence_group_id?: string | null
           starts_at: string
           updated_at?: string
         }
@@ -106,6 +112,9 @@ export type Database = {
           ends_at?: string
           id?: string
           reason?: string
+          recurrence?: string
+          recurrence_count?: number
+          recurrence_group_id?: string | null
           starts_at?: string
           updated_at?: string
         }
