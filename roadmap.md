@@ -6,3 +6,5 @@
 - [ ] Flusso guidato di gestione conflitti dal calendario (riprogramma / libera slot)
 - [ ] Vista mensile tipo agenda affiancata alla vista giorno
 - [ ] Home: rimuovere la linea curva verde, box prima/dopo di uguale altezza, immagini più realistiche
+- [ ] Toast "N pazienti avvisati" dopo salvataggio/modifica indisponibilità
+- [ ] Registro audit ferie/permessi: tabella + filtri + paginazione lato server
