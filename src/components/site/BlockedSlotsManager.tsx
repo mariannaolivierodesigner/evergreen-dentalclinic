@@ -39,6 +39,7 @@ import {
   listStaffDoctors,
   saveBlockedSlot,
 } from "@/lib/staff.functions";
+import { BlockedSlotsAudit } from "@/components/site/BlockedSlotsAudit";
 import { localToIso } from "@/lib/slots";
 import { formatDateTime, isoDay } from "@/lib/format";
 
@@ -49,6 +50,8 @@ type Conflict = {
   profiles: { full_name: string } | null;
 };
 
+type Recurrence = "none" | "monthly" | "yearly";
+
 type FormState = {
   id?: string;
   doctor_id: string;
@@ -57,6 +60,8 @@ type FormState = {
   toDay: string;
   toTime: string;
   reason: string;
+  recurrence: Recurrence;
+  recurrenceCount: number;
 };
 
 const emptyForm = (): FormState => ({
@@ -66,6 +71,8 @@ const emptyForm = (): FormState => ({
   toDay: isoDay(new Date()),
   toTime: "13:00",
   reason: "Ferie",
+  recurrence: "none",
+  recurrenceCount: 1,
 });
 
 /** Estrae giorno e ora locali (fuso studio) da un timestamp ISO. */
