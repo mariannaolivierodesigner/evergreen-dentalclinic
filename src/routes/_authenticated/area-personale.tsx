@@ -21,6 +21,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { RescheduleDialog } from "@/components/site/RescheduleDialog";
+import { NotificationsPanel } from "@/components/site/NotificationsPanel";
 import {
   cancelAppointment,
   listMyAppointments,
@@ -110,9 +111,11 @@ function AreaPersonale() {
         <Tabs defaultValue="appuntamenti" className="mt-8">
           <TabsList>
             <TabsTrigger value="appuntamenti">Appuntamenti</TabsTrigger>
+            <TabsTrigger value="notifiche">Notifiche</TabsTrigger>
             <TabsTrigger value="documenti">Documenti</TabsTrigger>
             <TabsTrigger value="profilo">Profilo</TabsTrigger>
           </TabsList>
+
 
           <TabsContent value="appuntamenti" className="mt-6 space-y-8">
             {appointments.isPending ? (
@@ -227,6 +230,10 @@ function AreaPersonale() {
                 </section>
               </>
             )}
+          </TabsContent>
+
+          <TabsContent value="notifiche" className="mt-6">
+            <NotificationsPanel />
           </TabsContent>
 
           <TabsContent value="documenti" className="mt-6">

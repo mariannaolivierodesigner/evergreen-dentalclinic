@@ -39,6 +39,7 @@ import {
   listStaffDoctors,
   saveBlockedSlot,
 } from "@/lib/staff.functions";
+import { BlockedSlotsAudit } from "@/components/site/BlockedSlotsAudit";
 import { localToIso } from "@/lib/slots";
 import { formatDateTime, isoDay } from "@/lib/format";
 
@@ -49,6 +50,8 @@ type Conflict = {
   profiles: { full_name: string } | null;
 };
 
+type Recurrence = "none" | "monthly" | "yearly";
+
 type FormState = {
   id?: string;
   doctor_id: string;
@@ -57,6 +60,8 @@ type FormState = {
   toDay: string;
   toTime: string;
   reason: string;
+  recurrence: Recurrence;
+  recurrenceCount: number;
 };
 
 const emptyForm = (): FormState => ({
@@ -66,6 +71,8 @@ const emptyForm = (): FormState => ({
   toDay: isoDay(new Date()),
   toTime: "13:00",
   reason: "Ferie",
+  recurrence: "none",
+  recurrenceCount: 1,
 });
 
 /** Estrae giorno e ora locali (fuso studio) da un timestamp ISO. */
@@ -134,6 +141,8 @@ export function BlockedSlotsManager() {
           starts_at: startsAt,
           ends_at: endsAt,
           reason: form.reason.trim(),
+          recurrence: form.recurrence,
+          recurrence_count: form.recurrence === "none" ? 1 : form.recurrenceCount,
           force,
         },
       }),
@@ -146,13 +155,23 @@ export function BlockedSlotsManager() {
       setConflicts([]);
       setOpen(false);
       invalidate();
-      toast.success(form.id ? "Periodo aggiornato." : "Periodo di indisponibilità salvato.");
+      const base = form.id
+        ? "Periodo aggiornato."
+        : res.created > 1
+          ? `${res.created} periodi salvati (ricorrenza).`
+          : "Periodo di indisponibilità salvato.";
+      toast.success(base, {
+        description:
+          res.notified > 0 || res.emailed > 0
+            ? `${res.notified + res.emailed} pazienti avvisati${res.emailed > 0 ? ` (${res.emailed} via email)` : ""}.`
+            : undefined,
+      });
     },
     onError: (e: Error) => toast.error(e.message || "Salvataggio non riuscito."),
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => remove({ data: { id } }),
+    mutationFn: (input: { id: string; whole_series?: boolean }) => remove({ data: input }),
     onSuccess: () => {
       setDeleteId(null);
       invalidate();
@@ -184,6 +203,8 @@ export function BlockedSlotsManager() {
       toDay: to.day,
       toTime: to.time,
       reason: row.reason,
+      recurrence: "none",
+      recurrenceCount: 1,
     });
     setConflicts([]);
     setOpen(true);
@@ -322,6 +343,46 @@ export function BlockedSlotsManager() {
               />
             </div>
 
+            {!form.id ? (
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-2">
+                  <Label>Ripetizione</Label>
+                  <Select
+                    value={form.recurrence}
+                    onValueChange={(v) => {
+                      setForm((f) => ({ ...f, recurrence: v as Recurrence }));
+                      setConflicts([]);
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">Nessuna</SelectItem>
+                      <SelectItem value="monthly">Ogni mese</SelectItem>
+                      <SelectItem value="yearly">Ogni anno</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="rec-count">Numero di occorrenze</Label>
+                  <Input
+                    id="rec-count"
+                    type="number"
+                    min={1}
+                    max={24}
+                    disabled={form.recurrence === "none"}
+                    value={form.recurrenceCount}
+                    onChange={(e) => {
+                      const n = Math.min(24, Math.max(1, Number(e.target.value) || 1));
+                      setForm((f) => ({ ...f, recurrenceCount: n }));
+                      setConflicts([]);
+                    }}
+                  />
+                </div>
+              </div>
+            ) : null}
+
             {validation ? (
               <p className="text-destructive text-sm">{validation}</p>
             ) : null}
@@ -374,17 +435,32 @@ export function BlockedSlotsManager() {
           <AlertDialogHeader>
             <AlertDialogTitle>Rimuovere il periodo?</AlertDialogTitle>
             <AlertDialogDescription>
-              Gli orari torneranno prenotabili online.
+              Gli orari torneranno prenotabili online. Se il periodo fa parte di una serie
+              ricorrente puoi rimuovere anche tutte le occorrenze.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Annulla</AlertDialogCancel>
-            <AlertDialogAction onClick={() => deleteId && deleteMutation.mutate(deleteId)}>
+            <Button
+              variant="outline"
+              onClick={() =>
+                deleteId && deleteMutation.mutate({ id: deleteId, whole_series: true })
+              }
+            >
+              Rimuovi tutta la serie
+            </Button>
+            <AlertDialogAction
+              onClick={() => deleteId && deleteMutation.mutate({ id: deleteId })}
+            >
               Rimuovi
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <div className="border-border mt-12 border-t pt-10">
+        <BlockedSlotsAudit />
+      </div>
     </div>
   );
 }
