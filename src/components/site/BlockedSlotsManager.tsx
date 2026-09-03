@@ -395,17 +395,32 @@ export function BlockedSlotsManager() {
           <AlertDialogHeader>
             <AlertDialogTitle>Rimuovere il periodo?</AlertDialogTitle>
             <AlertDialogDescription>
-              Gli orari torneranno prenotabili online.
+              Gli orari torneranno prenotabili online. Se il periodo fa parte di una serie
+              ricorrente puoi rimuovere anche tutte le occorrenze.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Annulla</AlertDialogCancel>
-            <AlertDialogAction onClick={() => deleteId && deleteMutation.mutate(deleteId)}>
+            <Button
+              variant="outline"
+              onClick={() =>
+                deleteId && deleteMutation.mutate({ id: deleteId, whole_series: true })
+              }
+            >
+              Rimuovi tutta la serie
+            </Button>
+            <AlertDialogAction
+              onClick={() => deleteId && deleteMutation.mutate({ id: deleteId })}
+            >
               Rimuovi
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <div className="border-border mt-12 border-t pt-10">
+        <BlockedSlotsAudit />
+      </div>
     </div>
   );
 }
