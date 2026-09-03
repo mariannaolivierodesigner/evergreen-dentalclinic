@@ -271,21 +271,59 @@ export const saveBlockedSlot = createServerFn({ method: "POST" })
       if (error) throw new Error(error.message);
     }
 
-    // Avvisa i pazienti i cui appuntamenti ricadono nel periodo di indisponibilità.
+    // Avvisa i pazienti i cui appuntamenti ricadono nel periodo di indisponibilità,
+    // rispettando le preferenze di contatto di ciascun paziente.
     let notified = 0;
+    let emailed = 0;
     if (conflicts.length > 0) {
-      const rows = conflicts.map((c) => ({
-        patient_id: c.patient_id,
-        appointment_id: c.id,
-        type: "conflict",
-        title: "Il tuo appuntamento va riprogrammato",
-        body: `L'appuntamento del ${dateLabel(c.starts_at)} ricade in un periodo di indisponibilità del medico (${data.reason}). Ti invitiamo a spostarlo dall'area personale o a contattare lo studio.`,
-      }));
-      const { error: nErr } = await context.supabase.from("notifications").insert(rows);
-      if (!nErr) notified = rows.length;
+      const patientIds = [...new Set(conflicts.map((c) => c.patient_id))];
+      const { data: prefs } = await context.supabase
+        .from("profiles")
+        .select("id, full_name, email, notify_in_app, notify_email, notify_sms")
+        .in("id", patientIds);
+      const prefMap = new Map((prefs ?? []).map((p: any) => [p.id, p]));
+
+      const rows: any[] = [];
+      for (const c of conflicts) {
+        const p: any = prefMap.get(c.patient_id);
+        const title = "Il tuo appuntamento va riprogrammato";
+        const body = `L'appuntamento del ${dateLabel(c.starts_at)} ricade in un periodo di indisponibilità del medico (${data.reason}). Ti invitiamo a spostarlo dall'area personale o a contattare lo studio.`;
+
+        let deliveredElsewhere = false;
+        if (p?.notify_email && p?.email) {
+          const { sendPatientEmail } = await import("@/lib/notify.server");
+          const sent = await sendPatientEmail({ to: p.email, subject: title, text: body });
+          if (sent) {
+            deliveredElsewhere = true;
+            emailed++;
+          }
+        }
+        // In-app come canale predefinito e come fallback se l'email non è disponibile.
+        if (p?.notify_in_app !== false || !deliveredElsewhere) {
+          rows.push({
+            patient_id: c.patient_id,
+            appointment_id: c.id,
+            type: "conflict",
+            title,
+            body,
+          });
+        }
+      }
+
+      if (rows.length > 0) {
+        const { error: nErr } = await context.supabase.from("notifications").insert(rows);
+        if (!nErr) notified = rows.length;
+      }
     }
 
-    return { ok: true as const, conflicts: [], notified, created: occurrences.length };
+    return {
+      ok: true as const,
+      conflicts: [],
+      notified,
+      emailed,
+      recipients: conflicts.length,
+      created: occurrences.length,
+    };
   });
 
 /** Appuntamenti + indisponibilità di un intervallo, per la vista calendario. */
