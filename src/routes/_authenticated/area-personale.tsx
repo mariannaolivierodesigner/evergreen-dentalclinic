@@ -21,6 +21,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { RescheduleDialog } from "@/components/site/RescheduleDialog";
+import { NotificationsPanel } from "@/components/site/NotificationsPanel";
 import {
   cancelAppointment,
   listMyAppointments,
