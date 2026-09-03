@@ -141,6 +141,8 @@ export function BlockedSlotsManager() {
           starts_at: startsAt,
           ends_at: endsAt,
           reason: form.reason.trim(),
+          recurrence: form.recurrence,
+          recurrence_count: form.recurrence === "none" ? 1 : form.recurrenceCount,
           force,
         },
       }),
@@ -153,13 +155,23 @@ export function BlockedSlotsManager() {
       setConflicts([]);
       setOpen(false);
       invalidate();
-      toast.success(form.id ? "Periodo aggiornato." : "Periodo di indisponibilità salvato.");
+      const base = form.id
+        ? "Periodo aggiornato."
+        : res.created > 1
+          ? `${res.created} periodi salvati (ricorrenza).`
+          : "Periodo di indisponibilità salvato.";
+      toast.success(base, {
+        description:
+          res.notified > 0 || res.emailed > 0
+            ? `${res.notified + res.emailed} pazienti avvisati${res.emailed > 0 ? ` (${res.emailed} via email)` : ""}.`
+            : undefined,
+      });
     },
     onError: (e: Error) => toast.error(e.message || "Salvataggio non riuscito."),
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => remove({ data: { id } }),
+    mutationFn: (input: { id: string; whole_series?: boolean }) => remove({ data: input }),
     onSuccess: () => {
       setDeleteId(null);
       invalidate();
@@ -191,6 +203,8 @@ export function BlockedSlotsManager() {
       toDay: to.day,
       toTime: to.time,
       reason: row.reason,
+      recurrence: "none",
+      recurrenceCount: 1,
     });
     setConflicts([]);
     setOpen(true);
