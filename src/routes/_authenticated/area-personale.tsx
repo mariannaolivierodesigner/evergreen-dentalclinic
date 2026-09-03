@@ -232,6 +232,10 @@ function AreaPersonale() {
             )}
           </TabsContent>
 
+          <TabsContent value="notifiche" className="mt-6">
+            <NotificationsPanel />
+          </TabsContent>
+
           <TabsContent value="documenti" className="mt-6">
             {documents.isPending ? (
               <Skeleton className="h-24 w-full rounded-3xl" />
