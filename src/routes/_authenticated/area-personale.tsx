@@ -111,9 +111,11 @@ function AreaPersonale() {
         <Tabs defaultValue="appuntamenti" className="mt-8">
           <TabsList>
             <TabsTrigger value="appuntamenti">Appuntamenti</TabsTrigger>
+            <TabsTrigger value="notifiche">Notifiche</TabsTrigger>
             <TabsTrigger value="documenti">Documenti</TabsTrigger>
             <TabsTrigger value="profilo">Profilo</TabsTrigger>
           </TabsList>
+
 
           <TabsContent value="appuntamenti" className="mt-6 space-y-8">
             {appointments.isPending ? (
