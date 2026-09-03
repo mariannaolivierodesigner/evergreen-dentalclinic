@@ -343,6 +343,46 @@ export function BlockedSlotsManager() {
               />
             </div>
 
+            {!form.id ? (
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-2">
+                  <Label>Ripetizione</Label>
+                  <Select
+                    value={form.recurrence}
+                    onValueChange={(v) => {
+                      setForm((f) => ({ ...f, recurrence: v as Recurrence }));
+                      setConflicts([]);
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">Nessuna</SelectItem>
+                      <SelectItem value="monthly">Ogni mese</SelectItem>
+                      <SelectItem value="yearly">Ogni anno</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="rec-count">Numero di occorrenze</Label>
+                  <Input
+                    id="rec-count"
+                    type="number"
+                    min={1}
+                    max={24}
+                    disabled={form.recurrence === "none"}
+                    value={form.recurrenceCount}
+                    onChange={(e) => {
+                      const n = Math.min(24, Math.max(1, Number(e.target.value) || 1));
+                      setForm((f) => ({ ...f, recurrenceCount: n }));
+                      setConflicts([]);
+                    }}
+                  />
+                </div>
+              </div>
+            ) : null}
+
             {validation ? (
               <p className="text-destructive text-sm">{validation}</p>
             ) : null}
