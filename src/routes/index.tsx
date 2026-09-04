@@ -153,25 +153,8 @@ function Index() {
           </div>
         </div>
 
-        {/* Sorriso che si costruisce */}
-        <div className="relative mx-auto max-w-6xl px-5 pb-10">
-          <svg
-            viewBox="0 0 400 60"
-            className="text-primary/50 h-14 w-full"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M20 12 Q200 88 380 12"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeDasharray="420"
-              strokeDashoffset="420"
-              className="animate-draw"
-            />
-          </svg>
-        </div>
+        <div className="pb-10" />
+
       </section>
 
       {/* SERVIZI */}
