@@ -153,25 +153,8 @@ function Index() {
           </div>
         </div>
 
-        {/* Sorriso che si costruisce */}
-        <div className="relative mx-auto max-w-6xl px-5 pb-10">
-          <svg
-            viewBox="0 0 400 60"
-            className="text-primary/50 h-14 w-full"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M20 12 Q200 88 380 12"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeDasharray="420"
-              strokeDashoffset="420"
-              className="animate-draw"
-            />
-          </svg>
-        </div>
+        <div className="pb-10" />
+
       </section>
 
       {/* SERVIZI */}
@@ -333,7 +316,7 @@ function Index() {
             pazienti.
           </p>
         </Reveal>
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
+        <div className="mt-10 grid items-stretch gap-6 md:grid-cols-2">
           {[
             {
               img: beforeSmile,
@@ -346,26 +329,29 @@ function Index() {
               text: "Sbiancamento professionale e rifinitura estetica: 4 gradi di colore in una seduta.",
             },
           ].map((c, i) => (
-            <Reveal key={c.label} delay={i * 90}>
-              <figure className="surface-card overflow-hidden">
+            <Reveal key={c.label} delay={i * 90} className="h-full">
+              <figure className="surface-card flex h-full flex-col overflow-hidden">
                 <div className="relative">
                   <img
                     src={c.img}
                     alt={`Sorriso ${c.label.toLowerCase()} il trattamento estetico`}
                     loading="lazy"
-                    width={700}
-                    height={700}
-                    className="aspect-square w-full object-cover"
+                    width={1024}
+                    height={768}
+                    className="aspect-[4/3] w-full object-cover"
                   />
                   <span className="bg-background/90 absolute top-4 left-4 rounded-full px-3 py-1 text-xs font-semibold">
                     {c.label}
                   </span>
                 </div>
-                <figcaption className="text-muted-foreground p-5 text-sm">{c.text}</figcaption>
+                <figcaption className="text-muted-foreground flex-1 p-5 text-sm">
+                  {c.text}
+                </figcaption>
               </figure>
             </Reveal>
           ))}
         </div>
+
       </section>
 
       {/* CTA FINALE */}
