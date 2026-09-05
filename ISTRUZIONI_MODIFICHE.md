@@ -59,6 +59,13 @@ on conflict (user_id, role) do nothing;
 altrimenti chiunque si registrasse vedrebbe subito i dati reali di pazienti e appuntamenti. Te la
 preparo io al momento della consegna.
 
+## Fix responsive: foto dei medici troppo grandi su mobile
+Su schermi stretti (telefono), la griglia del team diventa a colonna unica e piena larghezza; con
+il rapporto immagine verticale usato prima (4:5), la foto arrivava a occupare gran parte dello
+schermo prima di mostrare nome e specializzazione. Ora su mobile il rapporto è più contenuto
+(4:3), mentre su tablet/desktop resta quello verticale originale, dove le card sono più strette e
+sta bene così. Toccato in `src/routes/chi-siamo.tsx` e `src/routes/index.tsx` (home).
+
 ## Come caricarlo
 1. GitHub → repository `evergreen-dentalclinic` → **Add file → Upload files**
 2. Trascina dentro `src` (sovrascrivendo)

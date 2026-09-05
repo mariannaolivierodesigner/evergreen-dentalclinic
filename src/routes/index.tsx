@@ -154,7 +154,6 @@ function Index() {
         </div>
 
         <div className="pb-10" />
-
       </section>
 
       {/* SERVIZI */}
@@ -191,7 +190,9 @@ function Index() {
                   <span className="bg-secondary rounded-full px-2.5 py-1 font-medium">
                     {formatDuration(s.duration_min)}
                   </span>
-                  <span className="text-foreground font-semibold">da {formatPrice(s.price_cents)}</span>
+                  <span className="text-foreground font-semibold">
+                    da {formatPrice(s.price_cents)}
+                  </span>
                   <ArrowRight
                     className="text-primary ml-auto h-4 w-4 transition-transform group-hover:translate-x-1"
                     aria-hidden="true"
@@ -247,7 +248,7 @@ function Index() {
                   loading="lazy"
                   width={700}
                   height={800}
-                  className="aspect-4/5 w-full object-cover"
+                  className="aspect-[4/3] w-full object-cover sm:aspect-4/5"
                 />
                 <div className="p-5">
                   <h3 className="font-semibold">{d.full_name}</h3>
@@ -261,7 +262,10 @@ function Index() {
       </section>
 
       {/* RECENSIONI */}
-      <section className="bg-secondary/50 border-border border-y" aria-labelledby="recensioni-title">
+      <section
+        className="bg-secondary/50 border-border border-y"
+        aria-labelledby="recensioni-title"
+      >
         <div className="mx-auto max-w-6xl px-5 py-20">
           <Reveal>
             <h2 id="recensioni-title" className="text-3xl font-semibold md:text-4xl">
@@ -277,10 +281,7 @@ function Index() {
                       <Quote className="text-primary/40 h-7 w-7" aria-hidden="true" />
                       <blockquote className="mt-3 flex-1 leading-relaxed">{t.quote}</blockquote>
                       <figcaption className="mt-5">
-                        <span
-                          className="flex gap-0.5"
-                          aria-label={`Valutazione ${t.rating} su 5`}
-                        >
+                        <span className="flex gap-0.5" aria-label={`Valutazione ${t.rating} su 5`}>
                           {Array.from({ length: t.rating }).map((_, i) => (
                             <Star
                               key={i}
@@ -351,7 +352,6 @@ function Index() {
             </Reveal>
           ))}
         </div>
-
       </section>
 
       {/* CTA FINALE */}
@@ -362,8 +362,8 @@ function Index() {
               Prenota la tua visita in meno di due minuti
             </h2>
             <p className="text-primary-foreground/85 mx-auto mt-4 max-w-xl">
-              Scegli il trattamento, il medico e l'orario che preferisci. Ricevi conferma immediata e
-              un promemoria il giorno prima.
+              Scegli il trattamento, il medico e l'orario che preferisci. Ricevi conferma immediata
+              e un promemoria il giorno prima.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Button variant="hero" size="xl" asChild>

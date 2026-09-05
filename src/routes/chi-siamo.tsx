@@ -72,14 +72,15 @@ function ChiSiamo() {
         <Reveal delay={80}>
           <h2 className="text-3xl font-semibold">La nostra storia</h2>
           <p className="text-muted-foreground mt-4 leading-relaxed">
-            Abbiamo aperto in due, con una poltrona e molta pazienza. Vent'anni dopo siamo un team di
-            dodici persone, ma il criterio è rimasto lo stesso: nessun paziente esce dallo studio
+            Abbiamo aperto in due, con una poltrona e molta pazienza. Vent'anni dopo siamo un team
+            di dodici persone, ma il criterio è rimasto lo stesso: nessun paziente esce dallo studio
             senza aver capito cosa gli succederà la volta dopo.
           </p>
           <p className="text-muted-foreground mt-4 leading-relaxed">
-            Abbiamo progettato gli spazi con un architetto per togliere tutto ciò che rende ansiogeno
-            uno studio dentistico: rumori, odori, sale d'attesa affollate. Ogni appuntamento ha una
-            durata reale, così non ti troverai mai ad aspettare mezz'ora oltre l'orario.
+            Abbiamo progettato gli spazi con un architetto per togliere tutto ciò che rende
+            ansiogeno uno studio dentistico: rumori, odori, sale d'attesa affollate. Ogni
+            appuntamento ha una durata reale, così non ti troverai mai ad aspettare mezz'ora oltre
+            l'orario.
           </p>
           <ul className="mt-8 space-y-4">
             {VALUES.map((v) => (
@@ -109,7 +110,7 @@ function ChiSiamo() {
                     loading="lazy"
                     width={700}
                     height={800}
-                    className="aspect-4/5 w-full object-cover"
+                    className="aspect-[4/3] w-full object-cover sm:aspect-4/5"
                   />
                   <div className="p-5">
                     <h3 className="font-semibold">{d.full_name}</h3>
