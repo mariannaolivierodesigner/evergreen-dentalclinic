@@ -1,16 +1,18 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { z } from "zod";
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { CalendarPlus, Check, ChevronLeft, ChevronRight, LogIn } from "lucide-react";
+import { CalendarPlus, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader, SiteLayout } from "@/components/site/SiteLayout";
 import { ServiceIcon } from "@/components/site/ServiceIcon";
 import { doctorPhoto } from "@/components/site/doctor-photos";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
@@ -24,6 +26,8 @@ import { doctorsQuery, servicesQuery } from "@/lib/public-queries";
 import { getAvailability, bookAppointment } from "@/lib/booking.functions";
 import { formatDateShort, formatDuration, formatPrice, formatTime, isoDay } from "@/lib/format";
 import { useSession } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { translateAuthError } from "@/lib/auth-errors";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/prenota")({
@@ -78,6 +82,16 @@ function Prenota() {
   const [note, setNote] = useState("");
   const [confirmOpen, setConfirmOpen] = useState(false);
 
+  // Identità paziente non ancora loggato: raccolta direttamente nel riepilogo,
+  // senza far passare da una pagina di login/registrazione separata.
+  const [guestName, setGuestName] = useState("");
+  const [guestEmail, setGuestEmail] = useState("");
+  const [guestPhone, setGuestPhone] = useState("");
+  const [guestConsent, setGuestConsent] = useState(false);
+  const [guestPassword, setGuestPassword] = useState("");
+  const [accountExists, setAccountExists] = useState(false);
+  const [identityBusy, setIdentityBusy] = useState(false);
+
   const service = services.find((s) => s.id === serviceId) ?? null;
   const days = useMemo(() => nextDays(7, offset), [offset]);
 
@@ -109,6 +123,88 @@ function Prenota() {
 
   const canBook = serviceId && doctorId && slot;
 
+  /**
+   * Se il paziente è già loggato, non fa nulla (torna true subito).
+   * Se non lo è, crea l'account dietro le quinte con i dati raccolti nel
+   * riepilogo (nessuna pagina separata, nessuna password da scegliere) e
+   * aggiorna il profilo con telefono e consenso privacy. Se esiste già un
+   * account con quella email, chiede la password per accedere invece di
+   * registrarne uno nuovo.
+   */
+  async function ensureIdentity(): Promise<boolean> {
+    if (user) return true;
+
+    if (!guestName.trim() || !guestEmail.trim() || !guestPhone.trim()) {
+      toast.error("Compila nome, email e telefono per continuare.");
+      return false;
+    }
+    if (!guestConsent) {
+      toast.error("Devi accettare l'informativa privacy per prenotare.");
+      return false;
+    }
+
+    setIdentityBusy(true);
+    try {
+      if (accountExists) {
+        if (!guestPassword) {
+          toast.error("Inserisci la password del tuo account per continuare.");
+          return false;
+        }
+        const { error } = await supabase.auth.signInWithPassword({
+          email: guestEmail.trim(),
+          password: guestPassword,
+        });
+        if (error) {
+          toast.error(translateAuthError(error.message));
+          return false;
+        }
+        return true;
+      }
+
+      const randomPassword = `${crypto.randomUUID()}${crypto.randomUUID()}`;
+      const { data, error } = await supabase.auth.signUp({
+        email: guestEmail.trim(),
+        password: randomPassword,
+        options: {
+          emailRedirectTo: `${window.location.origin}/area-personale`,
+          data: { full_name: guestName.trim() },
+        },
+      });
+
+      if (error) {
+        if (error.message.toLowerCase().includes("already registered")) {
+          setAccountExists(true);
+          toast.error(
+            "Risulta già un account con questa email: inserisci la password per continuare.",
+          );
+          return false;
+        }
+        toast.error(translateAuthError(error.message));
+        return false;
+      }
+
+      if (!data.session || !data.user) {
+        toast.error(
+          "Ti abbiamo inviato un'email di conferma: apri il link e poi torna qui per completare la prenotazione.",
+        );
+        return false;
+      }
+
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .update({ phone: guestPhone.trim(), privacy_consent: true })
+        .eq("user_id", data.user.id);
+      if (profileError) {
+        // Non blocchiamo la prenotazione per questo: il profilo esiste comunque.
+        console.error("Aggiornamento profilo non riuscito:", profileError.message);
+      }
+
+      return true;
+    } finally {
+      setIdentityBusy(false);
+    }
+  }
+
   return (
     <SiteLayout>
       <PageHeader
@@ -136,7 +232,9 @@ function Prenota() {
                     aria-pressed={serviceId === s.id}
                     className={cn(
                       "surface-card flex w-full items-start gap-3 p-4 text-left transition-colors",
-                      serviceId === s.id ? "border-primary bg-primary-soft/60" : "hover:bg-secondary",
+                      serviceId === s.id
+                        ? "border-primary bg-primary-soft/60"
+                        : "hover:bg-secondary",
                     )}
                   >
                     <span className="bg-primary-soft text-primary grid h-9 w-9 shrink-0 place-items-center rounded-xl">
@@ -344,7 +442,7 @@ function Prenota() {
               )}
             </dl>
 
-            {loading ? null : user ? (
+            {loading ? null : (
               <Button
                 variant="hero"
                 size="lg"
@@ -354,18 +452,6 @@ function Prenota() {
               >
                 <CalendarPlus aria-hidden="true" /> Vai al riepilogo
               </Button>
-            ) : (
-              <div className="mt-6">
-                <p className="text-muted-foreground text-sm">
-                  Per completare la prenotazione accedi o crea un account: ti serve anche per
-                  gestire e disdire gli appuntamenti.
-                </p>
-                <Button variant="hero" size="lg" className="mt-3 w-full" asChild>
-                  <Link to="/auth" search={{ redirect: "/prenota" }}>
-                    <LogIn aria-hidden="true" /> Accedi per prenotare
-                  </Link>
-                </Button>
-              </div>
             )}
 
             <p className="text-muted-foreground mt-4 flex items-start gap-2 text-xs">
@@ -385,6 +471,81 @@ function Prenota() {
               personale.
             </DialogDescription>
           </DialogHeader>
+
+          {!user && (
+            <div className="border-border space-y-4 border-b pb-5">
+              <p className="text-muted-foreground text-xs">
+                {accountExists
+                  ? "Hai già un account con questa email: inserisci la password per continuare."
+                  : "Ci servono pochi dati per confermare la prenotazione — ti creiamo subito un accesso alla tua area personale, senza bisogno di scegliere una password."}
+              </p>
+              {!accountExists && (
+                <>
+                  <div>
+                    <Label htmlFor="guest-name">Nome e cognome</Label>
+                    <Input
+                      id="guest-name"
+                      value={guestName}
+                      onChange={(e) => setGuestName(e.target.value)}
+                      maxLength={120}
+                      className="mt-1.5"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="guest-phone">Telefono</Label>
+                    <Input
+                      id="guest-phone"
+                      type="tel"
+                      value={guestPhone}
+                      onChange={(e) => setGuestPhone(e.target.value)}
+                      maxLength={30}
+                      className="mt-1.5"
+                    />
+                  </div>
+                </>
+              )}
+              <div>
+                <Label htmlFor="guest-email">Email</Label>
+                <Input
+                  id="guest-email"
+                  type="email"
+                  value={guestEmail}
+                  onChange={(e) => setGuestEmail(e.target.value)}
+                  className="mt-1.5"
+                />
+              </div>
+              {accountExists && (
+                <div>
+                  <Label htmlFor="guest-password">Password</Label>
+                  <Input
+                    id="guest-password"
+                    type="password"
+                    value={guestPassword}
+                    onChange={(e) => setGuestPassword(e.target.value)}
+                    className="mt-1.5"
+                  />
+                </div>
+              )}
+              {!accountExists && (
+                <div className="flex items-start gap-2.5">
+                  <Checkbox
+                    id="guest-consent"
+                    checked={guestConsent}
+                    onCheckedChange={(v) => setGuestConsent(v === true)}
+                    className="mt-0.5"
+                  />
+                  <Label htmlFor="guest-consent" className="text-xs leading-relaxed font-normal">
+                    Ho letto e accetto l'{" "}
+                    <a href="/privacy" target="_blank" rel="noreferrer" className="underline">
+                      informativa privacy
+                    </a>{" "}
+                    e presto il consenso al trattamento dei dati relativi alla salute necessari per
+                    la visita.
+                  </Label>
+                </div>
+              )}
+            </div>
+          )}
 
           <dl className="divide-border divide-y text-sm">
             <div className="flex items-start justify-between gap-4 py-2.5">
@@ -447,8 +608,10 @@ function Prenota() {
             </Button>
             <Button
               variant="hero"
-              disabled={!canBook || mutation.isPending}
-              onClick={() =>
+              disabled={!canBook || mutation.isPending || identityBusy}
+              onClick={async () => {
+                const ready = await ensureIdentity();
+                if (!ready) return;
                 mutation.mutate({
                   data: {
                     doctorId: doctorId!,
@@ -456,10 +619,10 @@ function Prenota() {
                     startsAt: slot!,
                     note,
                   },
-                })
-              }
+                });
+              }}
             >
-              {mutation.isPending ? (
+              {mutation.isPending || identityBusy ? (
                 "Prenotazione…"
               ) : (
                 <>

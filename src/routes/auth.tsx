@@ -4,6 +4,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
+import { translateAuthError } from "@/lib/auth-errors";
 import { useSession } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,7 +59,7 @@ function AuthPage() {
     });
     setBusy(false);
     if (error) {
-      toast.error("Credenziali non valide.");
+      toast.error(translateAuthError(error.message));
       return;
     }
     navigate({ to: target, replace: true });
@@ -83,7 +84,7 @@ function AuthPage() {
     });
     setBusy(false);
     if (error) {
-      toast.error(error.message);
+      toast.error(translateAuthError(error.message));
       return;
     }
     toast.success("Ti abbiamo inviato una email di conferma: apri il link per attivare l'account.");

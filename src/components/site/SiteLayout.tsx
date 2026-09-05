@@ -12,7 +12,7 @@ export function SiteLayout({
   return (
     <div className="flex min-h-dvh flex-col">
       <SiteHeader />
-      <main className="flex-1">{children}</main>
+      <main>{children}</main>
       <SiteFooter className={footerClassName ?? ""} />
     </div>
   );

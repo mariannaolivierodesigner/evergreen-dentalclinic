@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useRoles, useSession } from "@/hooks/useAuth";
 import { adminExists, claimFirstAdmin } from "@/lib/admin-setup.functions";
+import { translateAuthError } from "@/lib/auth-errors";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -72,7 +73,7 @@ function AdminGate() {
       password: String(fd.get("password") ?? ""),
     });
     setBusy(false);
-    if (error) toast.error("Credenziali non valide.");
+    if (error) toast.error(translateAuthError(error.message));
   }
 
   async function signUp(e: React.FormEvent<HTMLFormElement>) {
@@ -94,7 +95,7 @@ function AdminGate() {
     });
     setBusy(false);
     if (error) {
-      toast.error(error.message);
+      toast.error(translateAuthError(error.message));
       return;
     }
     toast.success("Account creato: se richiesto, conferma l'email e torna su questa pagina.");
@@ -139,7 +140,13 @@ function AdminGate() {
               <form onSubmit={signUp} className="mt-6 space-y-4">
                 <div>
                   <Label htmlFor="ad-name">Nome e cognome</Label>
-                  <Input id="ad-name" name="full_name" required maxLength={120} className="mt-1.5" />
+                  <Input
+                    id="ad-name"
+                    name="full_name"
+                    required
+                    maxLength={120}
+                    className="mt-1.5"
+                  />
                 </div>
                 <div>
                   <Label htmlFor="ad-email2">Email</Label>
