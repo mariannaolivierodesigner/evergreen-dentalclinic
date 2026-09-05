@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { Clock, Instagram, Facebook, Mail, MapPin, Phone } from "lucide-react";
 import { STUDIO } from "@/lib/format";
+import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
 
-export function SiteFooter() {
+export function SiteFooter({ className }: { className?: string }) {
   return (
-    <footer className="bg-secondary/60 border-border mt-24 border-t">
+    <footer className={cn("bg-secondary/60 border-border mt-24 border-t", className)}>
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-4">
         <div className="md:col-span-1">
           <Logo />
