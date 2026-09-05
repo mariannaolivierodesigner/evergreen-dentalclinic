@@ -10,6 +10,55 @@
 - `README.md` → rimossa la parte finale ("BeautyOS") che non riguardava questo progetto: era
   materiale di un prompt diverso rimasto per errore nel file
 
+## App installabile su desktop e smartphone (PWA)
+Stesso trattamento fatto per Aura Clinic: il sito è ora installabile come un'app, senza passare
+da App Store/Play Store.
+- `public/manifest.webmanifest`, `public/sw.js`, `public/icons/` → involucro PWA, icona con il
+  dente del logo su sfondo verde salvia (sostituibile in futuro col logo reale del cliente)
+- Pulsante **"Installa app"** nel menu "Il mio account" dell'header (visibile solo a chi è
+  loggato, quando il browser lo supporta)
+
+**Come si installa**: Desktop/Android (Chrome/Edge) → icona nella barra indirizzi o voce nel
+menu account; iPhone (Safari) → Condividi (□↑) → "Aggiungi a Home" (sempre manuale su iOS, limite
+di Apple).
+
+## Fix vero spazio bianco "Chi siamo" (il precedente non bastava)
+La causa reale era un margine fisso di 96px sempre applicato sopra il footer
+(`src/components/site/SiteFooter.tsx`), su ogni pagina — non il layout generale come pensavo la
+prima volta. Tolto: ora lo spazio prima del footer dipende solo dal contenuto della pagina, niente
+più vuoti innaturali sulle pagine corte.
+
+## Registrazione automatica come "admin" per la demo (paziente E staff, email E Google)
+Ho aggiunto `supabase/migrations/20260905140000_demo_auto_admin_role.sql`: chi si registra per la
+prima volta — da `/auth` (pazienti) o da `/admin` (staff), con email o con Google — riceve subito
+anche il ruolo "admin", oltre a "patient". Così un potenziale cliente in prova entra direttamente
+nel gestionale con accesso completo, senza il messaggio "Questo account non ha ancora i permessi
+dello staff".
+
+**Da eseguire una volta in SQL Editor** (Lovable → Altro → Cloud → SQL editor):
+```sql
+CREATE OR REPLACE FUNCTION public.handle_new_user() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  INSERT INTO public.profiles (user_id, full_name, email)
+  VALUES (NEW.id, COALESCE(NEW.raw_user_meta_data->>'full_name', split_part(NEW.email,'@',1)), NEW.email)
+  ON CONFLICT (user_id) DO NOTHING;
+  INSERT INTO public.user_roles (user_id, role) VALUES (NEW.id, 'patient') ON CONFLICT DO NOTHING;
+  INSERT INTO public.user_roles (user_id, role) VALUES (NEW.id, 'admin') ON CONFLICT DO NOTHING;
+  RETURN NEW;
+END; $$;
+```
+
+**Per sbloccare subito l'account già registrato** (lorenzaiacone@gmail.com, rimasto senza ruoli):
+```sql
+insert into public.user_roles (user_id, role)
+select id, 'admin' from auth.users where email = 'lorenzaiacone@gmail.com'
+on conflict (user_id, role) do nothing;
+```
+
+**IMPORTANTE — da fare alla consegna a un cliente reale**: questa migrazione va disattivata,
+altrimenti chiunque si registrasse vedrebbe subito i dati reali di pazienti e appuntamenti. Te la
+preparo io al momento della consegna.
+
 ## Come caricarlo
 1. GitHub → repository `evergreen-dentalclinic` → **Add file → Upload files**
 2. Trascina dentro `src` (sovrascrivendo)

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { CalendarPlus, LogOut, Menu, User, X } from "lucide-react";
+import { CalendarPlus, Download, LogOut, Menu, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRoles, useSession } from "@/hooks/useAuth";
+import { useInstallPrompt } from "@/hooks/use-install-prompt";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "./Logo";
 import { cn } from "@/lib/utils";
@@ -30,6 +31,7 @@ export function SiteHeader() {
   const { isStaff } = useRoles(user?.id);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { canInstall, promptInstall } = useInstallPrompt();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -88,6 +90,11 @@ export function SiteHeader() {
                 {isStaff && (
                   <DropdownMenuItem asChild>
                     <Link to="/staff">Gestionale studio</Link>
+                  </DropdownMenuItem>
+                )}
+                {canInstall && (
+                  <DropdownMenuItem onSelect={promptInstall}>
+                    <Download aria-hidden="true" /> Installa app
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuSeparator />
