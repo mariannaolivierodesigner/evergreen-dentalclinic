@@ -84,7 +84,7 @@ function Index() {
   const { data: testimonials } = useSuspenseQuery(testimonialsQuery());
 
   return (
-    <SiteLayout>
+    <SiteLayout footerClassName="mt-0">
       {/* HERO */}
       <section className="bg-calm relative overflow-hidden">
         <div
