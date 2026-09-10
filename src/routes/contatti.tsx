@@ -39,7 +39,8 @@ function Contatti() {
 
   const mutation = useMutation({
     mutationFn: send,
-    onSuccess: () => toast.success("Messaggio inviato: ti rispondiamo entro un giorno lavorativo."),
+    onSuccess: () =>
+      toast.success("Grazie per il messaggio, la nostra segreteria la contatterà il prima possibile."),
     onError: (e: Error) => toast.error(e.message || "Invio non riuscito, riprova."),
   });
 
@@ -56,6 +57,8 @@ function Contatti() {
     const next: Record<string, string> = {};
     if (values.name.trim().length < 2) next["name"] = "Inserisci il tuo nome.";
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(values.email.trim())) next["email"] = "Email non valida.";
+    if (!/^[0-9+()\s.-]{6,40}$/.test(values.phone.trim()))
+      next["phone"] = "Inserisci un numero di telefono valido.";
     if (values.message.trim().length < 10) next["message"] = "Scrivi almeno una riga.";
     if (!consent) next["consent"] = "Devi accettare l'informativa privacy.";
     setErrors(next);
@@ -129,8 +132,11 @@ function Contatti() {
                 )}
               </div>
               <div>
-                <Label htmlFor="phone">Telefono (facoltativo)</Label>
-                <Input id="phone" name="phone" maxLength={40} className="mt-1.5" />
+                <Label htmlFor="phone">Telefono</Label>
+                <Input id="phone" name="phone" maxLength={40} required className="mt-1.5" />
+                {errors["phone"] && (
+                  <p className="text-destructive mt-1 text-xs">{errors["phone"]}</p>
+                )}
               </div>
             </div>
             <div>

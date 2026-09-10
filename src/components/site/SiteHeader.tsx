@@ -92,7 +92,7 @@ export function SiteHeader() {
                     <Link to="/staff">Gestionale studio</Link>
                   </DropdownMenuItem>
                 )}
-                {canInstall && (
+                {isStaff && canInstall && (
                   <DropdownMenuItem onSelect={promptInstall}>
                     <Download aria-hidden="true" /> Installa app
                   </DropdownMenuItem>

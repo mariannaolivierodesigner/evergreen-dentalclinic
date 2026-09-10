@@ -75,7 +75,12 @@ export const getPost = createServerFn({ method: "GET" })
 const contactSchema = z.object({
   name: z.string().trim().min(2, "Inserisci il tuo nome").max(100),
   email: z.string().trim().email("Email non valida").max(255),
-  phone: z.string().trim().max(40).optional().or(z.literal("")),
+  phone: z
+    .string()
+    .trim()
+    .min(6, "Inserisci un numero di telefono valido")
+    .max(40)
+    .regex(/^[0-9+()\s.-]+$/, "Inserisci un numero di telefono valido"),
   message: z.string().trim().min(10, "Scrivi almeno una riga").max(1500),
   privacy_consent: z.literal(true),
 });

@@ -1,8 +1,8 @@
 {
-  "name": "Studio Dentistico Evergreen",
-  "short_name": "Evergreen",
-  "description": "Studio dentistico a Milano — prenota online e gestisci i tuoi appuntamenti.",
-  "start_url": "/",
+  "name": "Studio Dentistico Evergreen — Gestionale",
+  "short_name": "Evergreen Staff",
+  "description": "Gestionale interno dello Studio Dentistico Evergreen.",
+  "start_url": "/staff",
   "scope": "/",
   "display": "standalone",
   "background_color": "#F5F3EC",

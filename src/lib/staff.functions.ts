@@ -72,6 +72,72 @@ export const listMessages = createServerFn({ method: "GET" })
     return data ?? [];
   });
 
+/** ---- Documenti pazienti ---- */
+
+export const listPatientDocuments = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ patientId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertStaff(context);
+    const { data: rows, error } = await context.supabase
+      .from("documents")
+      .select("*")
+      .eq("patient_id", data.patientId)
+      .order("created_at", { ascending: false });
+    if (error) throw new Error(error.message);
+
+    return Promise.all(
+      (rows ?? []).map(async (doc) => {
+        if (!doc.file_url) return doc;
+        const { data: signed } = await context.supabase.storage
+          .from("documents")
+          .createSignedUrl(doc.file_url, 60 * 10);
+        return { ...doc, file_url: signed?.signedUrl ?? null };
+      }),
+    );
+  });
+
+const documentInput = z.object({
+  patientId: z.string().uuid(),
+  title: z.string().trim().min(2).max(120),
+  kind: z.enum(["referto", "radiografia", "piano", "preventivo", "altro"]),
+  filePath: z.string().trim().min(1),
+});
+
+/** Registra un documento già caricato su storage (bucket "documents"). */
+export const addPatientDocument = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => documentInput.parse(d))
+  .handler(async ({ data, context }) => {
+    await assertStaff(context);
+    const { error } = await context.supabase.from("documents").insert({
+      patient_id: data.patientId,
+      title: data.title,
+      kind: data.kind,
+      file_url: data.filePath,
+    });
+    if (error) throw new Error(error.message);
+    return { ok: true as const };
+  });
+
+export const deletePatientDocument = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertStaff(context);
+    const { data: doc } = await context.supabase
+      .from("documents")
+      .select("file_url")
+      .eq("id", data.id)
+      .maybeSingle();
+    const { error } = await context.supabase.from("documents").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    if (doc?.file_url) {
+      await context.supabase.storage.from("documents").remove([doc.file_url]);
+    }
+    return { ok: true as const };
+  });
+
 /** ---- Ferie / permessi (indisponibilità) ---- */
 
 const blockedInput = z

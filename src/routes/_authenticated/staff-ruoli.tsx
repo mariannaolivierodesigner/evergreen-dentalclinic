@@ -28,7 +28,10 @@ export const Route = createFileRoute("/_authenticated/staff-ruoli")({
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
-    links: [{ rel: "canonical", href: "/staff-ruoli" }],
+    links: [
+      { rel: "canonical", href: "/staff-ruoli" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+    ],
   }),
   component: RolesPage,
 });

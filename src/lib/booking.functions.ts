@@ -204,7 +204,16 @@ export const listMyDocuments = createServerFn({ method: "GET" })
       .select("*")
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
-    return data ?? [];
+
+    return Promise.all(
+      (data ?? []).map(async (doc) => {
+        if (!doc.file_url) return doc;
+        const { data: signed } = await context.supabase.storage
+          .from("documents")
+          .createSignedUrl(doc.file_url, 60 * 10);
+        return { ...doc, file_url: signed?.signedUrl ?? null };
+      }),
+    );
   });
 
 export const updateMyProfile = createServerFn({ method: "POST" })
