@@ -23,6 +23,8 @@ export type Database = {
           patient_id: string
           patient_note: string | null
           reminder_sent: boolean
+          reminder_channel: string | null
+          reminder_sent_at: string | null
           service_id: string
           staff_note: string | null
           starts_at: string
@@ -37,6 +39,8 @@ export type Database = {
           patient_id: string
           patient_note?: string | null
           reminder_sent?: boolean
+          reminder_channel?: string | null
+          reminder_sent_at?: string | null
           service_id: string
           staff_note?: string | null
           starts_at: string
@@ -51,6 +55,8 @@ export type Database = {
           patient_id?: string
           patient_note?: string | null
           reminder_sent?: boolean
+          reminder_channel?: string | null
+          reminder_sent_at?: string | null
           service_id?: string
           staff_note?: string | null
           starts_at?: string
@@ -413,7 +419,7 @@ export type Database = {
           id: string
           marketing_consent: boolean
           notes: string | null
-          notify_email: boolean
+          notify_whatsapp: boolean
           notify_in_app: boolean
           notify_sms: boolean
           onboarded: boolean
@@ -432,7 +438,7 @@ export type Database = {
           id?: string
           marketing_consent?: boolean
           notes?: string | null
-          notify_email?: boolean
+          notify_whatsapp?: boolean
           notify_in_app?: boolean
           notify_sms?: boolean
           onboarded?: boolean
@@ -451,7 +457,7 @@ export type Database = {
           id?: string
           marketing_consent?: boolean
           notes?: string | null
-          notify_email?: boolean
+          notify_whatsapp?: boolean
           notify_in_app?: boolean
           notify_sms?: boolean
           onboarded?: boolean

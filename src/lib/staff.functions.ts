@@ -19,13 +19,31 @@ export const listAgenda = createServerFn({ method: "GET" })
     const { data: rows, error } = await context.supabase
       .from("appointments")
       .select(
-        "id, starts_at, ends_at, status, patient_note, staff_note, services(name, price_cents), doctors(id, full_name, color), profiles(full_name, phone, email)",
+        "id, starts_at, ends_at, status, patient_note, staff_note, reminder_channel, reminder_sent_at, services(name, price_cents), doctors(id, full_name, color), profiles(full_name, phone, email)",
       )
       .gte("starts_at", data.from)
       .lte("starts_at", data.to)
       .order("starts_at");
     if (error) throw new Error(error.message);
     return rows ?? [];
+  });
+
+/** Registra l'invio (simulato) di un promemoria SMS/WhatsApp per un appuntamento. */
+export const sendAppointmentReminder = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z
+      .object({ id: z.string().uuid(), channel: z.enum(["sms", "whatsapp"]) })
+      .parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertStaff(context);
+    const { error } = await context.supabase
+      .from("appointments")
+      .update({ reminder_channel: data.channel, reminder_sent_at: new Date().toISOString() })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true as const };
   });
 
 export const setAppointmentStatus = createServerFn({ method: "POST" })
@@ -70,6 +88,85 @@ export const listMessages = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
     return data ?? [];
+  });
+
+/** ---- Listino trattamenti ---- */
+
+export const listServicesForStaff = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertStaff(context);
+    const { data, error } = await context.supabase
+      .from("services")
+      .select("id, slug, name, short_description, duration_min, price_cents, published, sort_order")
+      .order("sort_order")
+      .order("name");
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+function slugify(text: string) {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+const serviceInput = z.object({
+  id: z.string().uuid().optional(),
+  name: z.string().trim().min(2).max(120),
+  shortDescription: z.string().trim().min(2).max(300),
+  durationMin: z.number().int().min(5).max(480),
+  priceCents: z.number().int().min(0).max(10_000_00),
+  published: z.boolean(),
+});
+
+export const saveService = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => serviceInput.parse(d))
+  .handler(async ({ data, context }) => {
+    await assertStaff(context);
+    const payload = {
+      name: data.name,
+      short_description: data.shortDescription,
+      duration_min: data.durationMin,
+      price_cents: data.priceCents,
+      published: data.published,
+    };
+    if (data.id) {
+      const { error } = await context.supabase.from("services").update(payload).eq("id", data.id);
+      if (error) throw new Error(error.message);
+    } else {
+      let slug = slugify(data.name);
+      const { data: clash } = await context.supabase
+        .from("services")
+        .select("id")
+        .eq("slug", slug)
+        .maybeSingle();
+      if (clash) slug = `${slug}-${Date.now().toString(36)}`;
+      const { error } = await context.supabase.from("services").insert({ ...payload, slug });
+      if (error) throw new Error(error.message);
+    }
+    return { ok: true as const };
+  });
+
+export const deleteService = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertStaff(context);
+    const { error } = await context.supabase.from("services").delete().eq("id", data.id);
+    if (error) {
+      if (error.code === "23503") {
+        throw new Error(
+          "Questo trattamento è già collegato ad appuntamenti esistenti: disattivalo invece di eliminarlo.",
+        );
+      }
+      throw new Error(error.message);
+    }
+    return { ok: true as const };
   });
 
 /** ---- Documenti pazienti ---- */
@@ -237,6 +334,72 @@ export const listStaffDoctors = createServerFn({ method: "GET" })
     return data ?? [];
   });
 
+/** ---- Turni settimanali ---- */
+
+const timeSchema = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Orario non valido");
+
+export const listDoctorShifts = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ doctorId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertStaff(context);
+    const { data: rows, error } = await context.supabase
+      .from("doctor_availability")
+      .select("id, doctor_id, weekday, start_time, end_time")
+      .eq("doctor_id", data.doctorId)
+      .order("weekday")
+      .order("start_time");
+    if (error) throw new Error(error.message);
+    return rows ?? [];
+  });
+
+const shiftInput = z
+  .object({
+    id: z.string().uuid().optional(),
+    doctorId: z.string().uuid(),
+    weekday: z.number().int().min(0).max(6),
+    startTime: timeSchema,
+    endTime: timeSchema,
+  })
+  .refine((v) => v.endTime > v.startTime, {
+    message: "L'orario di fine deve seguire quello di inizio",
+    path: ["endTime"],
+  });
+
+export const saveDoctorShift = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => shiftInput.parse(d))
+  .handler(async ({ data, context }) => {
+    await assertStaff(context);
+    const payload = {
+      doctor_id: data.doctorId,
+      weekday: data.weekday,
+      start_time: data.startTime,
+      end_time: data.endTime,
+    };
+    if (data.id) {
+      const { error } = await context.supabase
+        .from("doctor_availability")
+        .update(payload)
+        .eq("id", data.id);
+      if (error) throw new Error(error.message);
+    } else {
+      const { error } = await context.supabase.from("doctor_availability").insert(payload);
+      if (error) throw new Error(error.message);
+    }
+    return { ok: true as const };
+  });
+
+export const deleteDoctorShift = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertStaff(context);
+    const { error } = await context.supabase.from("doctor_availability").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true as const };
+  });
+
 /** Appuntamenti attivi che si sovrappongono al periodo indicato. */
 async function findConflicts(
   context: { supabase: any },
@@ -345,7 +508,7 @@ export const saveBlockedSlot = createServerFn({ method: "POST" })
       const patientIds = [...new Set(conflicts.map((c) => c.patient_id))];
       const { data: prefs } = await context.supabase
         .from("profiles")
-        .select("id, full_name, email, notify_in_app, notify_email, notify_sms")
+        .select("id, full_name, notify_in_app")
         .in("id", patientIds);
       const prefMap = new Map((prefs ?? []).map((p: any) => [p.id, p]));
 
@@ -355,17 +518,8 @@ export const saveBlockedSlot = createServerFn({ method: "POST" })
         const title = "Il tuo appuntamento va riprogrammato";
         const body = `L'appuntamento del ${dateLabel(c.starts_at)} ricade in un periodo di indisponibilità del medico (${data.reason}). Ti invitiamo a spostarlo dall'area personale o a contattare lo studio.`;
 
-        let deliveredElsewhere = false;
-        if (p?.notify_email && p?.email) {
-          const { sendPatientEmail } = await import("@/lib/notify.server");
-          const sent = await sendPatientEmail({ to: p.email, subject: title, text: body });
-          if (sent) {
-            deliveredElsewhere = true;
-            emailed++;
-          }
-        }
-        // In-app come canale predefinito e come fallback se l'email non è disponibile.
-        if (p?.notify_in_app !== false || !deliveredElsewhere) {
+        // Canale predefinito: notifica in app (email non più prevista, sostituita da SMS/WhatsApp).
+        if (p?.notify_in_app !== false) {
           rows.push({
             patient_id: c.patient_id,
             appointment_id: c.id,

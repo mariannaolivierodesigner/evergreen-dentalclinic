@@ -12,6 +12,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -25,10 +33,13 @@ import {
   listMessages,
   listPatientDocuments,
   listPatients,
+  sendAppointmentReminder,
   setAppointmentStatus,
 } from "@/lib/staff.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { BlockedSlotsManager } from "@/components/site/BlockedSlotsManager";
+import { ShiftsManager } from "@/components/site/ShiftsManager";
+import { ServicesManager } from "@/components/site/ServicesManager";
 import { StaffCalendar } from "@/components/site/StaffCalendar";
 import { useRoles, useSession } from "@/hooks/useAuth";
 import { STATUS_LABEL, formatDate, formatPrice, formatTime, isoDay } from "@/lib/format";
@@ -83,6 +94,12 @@ function StaffPage() {
   const registerDocument = useServerFn(addPatientDocument);
   const removeDocument = useServerFn(deletePatientDocument);
   const updateStatus = useServerFn(setAppointmentStatus);
+  const sendReminder = useServerFn(sendAppointmentReminder);
+
+  const [reminderTarget, setReminderTarget] = useState<{
+    appointment: any;
+    channel: "sms" | "whatsapp";
+  } | null>(null);
 
   const agenda = useQuery({
     queryKey: ["agenda", day],
@@ -114,6 +131,30 @@ function StaffPage() {
     },
     onError: () => toast.error("Aggiornamento non riuscito."),
   });
+
+  const reminderMutation = useMutation({
+    mutationFn: (input: { id: string; channel: "sms" | "whatsapp" }) =>
+      sendReminder({ data: input }),
+    onSuccess: () => {
+      toast.success("Promemoria segnato come inviato.");
+      setReminderTarget(null);
+      queryClient.invalidateQueries({ queryKey: ["agenda"] });
+    },
+    onError: () => toast.error("Non è stato possibile registrare l'invio."),
+  });
+
+  function composeReminderMessage(a: any) {
+    const firstName = (a.profiles?.full_name ?? "").split(" ")[0] || "";
+    const when = new Intl.DateTimeFormat("it-IT", {
+      timeZone: "Europe/Rome",
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(new Date(a.starts_at));
+    return `Ciao ${firstName}, ti confermiamo l'appuntamento per "${a.services?.name}" presso Studio Dentistico Evergreen, ${when}. A presto!`;
+  }
 
   const uploadDocumentMutation = useMutation({
     mutationFn: async () => {
@@ -191,7 +232,9 @@ function StaffPage() {
             <TabsTrigger value="calendario">Calendario</TabsTrigger>
             <TabsTrigger value="pazienti">Pazienti</TabsTrigger>
             <TabsTrigger value="documenti">Documenti</TabsTrigger>
+            <TabsTrigger value="listino">Listino</TabsTrigger>
             <TabsTrigger value="indisponibilita">Ferie e permessi</TabsTrigger>
+            <TabsTrigger value="turni">Turni</TabsTrigger>
             <TabsTrigger value="messaggi">Messaggi</TabsTrigger>
           </TabsList>
 
@@ -239,6 +282,32 @@ function StaffPage() {
                           <p className="text-muted-foreground mt-1 text-xs italic">
                             “{a.patient_note}”
                           </p>
+                        )}
+                        {a.status === "confirmed" && (
+                          <div className="mt-3 flex flex-wrap items-center gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setReminderTarget({ appointment: a, channel: "sms" })}
+                            >
+                              SMS
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() =>
+                                setReminderTarget({ appointment: a, channel: "whatsapp" })
+                              }
+                            >
+                              WhatsApp
+                            </Button>
+                            {a.reminder_sent_at && (
+                              <span className="text-muted-foreground text-xs">
+                                Inviato via {a.reminder_channel === "whatsapp" ? "WhatsApp" : "SMS"}{" "}
+                                il {formatDate(a.reminder_sent_at)} alle {formatTime(a.reminder_sent_at)}
+                              </span>
+                            )}
+                          </div>
                         )}
                       </div>
                       <Badge variant="secondary">{STATUS_LABEL[a.status]}</Badge>
@@ -425,8 +494,16 @@ function StaffPage() {
             ) : null}
           </TabsContent>
 
+          <TabsContent value="listino" className="mt-6">
+            <ServicesManager />
+          </TabsContent>
+
           <TabsContent value="indisponibilita" className="mt-6">
             <BlockedSlotsManager />
+          </TabsContent>
+
+          <TabsContent value="turni" className="mt-6">
+            <ShiftsManager />
           </TabsContent>
 
           <TabsContent value="messaggi" className="mt-6">
@@ -468,6 +545,47 @@ function StaffPage() {
           )}
         </p>
       </div>
+
+      <Dialog open={!!reminderTarget} onOpenChange={(o) => !o && setReminderTarget(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              Promemoria via {reminderTarget?.channel === "whatsapp" ? "WhatsApp" : "SMS"}
+            </DialogTitle>
+            <DialogDescription>
+              {reminderTarget?.appointment.profiles?.phone
+                ? `Numero: ${reminderTarget.appointment.profiles.phone}`
+                : "Numero di telefono non presente in anagrafica."}
+            </DialogDescription>
+          </DialogHeader>
+          {reminderTarget && (
+            <div className="bg-muted/50 rounded-2xl p-4 text-sm whitespace-pre-wrap">
+              {composeReminderMessage(reminderTarget.appointment)}
+            </div>
+          )}
+          <p className="text-muted-foreground text-xs">
+            Invio dimostrativo: nessun SMS o messaggio WhatsApp viene realmente inviato, il
+            messaggio viene solo registrato come inviato con data e ora.
+          </p>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setReminderTarget(null)}>
+              Annulla
+            </Button>
+            <Button
+              disabled={reminderMutation.isPending}
+              onClick={() =>
+                reminderTarget &&
+                reminderMutation.mutate({
+                  id: reminderTarget.appointment.id,
+                  channel: reminderTarget.channel,
+                })
+              }
+            >
+              {reminderMutation.isPending ? "Registrazione…" : "Segna come inviato"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </SiteLayout>
   );
 }

@@ -35,7 +35,7 @@ export function NotificationsPanel() {
   });
 
   const prefsMutation = useMutation({
-    mutationFn: (input: { notify_in_app: boolean; notify_email: boolean; notify_sms: boolean }) =>
+    mutationFn: (input: { notify_in_app: boolean; notify_whatsapp: boolean; notify_sms: boolean }) =>
       savePrefs({ data: input }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-contact-prefs"] });
@@ -48,11 +48,11 @@ export function NotificationsPanel() {
   const unread = rows.filter((n) => !n.read_at).length;
   const p = prefs.data;
 
-  const updatePref = (key: "notify_in_app" | "notify_email" | "notify_sms", value: boolean) => {
+  const updatePref = (key: "notify_in_app" | "notify_whatsapp" | "notify_sms", value: boolean) => {
     if (!p) return;
     prefsMutation.mutate({
       notify_in_app: p.notify_in_app,
-      notify_email: p.notify_email,
+      notify_whatsapp: p.notify_whatsapp,
       notify_sms: p.notify_sms,
       [key]: value,
     });
@@ -136,13 +136,15 @@ export function NotificationsPanel() {
             </div>
             <div className="flex items-center justify-between gap-4">
               <div>
-                <Label htmlFor="pref-email">Email</Label>
-                <p className="text-muted-foreground text-xs">{p.email ?? "Email non impostata"}</p>
+                <Label htmlFor="pref-whatsapp">WhatsApp</Label>
+                <p className="text-muted-foreground text-xs">
+                  {p.phone ?? "Numero non impostato"}
+                </p>
               </div>
               <Switch
-                id="pref-email"
-                checked={p.notify_email}
-                onCheckedChange={(v) => updatePref("notify_email", v)}
+                id="pref-whatsapp"
+                checked={p.notify_whatsapp}
+                onCheckedChange={(v) => updatePref("notify_whatsapp", v)}
               />
             </div>
             <div className="flex items-center justify-between gap-4">

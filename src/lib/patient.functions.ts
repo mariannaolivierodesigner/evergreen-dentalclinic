@@ -57,19 +57,19 @@ export const getMyContactPreferences = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("profiles")
-      .select("notify_in_app, notify_email, notify_sms, email, phone")
+      .select("notify_in_app, notify_whatsapp, notify_sms, email, phone")
       .eq("user_id", context.userId)
       .maybeSingle();
     if (error) throw new Error(error.message);
     return (data ?? {
       notify_in_app: true,
-      notify_email: true,
+      notify_whatsapp: true,
       notify_sms: false,
       email: null,
       phone: null,
     }) as {
       notify_in_app: boolean;
-      notify_email: boolean;
+      notify_whatsapp: boolean;
       notify_sms: boolean;
       email: string | null;
       phone: string | null;
@@ -82,7 +82,7 @@ export const updateMyContactPreferences = createServerFn({ method: "POST" })
     z
       .object({
         notify_in_app: z.boolean(),
-        notify_email: z.boolean(),
+        notify_whatsapp: z.boolean(),
         notify_sms: z.boolean(),
       })
       .parse(d),
