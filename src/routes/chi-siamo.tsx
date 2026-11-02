@@ -11,16 +11,16 @@ import heroStudio from "@/assets/hero-studio.jpg";
 export const Route = createFileRoute("/chi-siamo")({
   head: () => ({
     meta: [
-      { title: "Chi siamo — Studio Dentistico Evergreen, Milano" },
+      { title: "Chi siamo — Studio Dentistico Longobardi, Milano" },
       {
         name: "description",
         content:
-          "22 anni di odontoiatria a Milano: il nostro team, il metodo di lavoro e i valori che guidano lo Studio Evergreen.",
+          "22 anni di odontoiatria a Milano: il nostro team, il metodo di lavoro e i valori che guidano lo Studio Longobardi.",
       },
-      { property: "og:title", content: "Chi siamo — Studio Evergreen" },
+      { property: "og:title", content: "Chi siamo — Studio Longobardi" },
       {
         property: "og:description",
-        content: "Il team, il metodo e i valori dello Studio Dentistico Evergreen.",
+        content: "Il team, il metodo e i valori dello Studio Dentistico Longobardi.",
       },
       { property: "og:url", content: "/chi-siamo" },
     ],
@@ -62,7 +62,7 @@ function ChiSiamo() {
         <Reveal variant="left">
           <img
             src={heroStudio}
-            alt="Interno dello Studio Dentistico Evergreen"
+            alt="Interno dello Studio Dentistico Longobardi"
             loading="lazy"
             width={1408}
             height={1104}

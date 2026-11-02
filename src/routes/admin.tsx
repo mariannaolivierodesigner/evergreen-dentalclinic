@@ -17,14 +17,14 @@ export const Route = createFileRoute("/admin")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Accesso gestionale — Studio Evergreen" },
+      { title: "Accesso gestionale — Studio Longobardi" },
       {
         name: "description",
         content:
-          "Area riservata dello staff dello Studio Evergreen: accedi per gestire calendario, appuntamenti, ferie e registro modifiche.",
+          "Area riservata dello staff dello Studio Longobardi: accedi per gestire calendario, appuntamenti, ferie e registro modifiche.",
       },
-      { property: "og:title", content: "Accesso gestionale — Studio Evergreen" },
-      { property: "og:description", content: "Area riservata dello staff dello Studio Evergreen." },
+      { property: "og:title", content: "Accesso gestionale — Studio Longobardi" },
+      { property: "og:description", content: "Area riservata dello staff dello Studio Longobardi." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

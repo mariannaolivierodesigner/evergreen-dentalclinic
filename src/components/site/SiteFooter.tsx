@@ -73,13 +73,13 @@ export function SiteFooter({ className }: { className?: string }) {
         <div>
           <h2 className="font-display mb-4 text-sm font-semibold">Dove siamo</h2>
           <address className="text-muted-foreground text-sm leading-relaxed not-italic">
-            Studio Dentistico Evergreen
+            Studio Dentistico Longobardi
             <br />
             {STUDIO.address}
           </address>
           <Button asChild variant="outline" size="sm" className="mt-4">
             <a
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Studio Dentistico Evergreen, ${STUDIO.address}`)}`}
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Studio Dentistico Longobardi, ${STUDIO.address}`)}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -91,7 +91,7 @@ export function SiteFooter({ className }: { className?: string }) {
 
       <div className="border-border border-t">
         <div className="text-muted-foreground mx-auto flex max-w-6xl flex-col gap-3 px-5 py-6 text-xs sm:flex-row sm:items-center sm:justify-between">
-          <p>{`© ${new Date().getFullYear()} Studio Dentistico Evergreen · P.IVA 09876543210`}</p>
+          <p>{`© ${new Date().getFullYear()} Studio Dentistico Longobardi · P.IVA 09876543210`}</p>
           <nav aria-label="Note legali" className="flex gap-4">
             <Link to="/privacy" className="hover:text-primary">
               Privacy policy

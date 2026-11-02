@@ -18,13 +18,13 @@ export const Route = createFileRoute("/auth")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Accedi all'area personale — Studio Evergreen" },
+      { title: "Accedi all'area personale — Studio Longobardi" },
       {
         name: "description",
         content:
-          "Accedi o registrati per prenotare visite, consultare i tuoi appuntamenti e scaricare preventivi e referti dello Studio Evergreen.",
+          "Accedi o registrati per prenotare visite, consultare i tuoi appuntamenti e scaricare preventivi e referti dello Studio Longobardi.",
       },
-      { property: "og:title", content: "Area personale — Studio Evergreen" },
+      { property: "og:title", content: "Area personale — Studio Longobardi" },
       { property: "og:description", content: "Accedi per gestire appuntamenti e documenti." },
       { property: "og:url", content: "/auth" },
       { name: "robots", content: "noindex" },

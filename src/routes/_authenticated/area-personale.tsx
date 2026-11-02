@@ -33,12 +33,12 @@ import { STATUS_LABEL, formatDateTime, formatPrice, isCancellable } from "@/lib/
 export const Route = createFileRoute("/_authenticated/area-personale")({
   head: () => ({
     meta: [
-      { title: "Area personale — Studio Evergreen" },
+      { title: "Area personale — Studio Longobardi" },
       {
         name: "description",
         content: "I tuoi appuntamenti, i documenti clinici e i dati del tuo profilo paziente.",
       },
-      { property: "og:title", content: "Area personale — Studio Evergreen" },
+      { property: "og:title", content: "Area personale — Studio Longobardi" },
       { property: "og:description", content: "Gestisci appuntamenti e documenti." },
       { property: "og:url", content: "/area-personale" },
       { name: "robots", content: "noindex" },

@@ -1,6 +1,6 @@
 export const STUDIO = {
-  name: "Studio Dentistico Evergreen",
-  short: "Evergreen",
+  name: "Studio Dentistico Longobardi",
+  short: "Longobardi",
   claim: "Il tuo sorriso, la nostra missione",
   address: "Via dei Tigli 14, 20144 Milano",
   phone: "+39 02 8422 1170",

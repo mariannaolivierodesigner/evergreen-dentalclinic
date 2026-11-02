@@ -10,13 +10,13 @@ import { formatDuration, formatPrice } from "@/lib/format";
 export const Route = createFileRoute("/servizi/")({
   head: () => ({
     meta: [
-      { title: "Trattamenti odontoiatrici — Studio Evergreen Milano" },
+      { title: "Trattamenti odontoiatrici — Studio Longobardi Milano" },
       {
         name: "description",
         content:
-          "Igiene, ortodonzia invisibile, implantologia, sbiancamento, pedodonzia e urgenze: tutti i trattamenti dello Studio Evergreen con durata e prezzo indicativo.",
+          "Igiene, ortodonzia invisibile, implantologia, sbiancamento, pedodonzia e urgenze: tutti i trattamenti dello Studio Longobardi con durata e prezzo indicativo.",
       },
-      { property: "og:title", content: "Trattamenti — Studio Evergreen" },
+      { property: "og:title", content: "Trattamenti — Studio Longobardi" },
       {
         property: "og:description",
         content: "Tutti i trattamenti dello studio, con durata e prezzi trasparenti.",

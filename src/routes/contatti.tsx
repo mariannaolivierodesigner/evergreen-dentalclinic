@@ -17,13 +17,13 @@ import { STUDIO } from "@/lib/format";
 export const Route = createFileRoute("/contatti")({
   head: () => ({
     meta: [
-      { title: "Contatti e orari — Studio Dentistico Evergreen, Milano" },
+      { title: "Contatti e orari — Studio Dentistico Longobardi, Milano" },
       {
         name: "description",
         content:
-          "Dove siamo, orari di apertura, telefono ed email dello Studio Dentistico Evergreen in Via dei Tigli 14 a Milano. Scrivici e ti rispondiamo entro un giorno lavorativo.",
+          "Dove siamo, orari di apertura, telefono ed email dello Studio Dentistico Longobardi in Via dei Tigli 14 a Milano. Scrivici e ti rispondiamo entro un giorno lavorativo.",
       },
-      { property: "og:title", content: "Contatti — Studio Evergreen" },
+      { property: "og:title", content: "Contatti — Studio Longobardi" },
       { property: "og:description", content: "Indirizzo, orari e modulo di contatto." },
       { property: "og:url", content: "/contatti" },
     ],

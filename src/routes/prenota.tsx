@@ -34,13 +34,13 @@ export const Route = createFileRoute("/prenota")({
   validateSearch: z.object({ servizio: z.string().optional() }),
   head: () => ({
     meta: [
-      { title: "Prenota una visita online — Studio Evergreen Milano" },
+      { title: "Prenota una visita online — Studio Longobardi Milano" },
       {
         name: "description",
         content:
-          "Scegli trattamento, medico e orario e prenota la tua visita allo Studio Dentistico Evergreen in meno di due minuti, con conferma immediata.",
+          "Scegli trattamento, medico e orario e prenota la tua visita allo Studio Dentistico Longobardi in meno di due minuti, con conferma immediata.",
       },
-      { property: "og:title", content: "Prenota online — Studio Evergreen" },
+      { property: "og:title", content: "Prenota online — Studio Longobardi" },
       { property: "og:description", content: "Conferma immediata e promemoria il giorno prima." },
       { property: "og:url", content: "/prenota" },
     ],

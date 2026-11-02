@@ -20,12 +20,12 @@ export const Route = createFileRoute("/servizi/$slug")({
   },
   head: ({ params }) => ({
     meta: [
-      { title: `Trattamento ${params.slug.replace(/-/g, " ")} — Studio Evergreen` },
+      { title: `Trattamento ${params.slug.replace(/-/g, " ")} — Studio Longobardi` },
       {
         name: "description",
-        content: `Come funziona il trattamento, quanto dura, quanto costa e cosa aspettarsi presso lo Studio Dentistico Evergreen a Milano.`,
+        content: `Come funziona il trattamento, quanto dura, quanto costa e cosa aspettarsi presso lo Studio Dentistico Longobardi a Milano.`,
       },
-      { property: "og:title", content: "Trattamento — Studio Evergreen" },
+      { property: "og:title", content: "Trattamento — Studio Longobardi" },
       {
         property: "og:description",
         content: "Dettagli, durata, prezzo e domande frequenti sul trattamento.",

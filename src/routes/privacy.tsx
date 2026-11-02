@@ -5,13 +5,13 @@ import { STUDIO } from "@/lib/format";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy e cookie policy — Studio Evergreen" },
+      { title: "Privacy e cookie policy — Studio Longobardi" },
       {
         name: "description",
         content:
-          "Come lo Studio Dentistico Evergreen tratta i dati personali e sanitari dei pazienti e quali cookie utilizza il sito.",
+          "Come lo Studio Dentistico Longobardi tratta i dati personali e sanitari dei pazienti e quali cookie utilizza il sito.",
       },
-      { property: "og:title", content: "Privacy policy — Studio Evergreen" },
+      { property: "og:title", content: "Privacy policy — Studio Longobardi" },
       { property: "og:description", content: "Trattamento dei dati e cookie policy." },
       { property: "og:url", content: "/privacy" },
       { name: "robots", content: "noindex" },

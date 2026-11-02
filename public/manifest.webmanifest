@@ -1,7 +1,7 @@
 {
-  "name": "Studio Dentistico Evergreen — Gestionale",
-  "short_name": "Evergreen Staff",
-  "description": "Gestionale interno dello Studio Dentistico Evergreen.",
+  "name": "Studio Dentistico Longobardi — Gestionale",
+  "short_name": "Longobardi Staff",
+  "description": "Gestionale interno dello Studio Dentistico Longobardi.",
   "start_url": "/staff",
   "scope": "/",
   "display": "standalone",

@@ -10,13 +10,13 @@ import { formatDate } from "@/lib/format";
 export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
-      { title: "Risorse e consigli di salute orale — Studio Evergreen" },
+      { title: "Risorse e consigli di salute orale — Studio Longobardi" },
       {
         name: "description",
         content:
-          "Articoli chiari su igiene, prevenzione, ortodonzia e cura dei denti dei bambini, scritti dal team dello Studio Evergreen di Milano.",
+          "Articoli chiari su igiene, prevenzione, ortodonzia e cura dei denti dei bambini, scritti dal team dello Studio Longobardi di Milano.",
       },
-      { property: "og:title", content: "Risorse — Studio Evergreen" },
+      { property: "og:title", content: "Risorse — Studio Longobardi" },
       {
         property: "og:description",
         content: "Consigli pratici di prevenzione e salute orale dal nostro team.",

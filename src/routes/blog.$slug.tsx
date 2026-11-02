@@ -12,13 +12,13 @@ export const Route = createFileRoute("/blog/$slug")({
   },
   head: ({ params }) => ({
     meta: [
-      { title: `${params.slug.replace(/-/g, " ")} — Studio Evergreen` },
+      { title: `${params.slug.replace(/-/g, " ")} — Studio Longobardi` },
       {
         name: "description",
-        content: "Articolo di prevenzione e salute orale a cura dello Studio Evergreen di Milano.",
+        content: "Articolo di prevenzione e salute orale a cura dello Studio Longobardi di Milano.",
       },
       { property: "og:type", content: "article" },
-      { property: "og:title", content: "Risorse — Studio Evergreen" },
+      { property: "og:title", content: "Risorse — Studio Longobardi" },
       {
         property: "og:description",
         content: "Articolo di prevenzione e salute orale del nostro team.",

@@ -16,13 +16,13 @@ import { formatDate, formatTime } from "@/lib/format";
 export const Route = createFileRoute("/_authenticated/staff-ruoli")({
   head: () => ({
     meta: [
-      { title: "Gestione ruoli staff — Studio Evergreen" },
+      { title: "Gestione ruoli staff — Studio Longobardi" },
       {
         name: "description",
         content:
           "Assegna e revoca i ruoli del personale dello studio con registro completo delle modifiche.",
       },
-      { property: "og:title", content: "Gestione ruoli staff — Studio Evergreen" },
+      { property: "og:title", content: "Gestione ruoli staff — Studio Longobardi" },
       { property: "og:description", content: "Permessi del personale e audit delle modifiche." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

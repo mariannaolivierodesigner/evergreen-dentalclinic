@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <Link to="/" className={className} aria-label="Studio Dentistico Evergreen — home">
+    <Link to="/" className={className} aria-label="Studio Dentistico Longobardi — home">
       <span className="flex items-center gap-2.5">
         <span className="grid h-9 w-9 place-items-center rounded-2xl bg-[image:var(--gradient-primary)] text-primary-foreground">
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden="true">
@@ -12,7 +12,7 @@ export function Logo({ className }: { className?: string }) {
             />
           </svg>
         </span>
-        <span className="font-display text-lg font-semibold tracking-tight">Evergreen</span>
+        <span className="font-display text-lg font-semibold tracking-tight">Longobardi</span>
       </span>
     </Link>
   );

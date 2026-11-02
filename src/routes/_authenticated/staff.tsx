@@ -47,12 +47,12 @@ import { STATUS_LABEL, formatDate, formatPrice, formatTime, isoDay } from "@/lib
 export const Route = createFileRoute("/_authenticated/staff")({
   head: () => ({
     meta: [
-      { title: "Gestionale studio — Studio Evergreen" },
+      { title: "Gestionale studio — Studio Longobardi" },
       {
         name: "description",
         content: "Agenda giornaliera, anagrafica pazienti e messaggi in arrivo per lo staff.",
       },
-      { property: "og:title", content: "Gestionale — Studio Evergreen" },
+      { property: "og:title", content: "Gestionale — Studio Longobardi" },
       { property: "og:description", content: "Agenda, pazienti e messaggi." },
       { property: "og:url", content: "/staff" },
       { name: "robots", content: "noindex" },
@@ -153,7 +153,7 @@ function StaffPage() {
       hour: "2-digit",
       minute: "2-digit",
     }).format(new Date(a.starts_at));
-    return `Ciao ${firstName}, ti confermiamo l'appuntamento per "${a.services?.name}" presso Studio Dentistico Evergreen, ${when}. A presto!`;
+    return `Ciao ${firstName}, ti confermiamo l'appuntamento per "${a.services?.name}" presso Studio Dentistico Longobardi, ${when}. A presto!`;
   }
 
   const uploadDocumentMutation = useMutation({

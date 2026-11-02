@@ -79,21 +79,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Studio Dentistico Evergreen — Milano" },
+      { title: "Studio Dentistico Longobardi — Milano" },
       {
         name: "description",
         content:
           "Studio dentistico a Milano: igiene, ortodonzia, implantologia e urgenze. Prenota online in pochi minuti.",
       },
-      { name: "author", content: "Studio Dentistico Evergreen" },
-      { property: "og:site_name", content: "Studio Dentistico Evergreen" },
+      { name: "author", content: "Studio Dentistico Longobardi" },
+      { property: "og:site_name", content: "Studio Dentistico Longobardi" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#0F4C5C" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
-      { name: "apple-mobile-web-app-title", content: "Evergreen" },
+      { name: "apple-mobile-web-app-title", content: "Longobardi" },
     ],
     links: [
       {
@@ -115,7 +115,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Dentist",
-          name: "Studio Dentistico Evergreen",
+          name: "Studio Dentistico Longobardi",
           address: {
             "@type": "PostalAddress",
             streetAddress: "Via dei Tigli 14",
