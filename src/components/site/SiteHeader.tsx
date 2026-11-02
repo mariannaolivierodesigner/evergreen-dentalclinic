@@ -20,7 +20,7 @@ import { useQueryClient } from "@tanstack/react-query";
 const NAV = [
   { to: "/servizi", label: "Trattamenti" },
   { to: "/chi-siamo", label: "Chi siamo" },
-  { to: "/blog", label: "Risorse" },
+  { to: "/blog", label: "Magazine" },
   { to: "/contatti", label: "Contatti" },
 ] as const;
 
@@ -110,7 +110,7 @@ export function SiteHeader() {
                   )}
                 >
                   <User aria-hidden="true" />
-                  Il mio account
+                  Accedi
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">

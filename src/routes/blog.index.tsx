@@ -11,13 +11,13 @@ import { formatDate } from "@/lib/format";
 export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
-      { title: "Risorse e consigli di salute orale — Studio Longobardi" },
+      { title: "Magazine: consigli di salute orale — Studio Longobardi" },
       {
         name: "description",
         content:
           "Articoli chiari su igiene, prevenzione, ortodonzia e cura dei denti dei bambini, scritti dal team dello Studio Longobardi di Milano.",
       },
-      { property: "og:title", content: "Risorse — Studio Longobardi" },
+      { property: "og:title", content: "Magazine — Studio Longobardi" },
       {
         property: "og:description",
         content: "Consigli pratici di prevenzione e salute orale dal nostro team.",
@@ -38,7 +38,7 @@ function BlogIndex() {
   return (
     <SiteLayout>
       <PageHeader
-        eyebrow="Risorse"
+        eyebrow="Magazine"
         title="Consigli utili, senza allarmismi"
         description="Quello che spieghiamo in poltrona, scritto in modo che resti anche dopo la visita."
       />

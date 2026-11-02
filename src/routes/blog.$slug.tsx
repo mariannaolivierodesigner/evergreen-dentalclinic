@@ -18,7 +18,7 @@ export const Route = createFileRoute("/blog/$slug")({
         content: "Articolo di prevenzione e salute orale a cura dello Studio Longobardi di Milano.",
       },
       { property: "og:type", content: "article" },
-      { property: "og:title", content: "Risorse — Studio Longobardi" },
+      { property: "og:title", content: "Magazine — Studio Longobardi" },
       {
         property: "og:description",
         content: "Articolo di prevenzione e salute orale del nostro team.",
