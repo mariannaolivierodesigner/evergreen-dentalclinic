@@ -102,12 +102,12 @@ export function SiteHeader() {
               className={cn(
                 "rounded-full px-4 py-2 text-sm font-medium transition-colors",
                 overlay
-                  ? "text-white/90 hover:bg-white/12 hover:text-[oklch(0.86_0.1_168)]"
+                  ? "text-white/90 hover:bg-white/12 hover:text-[oklch(0.88_0.05_160)]"
                   : "hover:text-primary hover:bg-secondary",
               )}
               activeProps={{
                 className: overlay
-                  ? "text-[oklch(0.86_0.1_168)] bg-white/12"
+                  ? "text-[oklch(0.88_0.05_160)] bg-white/12"
                   : "text-primary bg-secondary",
               }}
             >

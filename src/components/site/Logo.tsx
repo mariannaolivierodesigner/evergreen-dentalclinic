@@ -18,7 +18,7 @@ export function Logo({ className }: { className?: string | undefined }) {
     <Link to="/" className={className} aria-label="Studio Dentistico Longobardi — home">
       <span className="font-display flex items-baseline text-[1.65rem] leading-none font-bold tracking-tight">
         L
-        <LogoMark className="mx-[0.04em] h-[0.56em] w-[0.56em] shrink-0 self-baseline text-[oklch(0.72_0.1_168)]" />
+        <LogoMark className="mx-[0.04em] h-[0.56em] w-[0.56em] shrink-0 self-baseline text-[oklch(0.76_0.05_160)]" />
         ngobardi
       </span>
     </Link>

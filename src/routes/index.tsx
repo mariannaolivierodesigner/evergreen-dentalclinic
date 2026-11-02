@@ -41,6 +41,22 @@ import heroSmile from "@/assets/hero-smile.jpg";
 import heroStudio from "@/assets/hero-studio.jpg";
 import beforeSmile from "@/assets/before-smile.jpg";
 import afterSmile from "@/assets/after-smile.jpg";
+import treat1 from "@/assets/treat-1.jpg";
+import treat2 from "@/assets/treat-2.jpg";
+import treat3 from "@/assets/treat-3.jpg";
+import treat4 from "@/assets/treat-4.jpg";
+import treat5 from "@/assets/treat-5.jpg";
+import treat6 from "@/assets/treat-6.jpg";
+
+const TREATMENT_PHOTOS: Record<string, string> = {
+  "igiene-dentale": treat1,
+  ortodonzia: treat2,
+  implantologia: treat3,
+  sbiancamento: treat4,
+  pedodonzia: treat5,
+  urgenze: treat6,
+};
+const TREATMENT_ORDER = Object.values(TREATMENT_PHOTOS);
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -325,7 +341,7 @@ function Index() {
         </div>
 
         <HorizontalScroller label="Trattamenti">
-          {services.map((s) => (
+          {services.map((s, i) => (
             <li key={s.id}>
               <Tilt>
                 <Link
@@ -333,7 +349,15 @@ function Index() {
                   params={{ slug: s.slug }}
                   className="surface-card group flex h-full flex-col p-6"
                 >
-                  <span className="bg-primary-soft text-primary group-hover:bg-primary group-hover:text-primary-foreground mb-5 grid h-12 w-12 place-items-center rounded-2xl transition-colors">
+                  <div className="-mx-6 -mt-6 mb-5 aspect-[4/3] overflow-hidden rounded-t-[inherit]">
+                    <img
+                      src={TREATMENT_PHOTOS[s.slug] ?? TREATMENT_ORDER[i % TREATMENT_ORDER.length]}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                  </div>
+                  <span className="bg-primary-soft text-primary group-hover:bg-primary group-hover:text-primary-foreground mb-4 grid h-10 w-10 place-items-center rounded-2xl transition-colors">
                     <ServiceIcon name={s.icon} className="h-5 w-5" />
                   </span>
                   <h3 className="text-lg font-semibold">{s.name}</h3>
