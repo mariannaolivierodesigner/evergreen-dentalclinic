@@ -416,7 +416,7 @@ export function StaffCalendar() {
                               <span
                                 aria-hidden
                                 className="size-2 shrink-0 rounded-full"
-                                style={{ backgroundColor: a.doctors?.color ?? "#7BA79D" }}
+                                style={{ backgroundColor: a.doctors?.color ?? "#4F9DB0" }}
                               />
                               <span className="font-medium">
                                 {formatTime(a.starts_at)}–{formatTime(a.ends_at)}

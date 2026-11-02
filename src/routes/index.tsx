@@ -216,7 +216,7 @@ function Index() {
             {REASONS.map((r, i) => (
               <Reveal as="li" key={r.title} delay={i * 70}>
                 <div className="surface-card flex h-full gap-4 p-6">
-                  <span className="bg-accent-soft text-accent grid h-11 w-11 shrink-0 place-items-center rounded-2xl">
+                  <span className="bg-accent-soft text-primary grid h-11 w-11 shrink-0 place-items-center rounded-2xl">
                     <r.icon className="h-5 w-5" aria-hidden="true" />
                   </span>
                   <div>
@@ -285,7 +285,7 @@ function Index() {
                           {Array.from({ length: t.rating }).map((_, i) => (
                             <Star
                               key={i}
-                              className="fill-accent text-accent h-3.5 w-3.5"
+                              className="fill-primary text-primary h-3.5 w-3.5"
                               aria-hidden="true"
                             />
                           ))}
