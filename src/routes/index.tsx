@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import {
+  ArrowDown,
   ArrowRight,
   CalendarPlus,
   HeartHandshake,
@@ -36,6 +37,7 @@ import {
 } from "@/components/ui/carousel";
 import { servicesQuery, testimonialsQuery } from "@/lib/public-queries";
 import { formatDuration, formatPrice, STUDIO } from "@/lib/format";
+import heroSmile from "@/assets/hero-smile.jpg";
 import heroStudio from "@/assets/hero-studio.jpg";
 import beforeSmile from "@/assets/before-smile.jpg";
 import afterSmile from "@/assets/after-smile.jpg";
@@ -161,6 +163,43 @@ function Index() {
   return (
     <SiteLayout footerClassName="mt-0">
       {/* HERO */}
+      {/* SLIDE PRINCIPALE */}
+      <ScrollVars
+        as="section"
+        mode="hero"
+        className="relative isolate h-[100svh] min-h-[560px] overflow-hidden bg-[oklch(0.25_0.04_222)]"
+      >
+        <img
+          src={heroSmile}
+          alt="Primo piano del sorriso di una paziente durante la scelta del colore dei denti"
+          width={2000}
+          height={1333}
+          fetchPriority="high"
+          className="photo-settle absolute inset-0 -z-20 h-full w-full object-cover object-[60%_55%]"
+          style={{
+            transform: "scale(calc(1.02 + var(--p) * 0.16))",
+            transformOrigin: "62% 58%",
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,oklch(0.22_0.04_222/0.45)_0%,transparent_28%,transparent_65%,oklch(0.22_0.04_222/0.5)_100%)]"
+        />
+        <div className="pop-in absolute bottom-8 left-5 rounded-3xl border border-white/30 bg-white/15 p-4 text-white shadow-[var(--shadow-soft)] backdrop-blur-xl md:bottom-10 md:left-10">
+          <p className="text-xs text-white/75">Prossima disponibilità</p>
+          <p className="font-display text-lg font-semibold">Domani, 09:30</p>
+          <p className="text-xs font-medium text-[oklch(0.86_0.1_168)]">
+            Igiene dentale · Dott.ssa Ferraro
+          </p>
+        </div>
+        <div
+          aria-hidden="true"
+          className="animate-fade-up absolute right-5 bottom-9 grid h-12 w-12 place-items-center rounded-full border border-white/30 bg-white/15 text-white backdrop-blur-xl [animation-delay:1.4s] md:right-10 md:bottom-11"
+        >
+          <ArrowDown className="scroll-cue h-5 w-5" />
+        </div>
+      </ScrollVars>
+
       <ScrollVars as="section" mode="hero" className="bg-calm relative overflow-hidden">
         <div
           aria-hidden="true"
