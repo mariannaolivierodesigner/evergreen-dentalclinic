@@ -17,12 +17,11 @@ import { Reveal } from "@/components/site/Reveal";
 import {
   CompareSlider,
   CountUp,
-  HorizontalScroller,
+  CardMarquee,
   Marquee,
   Parallax,
   ScrollText,
   ScrollVars,
-  Tilt,
   Words,
 } from "@/components/site/motion";
 import { ServiceIcon } from "@/components/site/ServiceIcon";
@@ -324,7 +323,7 @@ function Index() {
       </div>
 
       {/* SERVIZI */}
-      <section className="py-20" aria-labelledby="servizi-title">
+      <section className="pt-20 pb-10" aria-labelledby="servizi-title">
         <div className="mx-auto max-w-6xl px-5">
           <Reveal>
             <p className="text-primary text-xs font-semibold tracking-[0.18em] uppercase">
@@ -340,26 +339,31 @@ function Index() {
           />
         </div>
 
-        <HorizontalScroller label="Trattamenti">
+        <CardMarquee label="Trattamenti">
           {services.map((s, i) => (
             <li key={s.id}>
-              <Tilt>
+              <div className="h-full">
                 <Link
                   to="/servizi/$slug"
                   params={{ slug: s.slug }}
                   className="surface-card group flex h-full flex-col p-6"
                 >
-                  <div className="-mx-6 -mt-6 mb-5 aspect-[4/3] overflow-hidden rounded-t-[inherit]">
-                    <img
-                      src={TREATMENT_PHOTOS[s.slug] ?? TREATMENT_ORDER[i % TREATMENT_ORDER.length]}
-                      alt=""
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    />
+                  <div className="relative -mx-6 -mt-6 mb-9 aspect-[4/3] rounded-t-[inherit]">
+                    <div className="absolute inset-0 overflow-hidden rounded-t-[inherit]">
+                      <img
+                        src={TREATMENT_PHOTOS[s.slug] ?? TREATMENT_ORDER[i % TREATMENT_ORDER.length]}
+                        alt=""
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      />
+                    </div>
+                    <span className="bg-card text-primary group-hover:bg-primary group-hover:text-primary-foreground absolute bottom-0 left-6 grid h-12 w-12 translate-y-1/2 place-items-center rounded-2xl shadow-[var(--shadow-soft)] transition-colors duration-300">
+                      <ServiceIcon
+                        name={s.icon}
+                        className="h-5 w-5 transition-transform duration-500 ease-out group-hover:scale-110 group-hover:-rotate-6"
+                      />
+                    </span>
                   </div>
-                  <span className="bg-primary-soft text-primary group-hover:bg-primary group-hover:text-primary-foreground mb-4 grid h-10 w-10 place-items-center rounded-2xl transition-colors">
-                    <ServiceIcon name={s.icon} className="h-5 w-5" />
-                  </span>
                   <h3 className="text-lg font-semibold">{s.name}</h3>
                   <p className="text-muted-foreground mt-2 flex-1 text-sm leading-relaxed">
                     {s.short_description}
@@ -377,10 +381,10 @@ function Index() {
                     />
                   </p>
                 </Link>
-              </Tilt>
+              </div>
             </li>
           ))}
-        </HorizontalScroller>
+        </CardMarquee>
       </section>
 
       {/* PERCHÉ NOI */}

@@ -198,6 +198,35 @@ export function Marquee({ items, className }: { items: string[]; className?: str
   );
 }
 
+/**
+ * Auto-scrolling row of cards (pauses on hover/focus). The list is rendered twice for a
+ * seamless loop; the copy is inert. With reduced motion it becomes a plain swipeable row.
+ */
+export function CardMarquee({
+  children,
+  label,
+  seconds = 46,
+}: {
+  children: ReactNode;
+  label: string;
+  seconds?: number;
+}) {
+  return (
+    <div className="card-marquee mt-10" role="region" aria-label={label}>
+      <div className="marquee-track" style={{ animationDuration: `${seconds}s` }}>
+        <ul className="card-marquee-row">{children}</ul>
+        <ul
+          className="card-marquee-row card-marquee-copy"
+          aria-hidden="true"
+          {...({ inert: "" } as object)}
+        >
+          {children}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
 /**
