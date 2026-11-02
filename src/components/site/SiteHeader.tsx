@@ -28,6 +28,7 @@ export function SiteHeader() {
   const overlay = useRouterState({ select: (s) => s.location.pathname === "/" });
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const { user } = useSession();
   const { isStaff } = useRoles(user?.id);
   const navigate = useNavigate();
@@ -35,10 +36,16 @@ export function SiteHeader() {
   const { canInstall, promptInstall } = useInstallPrompt();
 
   useEffect(() => {
-    const onScroll = () =>
-      setScrolled(
-        window.scrollY > (window.location.pathname === "/" ? window.innerHeight * 0.6 : 12),
-      );
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const home = window.location.pathname === "/";
+      setScrolled(y > (home ? window.innerHeight * 0.6 : 12));
+      // hide while scrolling down so it never covers the sections; show again on scroll up
+      if (y > window.innerHeight * 0.6 && y > last + 4) setHidden(true);
+      else if (y < last - 4 || y < 80) setHidden(false);
+      last = y;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -51,12 +58,19 @@ export function SiteHeader() {
     navigate({ to: "/", replace: true });
   }
 
+  // On the home, once the photo slide is behind us the pill turns into a slim,
+  // full-width rectangular bar with a hamburger menu.
+  const compact = overlay && scrolled;
+
   return (
     <header
       className={cn(
-        "z-50 transition-all duration-300",
+        "z-50 transition-[transform,background-color] duration-300",
+        hidden && !open && "-translate-y-full",
         overlay
-          ? "fixed inset-x-3 top-3 md:inset-x-6"
+          ? compact
+            ? "fixed inset-x-0 top-0"
+            : "fixed inset-x-3 top-3 md:inset-x-6"
           : cn(
               "sticky top-0",
               scrolled
@@ -69,13 +83,18 @@ export function SiteHeader() {
         className={cn(
           "mx-auto flex h-18 max-w-6xl items-center justify-between px-5 py-3",
           overlay &&
-            "h-16 rounded-full border border-white/25 px-4 shadow-[0_8px_32px_-8px_rgb(0_0_0/0.35)] backdrop-blur-xl backdrop-saturate-150 transition-colors duration-300 md:px-6",
-          overlay && (scrolled ? "bg-[oklch(0.3_0.05_222/0.82)]" : "bg-[oklch(0.3_0.05_222/0.38)]"),
+            !compact &&
+            "h-16 rounded-full border border-white/25 bg-[oklch(0.3_0.05_222/0.38)] px-4 shadow-[0_8px_32px_-8px_rgb(0_0_0/0.35)] backdrop-blur-xl backdrop-saturate-150 md:px-6",
+          compact &&
+            "h-14 max-w-none rounded-none border-b border-white/15 bg-[oklch(0.3_0.05_222/0.9)] px-5 shadow-none backdrop-blur-xl md:px-8",
         )}
       >
         <Logo className={overlay ? "text-white" : undefined} />
 
-        <nav aria-label="Navigazione principale" className="hidden items-center gap-1 md:flex">
+        <nav
+          aria-label="Navigazione principale"
+          className={cn("hidden items-center gap-1", !compact && "md:flex")}
+        >
           {NAV.map((item) => (
             <Link
               key={item.to}
@@ -97,7 +116,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 md:flex">
+        <div className={cn("hidden items-center gap-2", !compact && "md:flex")}>
           <Button variant="hero" asChild>
             <Link to="/prenota">
               <CalendarPlus aria-hidden="true" /> Prenota una visita
@@ -161,7 +180,10 @@ export function SiteHeader() {
         <Button
           variant="ghost"
           size="icon"
-          className={cn("md:hidden", overlay && "text-white hover:bg-white/12 hover:text-white")}
+          className={cn(
+            !compact && "md:hidden",
+            overlay && "text-white hover:bg-white/12 hover:text-white",
+          )}
           aria-label={open ? "Chiudi menu" : "Apri menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
@@ -173,9 +195,12 @@ export function SiteHeader() {
       {open && (
         <div
           className={cn(
-            "animate-fade-up px-5 pt-2 pb-6 md:hidden",
+            "animate-fade-up px-5 pt-2 pb-6",
+            !compact && "md:hidden",
             overlay
-              ? "mt-2 rounded-3xl border border-white/25 bg-[oklch(0.3_0.05_222/0.78)] text-white backdrop-blur-xl"
+              ? compact
+                ? "border-b border-white/15 bg-[oklch(0.3_0.05_222/0.95)] px-5 text-white backdrop-blur-xl md:px-8"
+                : "mt-2 rounded-3xl border border-white/25 bg-[oklch(0.3_0.05_222/0.78)] text-white backdrop-blur-xl"
               : "bg-background border-border border-t",
           )}
         >
