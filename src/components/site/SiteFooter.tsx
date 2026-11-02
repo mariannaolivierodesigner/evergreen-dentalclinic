@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Clock, Instagram, Facebook, Mail, MapPin, Phone } from "lucide-react";
 import { STUDIO } from "@/lib/format";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
 
@@ -71,14 +72,20 @@ export function SiteFooter({ className }: { className?: string }) {
 
         <div>
           <h2 className="font-display mb-4 text-sm font-semibold">Dove siamo</h2>
-          <div className="border-border overflow-hidden rounded-2xl border">
-            <iframe
-              title="Mappa dello Studio Dentistico Evergreen"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=9.155%2C45.451%2C9.185%2C45.469&layer=mapnik&marker=45.460%2C9.170"
-              className="h-44 w-full"
-              loading="lazy"
-            />
-          </div>
+          <address className="text-muted-foreground text-sm leading-relaxed not-italic">
+            Studio Dentistico Evergreen
+            <br />
+            {STUDIO.address}
+          </address>
+          <Button asChild variant="outline" size="sm" className="mt-4">
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Studio Dentistico Evergreen, ${STUDIO.address}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MapPin aria-hidden="true" /> Apri in Google Maps
+            </a>
+          </Button>
         </div>
       </div>
 
