@@ -185,7 +185,15 @@ export function StaffCalendar() {
   function exportCsv() {
     if (!data) return;
     const lines = [
-      ["Tipo", "Data e ora inizio", "Data e ora fine", "Medico", "Paziente", "Trattamento", "Stato/Motivo"]
+      [
+        "Tipo",
+        "Data e ora inizio",
+        "Data e ora fine",
+        "Medico",
+        "Paziente",
+        "Trattamento",
+        "Stato/Motivo",
+      ]
         .map(csvEscape)
         .join(";"),
     ];
@@ -327,7 +335,9 @@ export function StaffCalendar() {
       </div>
 
       {!rangeValid ? (
-        <p className="text-destructive text-sm">La data finale deve essere successiva all'inizio.</p>
+        <p className="text-destructive text-sm">
+          La data finale deve essere successiva all'inizio.
+        </p>
       ) : calendar.isPending ? (
         <Skeleton className="h-64 w-full rounded-3xl" />
       ) : calendar.isError ? (

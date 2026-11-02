@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 875" role="img" aria-label="Dott.ssa Giulia Rinaldi">
+<defs>
+<linearGradient id="bgg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E4F2EE"/><stop offset="1" stop-color="#C9E4DE"/></linearGradient>
+<linearGradient id="ung" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14596B"/><stop offset="1" stop-color="#0F4C5C"/></linearGradient>
+</defs>
+<rect width="700" height="875" fill="url(#bgg)"/>
+<circle cx="350" cy="400" r="270" fill="#F4F8F7" opacity=".55"/>
+<circle cx="238" cy="330" r="44" fill="#3A241C"/><circle cx="220" cy="400" r="46" fill="#3A241C"/><circle cx="232" cy="470" r="42" fill="#3A241C"/><circle cx="262" cy="270" r="48" fill="#3A241C"/><circle cx="310" cy="232" r="50" fill="#3A241C"/><circle cx="370" cy="226" r="52" fill="#3A241C"/><circle cx="430" cy="244" r="48" fill="#3A241C"/><circle cx="468" cy="290" r="46" fill="#3A241C"/><circle cx="484" cy="360" r="46" fill="#3A241C"/><circle cx="480" cy="440" r="44" fill="#3A241C"/><circle cx="462" cy="500" r="38" fill="#3A241C"/><circle cx="250" cy="520" r="34" fill="#3A241C"/>
+<!-- uniform -->
+<path d="M30 875V770Q30 655 180 625L312 596 350 660 388 596 520 625Q670 655 670 770V875Z" fill="url(#ung)"/>
+<path d="M312 596 350 700 388 596Z" fill="#B97F5A"/>
+<path d="M300 606 350 706 400 606" fill="none" stroke="#7ED6B5" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M300 606 350 706 400 606" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2" stroke-linejoin="round" stroke-dasharray="1 9" stroke-linecap="round" transform="translate(0 14)"/>
+<!-- pocket + logo -->
+<path d="M452 716h104v80q0 12-12 12h-80q-12 0-12-12z" fill="#0B3F4D"/>
+<path d="M452 716h104" stroke="#7ED6B5" stroke-opacity=".6" stroke-width="3"/>
+<g transform="translate(476 722) scale(2.4)" fill="#7ED6B5"><circle cx="8.2" cy="8.2" r="5.6"/><circle cx="15.8" cy="8.2" r="5.6"/><circle cx="8.2" cy="15.8" r="5.6"/><circle cx="15.8" cy="15.8" r="5.6"/><rect x="8.2" y="8.2" width="7.6" height="7.6"/></g>
+<!-- neck -->
+<path d="M308 470h84v135q-42 40-84 0z" fill="#B97F5A"/>
+<!-- ears -->
+<ellipse cx="232" cy="392" rx="16" ry="28" fill="#CB9470"/><ellipse cx="468" cy="392" rx="16" ry="28" fill="#CB9470"/>
+<!-- head -->
+<ellipse cx="350" cy="378" rx="120" ry="150" fill="#CB9470"/>
+
+<!-- eyes -->
+<ellipse cx="305" cy="372" rx="13" ry="9" fill="#2A1E1A"/><ellipse cx="395" cy="372" rx="13" ry="9" fill="#2A1E1A"/>
+<circle cx="309" cy="368" r="3" fill="#fff"/><circle cx="399" cy="368" r="3" fill="#fff"/>
+<path d="M281 346Q305 332 328 345M372 345Q395 332 419 346" fill="none" stroke="#2A1E1A" stroke-opacity=".75" stroke-width="7" stroke-linecap="round"/>
+<path d="M350 380q-9 40-14 52 14 8 28 0" fill="none" stroke="#B97F5A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="290" cy="428" rx="22" ry="12" fill="#E58C84" opacity=".3"/><ellipse cx="410" cy="428" rx="22" ry="12" fill="#E58C84" opacity=".3"/>
+<path d="M306 452Q350 500 394 452Q350 462 306 452Z" fill="#fff" stroke="#9A4B4B" stroke-width="4" stroke-linejoin="round"/>
+
+<path d="M236 360Q240 244 350 232Q462 244 464 360Q440 290 370 266Q300 272 236 360Z" fill="#3A241C"/><circle cx="300" cy="258" r="30" fill="#3A241C"/><circle cx="400" cy="262" r="30" fill="#3A241C"/>
+</svg>

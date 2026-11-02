@@ -35,8 +35,11 @@ export function NotificationsPanel() {
   });
 
   const prefsMutation = useMutation({
-    mutationFn: (input: { notify_in_app: boolean; notify_whatsapp: boolean; notify_sms: boolean }) =>
-      savePrefs({ data: input }),
+    mutationFn: (input: {
+      notify_in_app: boolean;
+      notify_whatsapp: boolean;
+      notify_sms: boolean;
+    }) => savePrefs({ data: input }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-contact-prefs"] });
       toast.success("Preferenze aggiornate.");
@@ -137,9 +140,7 @@ export function NotificationsPanel() {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <Label htmlFor="pref-whatsapp">WhatsApp</Label>
-                <p className="text-muted-foreground text-xs">
-                  {p.phone ?? "Numero non impostato"}
-                </p>
+                <p className="text-muted-foreground text-xs">{p.phone ?? "Numero non impostato"}</p>
               </div>
               <Switch
                 id="pref-whatsapp"
@@ -150,9 +151,7 @@ export function NotificationsPanel() {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <Label htmlFor="pref-sms">SMS</Label>
-                <p className="text-muted-foreground text-xs">
-                  {p.phone ?? "Numero non impostato"}
-                </p>
+                <p className="text-muted-foreground text-xs">{p.phone ?? "Numero non impostato"}</p>
               </div>
               <Switch
                 id="pref-sms"

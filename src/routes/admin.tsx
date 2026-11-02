@@ -24,7 +24,10 @@ export const Route = createFileRoute("/admin")({
           "Area riservata dello staff dello Studio Longobardi: accedi per gestire calendario, appuntamenti, ferie e registro modifiche.",
       },
       { property: "og:title", content: "Accesso gestionale — Studio Longobardi" },
-      { property: "og:description", content: "Area riservata dello staff dello Studio Longobardi." },
+      {
+        property: "og:description",
+        content: "Area riservata dello staff dello Studio Longobardi.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

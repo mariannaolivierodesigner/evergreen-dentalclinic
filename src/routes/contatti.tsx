@@ -40,7 +40,9 @@ function Contatti() {
   const mutation = useMutation({
     mutationFn: send,
     onSuccess: () =>
-      toast.success("Grazie per il messaggio, la nostra segreteria la contatterà il prima possibile."),
+      toast.success(
+        "Grazie per il messaggio, la nostra segreteria la contatterà il prima possibile.",
+      ),
     onError: (e: Error) => toast.error(e.message || "Invio non riuscito, riprova."),
   });
 
@@ -56,7 +58,8 @@ function Contatti() {
     };
     const next: Record<string, string> = {};
     if (values.name.trim().length < 2) next["name"] = "Inserisci il tuo nome.";
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(values.email.trim())) next["email"] = "Email non valida.";
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(values.email.trim()))
+      next["email"] = "Email non valida.";
     if (!/^[0-9+()\s.-]{6,40}$/.test(values.phone.trim()))
       next["phone"] = "Inserisci un numero di telefono valido.";
     if (values.message.trim().length < 10) next["message"] = "Scrivi almeno una riga.";
@@ -85,7 +88,7 @@ function Contatti() {
               { icon: Phone, label: "Telefono", value: STUDIO.phone, href: STUDIO.phoneHref },
               { icon: Mail, label: "Email", value: STUDIO.email, href: `mailto:${STUDIO.email}` },
             ].map((c) => (
-              <li key={c.label} className="surface-card flex items-start gap-4 p-5">
+              <li key={c.label} className="surface-card lift-on-hover flex items-start gap-4 p-5">
                 <span className="bg-primary-soft text-primary grid h-10 w-10 shrink-0 place-items-center rounded-2xl">
                   <c.icon className="h-4 w-4" aria-hidden="true" />
                 </span>
@@ -164,9 +167,7 @@ function Contatti() {
                 ricontattato.
               </Label>
             </div>
-            {errors["consent"] && (
-              <p className="text-destructive text-xs">{errors["consent"]}</p>
-            )}
+            {errors["consent"] && <p className="text-destructive text-xs">{errors["consent"]}</p>}
             <Button type="submit" variant="hero" size="lg" disabled={mutation.isPending}>
               {mutation.isPending ? "Invio…" : "Invia messaggio"}
             </Button>

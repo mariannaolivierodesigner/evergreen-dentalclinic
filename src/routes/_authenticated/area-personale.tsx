@@ -22,11 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { RescheduleDialog } from "@/components/site/RescheduleDialog";
 import { NotificationsPanel } from "@/components/site/NotificationsPanel";
-import {
-  cancelAppointment,
-  listMyAppointments,
-  listMyDocuments,
-} from "@/lib/booking.functions";
+import { cancelAppointment, listMyAppointments, listMyDocuments } from "@/lib/booking.functions";
 import { useProfile, useSession } from "@/hooks/useAuth";
 import { STATUS_LABEL, formatDateTime, formatPrice, isCancellable } from "@/lib/format";
 
@@ -115,7 +111,6 @@ function AreaPersonale() {
             <TabsTrigger value="documenti">Documenti</TabsTrigger>
             <TabsTrigger value="profilo">Profilo</TabsTrigger>
           </TabsList>
-
 
           <TabsContent value="appuntamenti" className="mt-6 space-y-8">
             {appointments.isPending ? (
@@ -286,8 +281,8 @@ function AreaPersonale() {
                 </p>
               </div>
               <p className="text-muted-foreground text-sm">
-                Per aggiornare i dati clinici scrivici dalla pagina contatti o parlane in
-                reception: li verifichiamo insieme.
+                Per aggiornare i dati clinici scrivici dalla pagina contatti o parlane in reception:
+                li verifichiamo insieme.
               </p>
             </div>
           </TabsContent>

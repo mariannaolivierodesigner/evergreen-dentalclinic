@@ -164,7 +164,12 @@ export function ShiftsManager() {
                       <Button type="submit" size="sm" disabled={saveMutation.isPending}>
                         Salva
                       </Button>
-                      <Button type="button" size="sm" variant="ghost" onClick={() => setDraft(null)}>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setDraft(null)}
+                      >
                         Annulla
                       </Button>
                     </div>

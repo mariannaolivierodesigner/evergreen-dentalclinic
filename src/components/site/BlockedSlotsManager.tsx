@@ -214,7 +214,8 @@ export function BlockedSlotsManager() {
     <div>
       <div className="mb-6 flex flex-wrap items-center gap-3">
         <p className="text-muted-foreground flex-1 text-sm">
-          Ferie, permessi e chiusure: gli orari inseriti spariscono subito dalla prenotazione online.
+          Ferie, permessi e chiusure: gli orari inseriti spariscono subito dalla prenotazione
+          online.
         </p>
         <Button onClick={openNew}>
           <Plus /> Nuovo periodo
@@ -251,7 +252,9 @@ export function BlockedSlotsManager() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>{form.id ? "Modifica indisponibilità" : "Nuova indisponibilità"}</DialogTitle>
+            <DialogTitle>
+              {form.id ? "Modifica indisponibilità" : "Nuova indisponibilità"}
+            </DialogTitle>
             <DialogDescription>
               Il periodo blocca la prenotazione online per il medico selezionato.
             </DialogDescription>
@@ -383,9 +386,7 @@ export function BlockedSlotsManager() {
               </div>
             ) : null}
 
-            {validation ? (
-              <p className="text-destructive text-sm">{validation}</p>
-            ) : null}
+            {validation ? <p className="text-destructive text-sm">{validation}</p> : null}
 
             {conflicts.length > 0 ? (
               <Alert variant="destructive">
@@ -449,9 +450,7 @@ export function BlockedSlotsManager() {
             >
               Rimuovi tutta la serie
             </Button>
-            <AlertDialogAction
-              onClick={() => deleteId && deleteMutation.mutate({ id: deleteId })}
-            >
+            <AlertDialogAction onClick={() => deleteId && deleteMutation.mutate({ id: deleteId })}>
               Rimuovi
             </AlertDialogAction>
           </AlertDialogFooter>

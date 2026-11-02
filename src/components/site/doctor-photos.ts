@@ -1,7 +1,7 @@
-import elena from "@/assets/doc-elena.jpg";
-import marco from "@/assets/doc-marco.jpg";
-import giulia from "@/assets/doc-giulia.jpg";
-import luca from "@/assets/doc-luca.jpg";
+import elena from "@/assets/doc-elena.svg";
+import marco from "@/assets/doc-marco.svg";
+import giulia from "@/assets/doc-giulia.svg";
+import luca from "@/assets/doc-luca.svg";
 
 export const DOCTOR_PHOTOS: Record<string, string> = {
   "Dott.ssa Elena Ferraro": elena,

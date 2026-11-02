@@ -125,7 +125,12 @@ export function RescheduleDialog({ open, onOpenChange, appointment }: Props) {
           ) : availability.isError ? (
             <div className="text-sm">
               <p className="text-muted-foreground">Non riesco a caricare gli orari liberi.</p>
-              <Button variant="outline" size="sm" className="mt-2" onClick={() => availability.refetch()}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-2"
+                onClick={() => availability.refetch()}
+              >
                 Riprova
               </Button>
             </div>
@@ -158,7 +163,11 @@ export function RescheduleDialog({ open, onOpenChange, appointment }: Props) {
         </div>
 
         <DialogFooter className="gap-2 sm:gap-2">
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={mutation.isPending}>
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={mutation.isPending}
+          >
             Annulla
           </Button>
           <Button

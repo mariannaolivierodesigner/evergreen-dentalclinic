@@ -74,8 +74,7 @@ const DEFAULT_FAQ: Faq[] = [
 function parseFaq(value: unknown): Faq[] {
   if (!Array.isArray(value)) return DEFAULT_FAQ;
   const items = value.filter(
-    (v): v is Faq =>
-      typeof v === "object" && v !== null && "q" in v && "a" in v,
+    (v): v is Faq => typeof v === "object" && v !== null && "q" in v && "a" in v,
   );
   return items.length ? items : DEFAULT_FAQ;
 }
@@ -113,12 +112,12 @@ function ServiceDetail() {
                 "Seduta operativa, con pause concordate quando ti servono.",
                 "Controllo di verifica incluso e richiami programmati.",
               ].map((step, i) => (
-                <li key={step} className="flex gap-3">
+                <Reveal as="li" key={step} delay={i * 100} variant="left" className="flex gap-3">
                   <span className="bg-primary-soft text-primary grid h-7 w-7 shrink-0 place-items-center rounded-full text-sm font-semibold">
                     {i + 1}
                   </span>
                   <span className="text-muted-foreground pt-0.5 leading-relaxed">{step}</span>
-                </li>
+                </Reveal>
               ))}
             </ol>
           </Reveal>

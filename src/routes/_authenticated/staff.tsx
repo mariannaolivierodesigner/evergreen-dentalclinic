@@ -2,7 +2,15 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ChevronLeft, ChevronRight, Download, FileText, ShieldCheck, Trash2, Upload } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  FileText,
+  ShieldCheck,
+  Trash2,
+  Upload,
+} from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader, SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
@@ -104,8 +112,7 @@ function StaffPage() {
   const agenda = useQuery({
     queryKey: ["agenda", day],
     enabled: isStaff,
-    queryFn: () =>
-      fetchAgenda({ data: { from: `${day}T00:00:00Z`, to: `${day}T23:59:59Z` } }),
+    queryFn: () => fetchAgenda({ data: { from: `${day}T00:00:00Z`, to: `${day}T23:59:59Z` } }),
   });
   const patients = useQuery({
     queryKey: ["staff-patients"],
@@ -304,7 +311,8 @@ function StaffPage() {
                             {a.reminder_sent_at && (
                               <span className="text-muted-foreground text-xs">
                                 Inviato via {a.reminder_channel === "whatsapp" ? "WhatsApp" : "SMS"}{" "}
-                                il {formatDate(a.reminder_sent_at)} alle {formatTime(a.reminder_sent_at)}
+                                il {formatDate(a.reminder_sent_at)} alle{" "}
+                                {formatTime(a.reminder_sent_at)}
                               </span>
                             )}
                           </div>
@@ -470,7 +478,12 @@ function StaffPage() {
                         </p>
                       </div>
                       {d.file_url ? (
-                        <Button variant="ghost" size="icon" aria-label={`Scarica ${d.title}`} asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          aria-label={`Scarica ${d.title}`}
+                          asChild
+                        >
                           <a href={d.file_url} target="_blank" rel="noreferrer">
                             <Download />
                           </a>

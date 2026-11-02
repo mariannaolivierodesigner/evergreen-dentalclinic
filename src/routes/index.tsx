@@ -25,7 +25,6 @@ import {
   Words,
 } from "@/components/site/motion";
 import { ServiceIcon } from "@/components/site/ServiceIcon";
-import { doctorPhoto } from "@/components/site/doctor-photos";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -35,7 +34,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { doctorsQuery, servicesQuery, testimonialsQuery } from "@/lib/public-queries";
+import { servicesQuery, testimonialsQuery } from "@/lib/public-queries";
 import { formatDuration, formatPrice, STUDIO } from "@/lib/format";
 import heroStudio from "@/assets/hero-studio.jpg";
 import beforeSmile from "@/assets/before-smile.jpg";
@@ -61,7 +60,6 @@ export const Route = createFileRoute("/")({
   }),
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(servicesQuery());
-    context.queryClient.ensureQueryData(doctorsQuery());
     context.queryClient.ensureQueryData(testimonialsQuery());
   },
   component: Index,
@@ -158,7 +156,6 @@ function ReasonsPinned() {
 
 function Index() {
   const { data: services } = useSuspenseQuery(servicesQuery());
-  const { data: doctors } = useSuspenseQuery(doctorsQuery());
   const { data: testimonials } = useSuspenseQuery(testimonialsQuery());
 
   return (
@@ -342,41 +339,6 @@ function Index() {
           </ul>
         </div>
         <ReasonsPinned />
-      </section>
-
-      {/* TEAM */}
-      <section className="mx-auto max-w-6xl px-5 py-20" aria-labelledby="team-title">
-        <Reveal>
-          <p className="text-primary text-xs font-semibold tracking-[0.18em] uppercase">Il team</p>
-          <h2 id="team-title" className="mt-3 text-3xl font-semibold md:text-4xl">
-            Le persone che ti seguiranno
-          </h2>
-        </Reveal>
-        <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {doctors.map((d, i) => (
-            <Reveal as="li" key={d.id} delay={i * 90}>
-              <Tilt>
-                <article className="surface-card h-full overflow-hidden">
-                  <div className="zoom-on-hover">
-                    <img
-                      src={doctorPhoto(d.full_name)}
-                      alt={`Ritratto di ${d.full_name}, ${d.specialization}`}
-                      loading="lazy"
-                      width={700}
-                      height={800}
-                      className="aspect-[4/3] w-full object-cover sm:aspect-4/5"
-                    />
-                  </div>
-                  <div className="p-5">
-                    <h3 className="font-semibold">{d.full_name}</h3>
-                    <p className="text-primary mt-0.5 text-xs font-medium">{d.specialization}</p>
-                    <p className="text-muted-foreground mt-3 text-sm leading-relaxed">{d.bio}</p>
-                  </div>
-                </article>
-              </Tilt>
-            </Reveal>
-          ))}
-        </ul>
       </section>
 
       {/* RECENSIONI */}

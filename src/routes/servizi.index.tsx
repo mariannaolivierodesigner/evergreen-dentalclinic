@@ -3,6 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
 import { PageHeader, SiteLayout } from "@/components/site/SiteLayout";
 import { Reveal } from "@/components/site/Reveal";
+import { Tilt } from "@/components/site/motion";
 import { ServiceIcon } from "@/components/site/ServiceIcon";
 import { servicesQuery } from "@/lib/public-queries";
 import { formatDuration, formatPrice } from "@/lib/format";
@@ -44,32 +45,34 @@ function ServiziPage() {
       <div className="mx-auto max-w-6xl px-5 py-16">
         <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s, i) => (
-            <Reveal as="li" key={s.id} delay={i * 60}>
-              <Link
-                to="/servizi/$slug"
-                params={{ slug: s.slug }}
-                className="surface-card lift-on-hover group flex h-full flex-col p-6"
-              >
-                <span className="bg-primary-soft text-primary group-hover:bg-primary group-hover:text-primary-foreground mb-5 grid h-12 w-12 place-items-center rounded-2xl transition-colors">
-                  <ServiceIcon name={s.icon} className="h-5 w-5" />
-                </span>
-                <h2 className="text-lg font-semibold">{s.name}</h2>
-                <p className="text-muted-foreground mt-2 flex-1 text-sm leading-relaxed">
-                  {s.short_description}
-                </p>
-                <p className="text-muted-foreground mt-5 flex items-center gap-3 text-xs">
-                  <span className="bg-secondary rounded-full px-2.5 py-1 font-medium">
-                    {formatDuration(s.duration_min)}
+            <Reveal as="li" key={s.id} delay={(i % 3) * 90} variant="scale">
+              <Tilt>
+                <Link
+                  to="/servizi/$slug"
+                  params={{ slug: s.slug }}
+                  className="surface-card group flex h-full flex-col p-6"
+                >
+                  <span className="bg-primary-soft text-primary group-hover:bg-primary group-hover:text-primary-foreground mb-5 grid h-12 w-12 place-items-center rounded-2xl transition-colors">
+                    <ServiceIcon name={s.icon} className="h-5 w-5" />
                   </span>
-                  <span className="text-foreground font-semibold">
-                    da {formatPrice(s.price_cents)}
-                  </span>
-                  <ArrowRight
-                    className="text-primary ml-auto h-4 w-4 transition-transform group-hover:translate-x-1"
-                    aria-hidden="true"
-                  />
-                </p>
-              </Link>
+                  <h2 className="text-lg font-semibold">{s.name}</h2>
+                  <p className="text-muted-foreground mt-2 flex-1 text-sm leading-relaxed">
+                    {s.short_description}
+                  </p>
+                  <p className="text-muted-foreground mt-5 flex items-center gap-3 text-xs">
+                    <span className="bg-secondary rounded-full px-2.5 py-1 font-medium">
+                      {formatDuration(s.duration_min)}
+                    </span>
+                    <span className="text-foreground font-semibold">
+                      da {formatPrice(s.price_cents)}
+                    </span>
+                    <ArrowRight
+                      className="text-primary ml-auto h-4 w-4 transition-transform group-hover:translate-x-1"
+                      aria-hidden="true"
+                    />
+                  </p>
+                </Link>
+              </Tilt>
             </Reveal>
           ))}
         </ul>

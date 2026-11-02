@@ -58,10 +58,12 @@ export function BlockedSlotsAudit() {
       }),
   });
 
-  const resetPage = <T,>(setter: (v: T) => void) => (v: T) => {
-    setter(v);
-    setPage(1);
-  };
+  const resetPage =
+    <T,>(setter: (v: T) => void) =>
+    (v: T) => {
+      setter(v);
+      setPage(1);
+    };
 
   if (audit.isPending) return <Skeleton className="h-64 w-full rounded-3xl" />;
   if (audit.data && !audit.data.allowed)
@@ -145,12 +147,24 @@ export function BlockedSlotsAudit() {
             <caption className="sr-only">Registro modifiche di ferie e permessi</caption>
             <thead className="text-muted-foreground border-border border-b text-left text-xs uppercase">
               <tr>
-                <th scope="col" className="p-4">Quando</th>
-                <th scope="col" className="p-4">Azione</th>
-                <th scope="col" className="p-4">Autore</th>
-                <th scope="col" className="p-4">Medico</th>
-                <th scope="col" className="p-4">Periodo</th>
-                <th scope="col" className="p-4">Motivo</th>
+                <th scope="col" className="p-4">
+                  Quando
+                </th>
+                <th scope="col" className="p-4">
+                  Azione
+                </th>
+                <th scope="col" className="p-4">
+                  Autore
+                </th>
+                <th scope="col" className="p-4">
+                  Medico
+                </th>
+                <th scope="col" className="p-4">
+                  Periodo
+                </th>
+                <th scope="col" className="p-4">
+                  Motivo
+                </th>
               </tr>
             </thead>
             <tbody>
