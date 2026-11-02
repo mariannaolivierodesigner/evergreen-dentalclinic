@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 
 const NAV = [
-  { to: "/servizi", label: "Servizi" },
+  { to: "/servizi", label: "Trattamenti" },
   { to: "/chi-siamo", label: "Chi siamo" },
   { to: "/blog", label: "Risorse" },
   { to: "/contatti", label: "Contatti" },
@@ -146,7 +146,9 @@ export function SiteHeader() {
               )}
               asChild
             >
-              <Link to="/auth">Accedi</Link>
+              <Link to="/auth">
+                <User aria-hidden="true" /> Accedi
+              </Link>
             </Button>
           )}
           <Button variant="hero" asChild>
