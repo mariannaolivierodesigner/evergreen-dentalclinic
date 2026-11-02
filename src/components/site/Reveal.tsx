@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
+export type RevealVariant = "up" | "left" | "right" | "scale" | "blur";
+
 /**
  * Scroll reveal wrapper. Content is visible by default for SSR/no-JS and for
  * users with reduced motion; the animation only opts in on the client.
@@ -10,11 +12,13 @@ export function Reveal({
   delay = 0,
   className,
   as: Tag = "div",
+  variant = "up",
 }: {
   children: ReactNode;
   delay?: number;
   className?: string;
   as?: "div" | "section" | "li" | "article";
+  variant?: RevealVariant;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [armed, setArmed] = useState(false);
@@ -44,6 +48,7 @@ export function Reveal({
   return (
     <Tag
       ref={ref as never}
+      data-reveal={variant}
       style={shown ? { transitionDelay: `${delay}ms` } : undefined}
       className={cn(armed && (shown ? "reveal-shown" : "reveal-hidden"), className)}
     >

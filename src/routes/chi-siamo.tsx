@@ -59,7 +59,7 @@ function ChiSiamo() {
       />
 
       <section className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-16 lg:grid-cols-2">
-        <Reveal>
+        <Reveal variant="left">
           <img
             src={heroStudio}
             alt="Interno dello Studio Dentistico Evergreen"
@@ -69,7 +69,7 @@ function ChiSiamo() {
             className="border-border w-full rounded-[2rem] border object-cover shadow-[var(--shadow-soft)]"
           />
         </Reveal>
-        <Reveal delay={80}>
+        <Reveal delay={80} variant="right">
           <h2 className="text-3xl font-semibold">La nostra storia</h2>
           <p className="text-muted-foreground mt-4 leading-relaxed">
             Abbiamo aperto in due, con una poltrona e molta pazienza. Vent'anni dopo siamo un team

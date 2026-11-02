@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Reveal } from "@/components/site/Reveal";
+import { CountUp, Marquee, Parallax, Words } from "@/components/site/motion";
 import { ServiceIcon } from "@/components/site/ServiceIcon";
 import { doctorPhoto } from "@/components/site/doctor-photos";
 import { Button } from "@/components/ui/button";
@@ -96,47 +97,62 @@ function Index() {
           className="bg-accent-soft animate-float absolute -bottom-40 -left-24 h-96 w-96 rounded-full opacity-70 blur-3xl [animation-delay:1.5s]"
         />
         <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 md:py-24 lg:grid-cols-2">
-          <div className="animate-fade-up">
-            <Badge variant="secondary" className="mb-5 rounded-full px-3 py-1 text-xs font-medium">
+          <div>
+            <Badge
+              variant="secondary"
+              className="animate-fade-up mb-5 rounded-full px-3 py-1 text-xs font-medium"
+            >
               Milano · Aperti anche il sabato per le urgenze
             </Badge>
             <h1 className="text-4xl leading-[1.05] font-semibold text-balance sm:text-5xl lg:text-6xl">
-              Il tuo sorriso,
+              <Words text="Il tuo sorriso," startDelay={150} />
               <br />
-              <span className="text-primary">la nostra missione</span>
+              <Words text="la nostra missione" className="text-primary" startDelay={150 + 3 * 70} />
             </h1>
-            <p className="text-muted-foreground mt-6 max-w-lg text-lg leading-relaxed">
+            <p className="text-muted-foreground animate-fade-up mt-6 max-w-lg text-lg leading-relaxed [animation-delay:650ms]">
               Uno studio pensato anche per chi il dentista lo teme: tempi distesi, ogni passaggio
               spiegato prima di farlo e la possibilità di fermarsi quando vuoi.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button variant="hero" size="xl" asChild>
+            <div className="animate-fade-up mt-8 flex flex-col gap-3 [animation-delay:800ms] sm:flex-row">
+              <Button variant="hero" size="xl" className="sheen group" asChild>
                 <Link to="/prenota">
                   <CalendarPlus aria-hidden="true" /> Prenota una visita
                 </Link>
               </Button>
-              <Button variant="outline" size="xl" asChild>
+              <Button variant="outline" size="xl" className="group" asChild>
                 <Link to="/servizi">
-                  Scopri i trattamenti <ArrowRight aria-hidden="true" />
+                  Scopri i trattamenti{" "}
+                  <ArrowRight
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                    aria-hidden="true"
+                  />
                 </Link>
               </Button>
             </div>
-            <dl className="border-border/70 mt-10 grid max-w-md grid-cols-3 gap-4 border-t pt-6">
-              {[
-                { k: "4.500+", v: "pazienti seguiti" },
-                { k: "22 anni", v: "di attività" },
-                { k: "4,9/5", v: "recensioni verificate" },
-              ].map((s) => (
-                <div key={s.k}>
-                  <dt className="font-display text-primary text-2xl font-semibold">{s.k}</dt>
-                  <dd className="text-muted-foreground text-xs">{s.v}</dd>
-                </div>
-              ))}
+            <dl className="border-border/70 animate-fade-up mt-10 grid max-w-md grid-cols-3 gap-4 border-t pt-6 [animation-delay:950ms]">
+              <div>
+                <dt className="font-display text-primary text-2xl font-semibold">
+                  <CountUp to={4500} suffix="+" />
+                </dt>
+                <dd className="text-muted-foreground text-xs">pazienti seguiti</dd>
+              </div>
+              <div>
+                <dt className="font-display text-primary text-2xl font-semibold">
+                  <CountUp to={22} suffix=" anni" />
+                </dt>
+                <dd className="text-muted-foreground text-xs">di attività</dd>
+              </div>
+              <div>
+                <dt className="font-display text-primary text-2xl font-semibold">
+                  <CountUp to={4.9} decimals={1} suffix="/5" />
+                </dt>
+                <dd className="text-muted-foreground text-xs">recensioni verificate</dd>
+              </div>
             </dl>
           </div>
 
-          <div className="relative">
-            <div className="border-border relative overflow-hidden rounded-[2.5rem] border shadow-[var(--shadow-lift)]">
+          <Parallax speed={0.05} className="relative">
+            <div className="photo-reveal border-border relative overflow-hidden rounded-[2.5rem] border shadow-[var(--shadow-lift)]">
               <img
                 src={heroStudio}
                 alt="Sala d'attesa luminosa dello Studio Dentistico Evergreen, con divano chiaro e piante"
@@ -145,16 +161,24 @@ function Index() {
                 className="h-full w-full object-cover"
               />
             </div>
-            <div className="bg-card border-border absolute -bottom-6 -left-4 hidden rounded-3xl border p-4 shadow-[var(--shadow-soft)] sm:block">
+            <div className="pop-in bg-card border-border absolute -bottom-6 -left-4 hidden rounded-3xl border p-4 shadow-[var(--shadow-soft)] sm:block">
               <p className="text-muted-foreground text-xs">Prossima disponibilità</p>
               <p className="font-display text-lg font-semibold">Domani, 09:30</p>
               <p className="text-primary text-xs font-medium">Igiene dentale · Dott.ssa Ferraro</p>
             </div>
-          </div>
+          </Parallax>
         </div>
 
         <div className="pb-10" />
       </section>
+
+      {/* STRISCIA TRATTAMENTI */}
+      <div
+        className="bg-primary text-primary-foreground py-4 text-sm font-medium"
+        aria-hidden="true"
+      >
+        <Marquee items={services.map((s) => s.name)} />
+      </div>
 
       {/* SERVIZI */}
       <section className="mx-auto max-w-6xl px-5 py-20" aria-labelledby="servizi-title">
@@ -173,7 +197,7 @@ function Index() {
 
         <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s, i) => (
-            <Reveal as="li" key={s.id} delay={i * 60}>
+            <Reveal as="li" key={s.id} delay={(i % 3) * 90} variant="scale">
               <Link
                 to="/servizi/$slug"
                 params={{ slug: s.slug }}
@@ -214,7 +238,7 @@ function Index() {
           </Reveal>
           <ul className="mt-10 grid gap-5 md:grid-cols-2">
             {REASONS.map((r, i) => (
-              <Reveal as="li" key={r.title} delay={i * 70}>
+              <Reveal as="li" key={r.title} delay={i * 80} variant={i % 2 ? "right" : "left"}>
                 <div className="surface-card flex h-full gap-4 p-6">
                   <span className="bg-accent-soft text-primary grid h-11 w-11 shrink-0 place-items-center rounded-2xl">
                     <r.icon className="h-5 w-5" aria-hidden="true" />
@@ -240,16 +264,18 @@ function Index() {
         </Reveal>
         <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {doctors.map((d, i) => (
-            <Reveal as="li" key={d.id} delay={i * 60}>
+            <Reveal as="li" key={d.id} delay={i * 90}>
               <article className="surface-card lift-on-hover h-full overflow-hidden">
-                <img
-                  src={doctorPhoto(d.full_name)}
-                  alt={`Ritratto di ${d.full_name}, ${d.specialization}`}
-                  loading="lazy"
-                  width={700}
-                  height={800}
-                  className="aspect-[4/3] w-full object-cover sm:aspect-4/5"
-                />
+                <div className="zoom-on-hover">
+                  <img
+                    src={doctorPhoto(d.full_name)}
+                    alt={`Ritratto di ${d.full_name}, ${d.specialization}`}
+                    loading="lazy"
+                    width={700}
+                    height={800}
+                    className="aspect-[4/3] w-full object-cover sm:aspect-4/5"
+                  />
+                </div>
                 <div className="p-5">
                   <h3 className="font-semibold">{d.full_name}</h3>
                   <p className="text-primary mt-0.5 text-xs font-medium">{d.specialization}</p>
@@ -272,7 +298,7 @@ function Index() {
               Cosa raccontano i pazienti
             </h2>
           </Reveal>
-          <Reveal delay={100}>
+          <Reveal delay={100} variant="blur">
             <Carousel opts={{ align: "start", loop: true }} className="mt-10">
               <CarouselContent>
                 {testimonials.map((t) => (
@@ -330,9 +356,9 @@ function Index() {
               text: "Sbiancamento professionale e rifinitura estetica: 4 gradi di colore in una seduta.",
             },
           ].map((c, i) => (
-            <Reveal key={c.label} delay={i * 90} className="h-full">
+            <Reveal key={c.label} delay={i * 120} className="h-full" variant={i ? "right" : "left"}>
               <figure className="surface-card flex h-full flex-col overflow-hidden">
-                <div className="relative">
+                <div className="zoom-on-hover relative">
                   <img
                     src={c.img}
                     alt={`Sorriso ${c.label.toLowerCase()} il trattamento estetico`}
@@ -357,7 +383,7 @@ function Index() {
       {/* CTA FINALE */}
       <section className="bg-[image:var(--gradient-primary)]">
         <div className="mx-auto max-w-4xl px-5 py-20 text-center">
-          <Reveal>
+          <Reveal variant="blur">
             <h2 className="text-primary-foreground text-3xl font-semibold text-balance md:text-4xl">
               Prenota la tua visita in meno di due minuti
             </h2>
@@ -366,7 +392,7 @@ function Index() {
               e un promemoria il giorno prima.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <Button variant="hero" size="xl" asChild>
+              <Button variant="hero" size="xl" className="sheen" asChild>
                 <Link to="/prenota">
                   <CalendarPlus aria-hidden="true" /> Prenota online
                 </Link>

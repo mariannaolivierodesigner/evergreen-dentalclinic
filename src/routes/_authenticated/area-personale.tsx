@@ -94,7 +94,7 @@ function AreaPersonale() {
   const rescheduling = rows.find((a) => a.id === rescheduleId) ?? null;
 
   return (
-    <SiteLayout>
+    <SiteLayout progress={false}>
       <PageHeader
         eyebrow="Area personale"
         title={profile?.full_name ? `Ciao, ${profile.full_name.split(" ")[0]}` : "Area personale"}

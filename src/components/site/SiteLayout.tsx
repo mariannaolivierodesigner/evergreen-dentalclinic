@@ -1,18 +1,23 @@
 import type { ReactNode } from "react";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
+import { ScrollProgress, Words } from "./motion";
 
 export function SiteLayout({
   children,
   footerClassName,
+  progress = true,
 }: {
   children: ReactNode;
   footerClassName?: string;
+  /** Scroll progress bar (public site only). */
+  progress?: boolean;
 }) {
   return (
     <div className="flex min-h-dvh flex-col">
+      {progress && <ScrollProgress />}
       <SiteHeader />
-      <main>{children}</main>
+      <main className="overflow-x-clip">{children}</main>
       <SiteFooter className={footerClassName ?? ""} />
     </div>
   );
@@ -31,13 +36,15 @@ export function PageHeader({
     <section className="bg-calm border-border border-b">
       <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
         {eyebrow && (
-          <p className="text-primary mb-3 text-xs font-semibold tracking-[0.18em] uppercase">
+          <p className="text-primary animate-fade-up mb-3 text-xs font-semibold tracking-[0.18em] uppercase">
             {eyebrow}
           </p>
         )}
-        <h1 className="max-w-3xl text-4xl font-semibold text-balance md:text-5xl">{title}</h1>
+        <h1 className="max-w-3xl text-4xl font-semibold text-balance md:text-5xl">
+          <Words text={title} />
+        </h1>
         {description && (
-          <p className="text-muted-foreground mt-4 max-w-2xl text-lg leading-relaxed">
+          <p className="text-muted-foreground animate-fade-up mt-4 max-w-2xl text-lg leading-relaxed [animation-delay:400ms]">
             {description}
           </p>
         )}

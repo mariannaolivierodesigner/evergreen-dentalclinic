@@ -76,7 +76,7 @@ function RolesPage() {
 
   if (isPending) {
     return (
-      <SiteLayout>
+      <SiteLayout progress={false}>
         <div className="mx-auto max-w-5xl space-y-4 px-5 py-20">
           <Skeleton className="h-10 w-64" />
           <Skeleton className="h-40 w-full" />
@@ -87,7 +87,7 @@ function RolesPage() {
 
   if (!isAdmin) {
     return (
-      <SiteLayout>
+      <SiteLayout progress={false}>
         <PageHeader
           eyebrow="Accesso negato"
           title="Area riservata agli amministratori"
@@ -105,7 +105,7 @@ function RolesPage() {
   }
 
   return (
-    <SiteLayout>
+    <SiteLayout progress={false}>
       <PageHeader
         eyebrow="Gestionale"
         title="Ruoli e permessi"

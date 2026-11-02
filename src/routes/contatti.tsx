@@ -78,7 +78,7 @@ function Contatti() {
         description="Per urgenze chiama: rispondiamo negli orari di apertura e teniamo sempre uno slot libero al mattino."
       />
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[1fr_1.1fr]">
-        <Reveal>
+        <Reveal variant="left">
           <ul className="space-y-5">
             {[
               { icon: MapPin, label: "Indirizzo", value: STUDIO.address },
@@ -120,7 +120,7 @@ function Contatti() {
           </ul>
         </Reveal>
 
-        <Reveal delay={90}>
+        <Reveal delay={90} variant="right">
           <form onSubmit={onSubmit} noValidate className="surface-card space-y-5 p-6 md:p-8">
             <h2 className="text-2xl font-semibold">Scrivici</h2>
             <div className="grid gap-4 sm:grid-cols-2">
