@@ -502,7 +502,7 @@ function Index() {
               Prenota la tua visita in meno di due minuti
             </h2>
             <p className="text-primary-foreground/85 mx-auto mt-4 max-w-xl">
-              Scegli il trattamento, il medico e l'orario che preferisci. Ricevi conferma immediata
+              Scegli il trattamento e l'orario che preferisci. Ricevi conferma immediata
               e un promemoria il giorno prima.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">

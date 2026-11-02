@@ -7,7 +7,6 @@ import { CalendarPlus, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader, SiteLayout } from "@/components/site/SiteLayout";
 import { ServiceIcon } from "@/components/site/ServiceIcon";
-import { doctorPhoto } from "@/components/site/doctor-photos";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -38,7 +37,7 @@ export const Route = createFileRoute("/prenota")({
       {
         name: "description",
         content:
-          "Scegli trattamento, medico e orario e prenota la tua visita allo Studio Dentistico Longobardi in meno di due minuti, con conferma immediata.",
+          "Scegli trattamento e orario e prenota la tua visita allo Studio Dentistico Longobardi in meno di due minuti, con conferma immediata.",
       },
       { property: "og:title", content: "Prenota online — Studio Longobardi" },
       { property: "og:description", content: "Conferma immediata e promemoria il giorno prima." },
@@ -75,7 +74,8 @@ function Prenota() {
   const [serviceId, setServiceId] = useState<string | null>(
     services.find((s) => s.slug === servizio)?.id ?? null,
   );
-  const [doctorId, setDoctorId] = useState<string | null>(null);
+  // Lo studio non propone più la scelta dell'operatore: si prenota sull'agenda del primo professionista attivo.
+  const doctorId: string | null = doctors[0]?.id ?? null;
   const [offset, setOffset] = useState(0);
   const [day, setDay] = useState<string>(isoDay(new Date()));
   const [slot, setSlot] = useState<string | null>(null);
@@ -209,8 +209,8 @@ function Prenota() {
     <SiteLayout>
       <PageHeader
         eyebrow="Prenotazione"
-        title="Prenota in tre passaggi"
-        description="Scegli il trattamento, il medico e l'orario. Ricevi conferma nell'area personale e un promemoria il giorno prima."
+        title="Prenota in due passaggi"
+        description="Scegli il trattamento e l'orario. Ricevi conferma nell'area personale e un promemoria il giorno prima."
       />
 
       <div className="mx-auto grid max-w-6xl gap-8 px-5 py-16 lg:grid-cols-[1fr_20rem]">
@@ -255,47 +255,7 @@ function Prenota() {
           {/* Step 2 */}
           <section aria-labelledby="step-2">
             <h2 id="step-2" className="text-xl font-semibold">
-              <span className="text-primary">2.</span> Scegli il medico
-            </h2>
-            <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {doctors.map((d) => (
-                <li key={d.id}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDoctorId(d.id);
-                      setSlot(null);
-                    }}
-                    aria-pressed={doctorId === d.id}
-                    className={cn(
-                      "surface-card w-full overflow-hidden text-left transition-colors",
-                      doctorId === d.id ? "border-primary" : "hover:bg-secondary",
-                    )}
-                  >
-                    <img
-                      src={doctorPhoto(d.full_name)}
-                      alt=""
-                      loading="lazy"
-                      width={700}
-                      height={700}
-                      className="aspect-square w-full object-cover"
-                    />
-                    <span className="block p-3">
-                      <span className="block text-sm font-medium">{d.full_name}</span>
-                      <span className="text-muted-foreground block text-xs">
-                        {d.specialization}
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          {/* Step 3 */}
-          <section aria-labelledby="step-3">
-            <h2 id="step-3" className="text-xl font-semibold">
-              <span className="text-primary">3.</span> Scegli data e orario
+              <span className="text-primary">2.</span> Scegli data e orario
             </h2>
 
             <div className="mt-4 flex items-center gap-2">
@@ -347,9 +307,9 @@ function Prenota() {
             </div>
 
             <div className="mt-5">
-              {!serviceId || !doctorId ? (
+              {!serviceId ? (
                 <p className="text-muted-foreground text-sm">
-                  Seleziona prima trattamento e medico per vedere gli orari liberi.
+                  Seleziona prima il trattamento per vedere gli orari liberi.
                 </p>
               ) : availability.isPending ? (
                 <div className="flex flex-wrap gap-2">
@@ -370,7 +330,7 @@ function Prenota() {
                 </p>
               ) : availability.data?.closed ? (
                 <p className="text-muted-foreground text-sm">
-                  Il medico selezionato non riceve in questa data: scegli un altro giorno.
+                  Lo studio non riceve in questa data: scegli un altro giorno.
                 </p>
               ) : availability.data && availability.data.slots.length > 0 ? (
                 <ul className="flex flex-wrap gap-2">
@@ -394,7 +354,7 @@ function Prenota() {
                 </ul>
               ) : (
                 <p className="text-muted-foreground text-sm">
-                  Nessun orario libero in questa giornata: prova un altro giorno o un altro medico.
+                  Nessun orario libero in questa giornata: prova un altro giorno.
                 </p>
               )}
             </div>
@@ -421,12 +381,6 @@ function Prenota() {
               <div>
                 <dt className="text-muted-foreground text-xs uppercase">Trattamento</dt>
                 <dd className="font-medium">{service?.name ?? "—"}</dd>
-              </div>
-              <div>
-                <dt className="text-muted-foreground text-xs uppercase">Medico</dt>
-                <dd className="font-medium">
-                  {doctors.find((d) => d.id === doctorId)?.full_name ?? "—"}
-                </dd>
               </div>
               <div>
                 <dt className="text-muted-foreground text-xs uppercase">Quando</dt>
@@ -560,15 +514,6 @@ function Prenota() {
               </dd>
             </div>
             <div className="flex items-start justify-between gap-4 py-2.5">
-              <dt className="text-muted-foreground">Medico</dt>
-              <dd className="text-right font-medium">
-                {doctors.find((d) => d.id === doctorId)?.full_name ?? "—"}
-                <span className="text-muted-foreground block text-xs font-normal">
-                  {doctors.find((d) => d.id === doctorId)?.specialization}
-                </span>
-              </dd>
-            </div>
-            <div className="flex items-start justify-between gap-4 py-2.5">
               <dt className="text-muted-foreground">Data e orario</dt>
               <dd className="text-right font-medium">
                 {slot
@@ -588,7 +533,7 @@ function Prenota() {
             )}
             {note.trim() && (
               <div className="py-2.5">
-                <dt className="text-muted-foreground">Nota per il medico</dt>
+                <dt className="text-muted-foreground">Nota per lo studio</dt>
                 <dd className="mt-1 whitespace-pre-line">{note.trim()}</dd>
               </div>
             )}
