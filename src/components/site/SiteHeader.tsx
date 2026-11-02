@@ -98,15 +98,20 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
+          <Button variant="hero" asChild>
+            <Link to="/prenota">
+              <CalendarPlus aria-hidden="true" /> Prenota una visita
+            </Link>
+          </Button>
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
-                  variant="ghost"
-                  size="sm"
+                  variant="outline"
                   className={cn(
                     "gap-2",
-                    overlay && "text-white hover:bg-white/12 hover:text-[oklch(0.86_0.1_168)]",
+                    overlay &&
+                      "border-white/60 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white",
                   )}
                 >
                   <User aria-hidden="true" />
@@ -139,10 +144,10 @@ export function SiteHeader() {
             </DropdownMenu>
           ) : (
             <Button
-              variant="ghost"
-              size="sm"
+              variant="outline"
               className={cn(
-                overlay && "text-white hover:bg-white/12 hover:text-[oklch(0.86_0.1_168)]",
+                overlay &&
+                  "border-white/60 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white",
               )}
               asChild
             >
@@ -151,11 +156,6 @@ export function SiteHeader() {
               </Link>
             </Button>
           )}
-          <Button variant="hero" asChild>
-            <Link to="/prenota">
-              <CalendarPlus aria-hidden="true" /> Prenota una visita
-            </Link>
-          </Button>
         </div>
 
         <Button
@@ -193,16 +193,6 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <Link
-              to={user ? "/area-personale" : "/auth"}
-              onClick={() => setOpen(false)}
-              className={cn(
-                "border-b py-3 text-base font-medium",
-                overlay ? "border-white/20" : "border-border/60",
-              )}
-            >
-              {user ? "Area personale" : "Accedi"}
-            </Link>
             {isStaff && (
               <Link
                 to="/staff"
@@ -219,6 +209,20 @@ export function SiteHeader() {
           <Button variant="hero" className="mt-5 w-full" size="lg" asChild>
             <Link to="/prenota" onClick={() => setOpen(false)}>
               <CalendarPlus aria-hidden="true" /> Prenota una visita
+            </Link>
+          </Button>
+          <Button
+            variant="outline"
+            className={cn(
+              "mt-3 w-full",
+              overlay &&
+                "border-white/60 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white",
+            )}
+            size="lg"
+            asChild
+          >
+            <Link to={user ? "/area-personale" : "/auth"} onClick={() => setOpen(false)}>
+              <User aria-hidden="true" /> Accedi
             </Link>
           </Button>
         </div>
