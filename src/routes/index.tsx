@@ -183,11 +183,34 @@ function Index() {
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,oklch(0.22_0.04_222/0.45)_0%,transparent_28%,transparent_65%,oklch(0.22_0.04_222/0.5)_100%)]"
+          className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,oklch(0.2_0.04_222/0.78)_0%,oklch(0.2_0.04_222/0.4)_38%,transparent_70%),linear-gradient(180deg,oklch(0.22_0.04_222/0.4)_0%,transparent_22%)]"
         />
+        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-5 pb-12 md:pb-16">
+          <h1 className="max-w-3xl text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-7xl">
+            <Words text="Il tuo sorriso," startDelay={250} />
+            <br />
+            <Words text="la nostra missione" startDelay={250 + 3 * 80} />
+          </h1>
+          <div className="animate-fade-up mt-8 [animation-delay:1.1s]">
+            <Button
+              variant="outline"
+              size="xl"
+              className="group border-white/60 bg-white/10 text-white backdrop-blur-md hover:border-white hover:bg-white/20 hover:text-white"
+              asChild
+            >
+              <Link to="/servizi">
+                Scopri i trattamenti{" "}
+                <ArrowRight
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
+              </Link>
+            </Button>
+          </div>
+        </div>
         <div
           aria-hidden="true"
-          className="animate-fade-up absolute right-5 bottom-9 grid h-12 w-12 place-items-center rounded-full border border-white/30 bg-white/15 text-white backdrop-blur-xl [animation-delay:1.4s] md:right-10 md:bottom-11"
+          className="animate-fade-up absolute right-5 bottom-12 grid h-12 w-12 max-sm:hidden place-items-center rounded-full border border-white/30 bg-white/15 text-white backdrop-blur-xl [animation-delay:1.4s] md:right-10 md:bottom-16"
         >
           <ArrowDown className="scroll-cue h-5 w-5" />
         </div>
@@ -203,65 +226,55 @@ function Index() {
           className="bg-accent-soft animate-float absolute -bottom-40 -left-24 h-96 w-96 rounded-full opacity-70 blur-3xl [animation-delay:1.5s]"
         />
         <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 md:py-24 lg:grid-cols-2">
-          <div
-            style={{
-              transform: "translate3d(0, calc(var(--p) * -70px), 0)",
-              opacity: "calc(1 - var(--p) * 1.25)",
-            }}
-          >
-            <Badge
-              variant="secondary"
-              className="animate-fade-up mb-5 rounded-full px-3 py-1 text-xs font-medium"
+          <Reveal>
+            <div
+              style={{
+                transform: "translate3d(0, calc(var(--p) * -70px), 0)",
+                opacity: "calc(1 - var(--p) * 1.25)",
+              }}
             >
-              Milano · Aperti anche il sabato per le urgenze
-            </Badge>
-            <h1 className="text-4xl leading-[1.05] font-semibold text-balance sm:text-5xl lg:text-7xl">
-              <Words text="Il tuo sorriso," startDelay={150} />
-              <br />
-              <Words text="la nostra missione" className="text-primary" startDelay={150 + 3 * 70} />
-            </h1>
-            <p className="text-muted-foreground animate-fade-up mt-6 max-w-lg text-lg leading-relaxed [animation-delay:650ms]">
-              Uno studio pensato anche per chi il dentista lo teme: tempi distesi, ogni passaggio
-              spiegato prima di farlo e la possibilità di fermarsi quando vuoi.
-            </p>
-            <div className="animate-fade-up mt-8 flex flex-col gap-3 [animation-delay:800ms] sm:flex-row">
-              <Button variant="hero" size="xl" className="sheen group" asChild>
-                <Link to="/prenota">
-                  <CalendarPlus aria-hidden="true" /> Prenota una visita
-                </Link>
-              </Button>
-              <Button variant="outline" size="xl" className="group" asChild>
-                <Link to="/servizi">
-                  Scopri i trattamenti{" "}
-                  <ArrowRight
-                    className="transition-transform duration-300 group-hover:translate-x-1"
-                    aria-hidden="true"
-                  />
-                </Link>
-              </Button>
+              <Badge
+                variant="secondary"
+                className="mb-5 rounded-full px-3 py-1 text-xs font-medium"
+              >
+                Milano · Aperti anche il sabato per le urgenze
+              </Badge>
+              <h2 className="text-primary text-4xl leading-[1.05] font-semibold text-balance sm:text-5xl lg:text-6xl">
+                Cure serene, spiegate passo dopo passo
+              </h2>
+              <p className="text-muted-foreground mt-6 max-w-lg text-lg leading-relaxed">
+                Uno studio pensato anche per chi il dentista lo teme: tempi distesi, ogni passaggio
+                spiegato prima di farlo e la possibilità di fermarsi quando vuoi.
+              </p>
+              <div className="mt-8">
+                <Button variant="hero" size="xl" className="sheen group" asChild>
+                  <Link to="/prenota">
+                    <CalendarPlus aria-hidden="true" /> Prenota una visita
+                  </Link>
+                </Button>
+              </div>
+              <dl className="border-border/70 mt-10 grid max-w-md grid-cols-3 gap-4 border-t pt-6">
+                <div>
+                  <dt className="font-display text-primary text-2xl font-semibold">
+                    <CountUp to={4500} suffix="+" />
+                  </dt>
+                  <dd className="text-muted-foreground text-xs">pazienti seguiti</dd>
+                </div>
+                <div>
+                  <dt className="font-display text-primary text-2xl font-semibold">
+                    <CountUp to={22} suffix=" anni" />
+                  </dt>
+                  <dd className="text-muted-foreground text-xs">di attività</dd>
+                </div>
+                <div>
+                  <dt className="font-display text-primary text-2xl font-semibold">
+                    <CountUp to={4.9} decimals={1} suffix="/5" />
+                  </dt>
+                  <dd className="text-muted-foreground text-xs">recensioni verificate</dd>
+                </div>
+              </dl>
             </div>
-            <dl className="border-border/70 animate-fade-up mt-10 grid max-w-md grid-cols-3 gap-4 border-t pt-6 [animation-delay:950ms]">
-              <div>
-                <dt className="font-display text-primary text-2xl font-semibold">
-                  <CountUp to={4500} suffix="+" />
-                </dt>
-                <dd className="text-muted-foreground text-xs">pazienti seguiti</dd>
-              </div>
-              <div>
-                <dt className="font-display text-primary text-2xl font-semibold">
-                  <CountUp to={22} suffix=" anni" />
-                </dt>
-                <dd className="text-muted-foreground text-xs">di attività</dd>
-              </div>
-              <div>
-                <dt className="font-display text-primary text-2xl font-semibold">
-                  <CountUp to={4.9} decimals={1} suffix="/5" />
-                </dt>
-                <dd className="text-muted-foreground text-xs">recensioni verificate</dd>
-              </div>
-            </dl>
-          </div>
-
+          </Reveal>
           <Parallax speed={0.05} className="relative">
             <div
               className="photo-reveal border-border relative overflow-hidden rounded-[2.5rem] border shadow-[var(--shadow-lift)]"
