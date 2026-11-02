@@ -234,16 +234,18 @@ function StaffPage() {
           </div>
         ) : null}
         <Tabs defaultValue="agenda">
-          <TabsList>
-            <TabsTrigger value="agenda">Agenda</TabsTrigger>
-            <TabsTrigger value="calendario">Calendario</TabsTrigger>
-            <TabsTrigger value="pazienti">Pazienti</TabsTrigger>
-            <TabsTrigger value="documenti">Documenti</TabsTrigger>
-            <TabsTrigger value="listino">Listino</TabsTrigger>
-            <TabsTrigger value="indisponibilita">Ferie e permessi</TabsTrigger>
-            <TabsTrigger value="turni">Turni</TabsTrigger>
-            <TabsTrigger value="messaggi">Messaggi</TabsTrigger>
-          </TabsList>
+          <div className="-mx-5 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <TabsList>
+              <TabsTrigger value="agenda">Agenda</TabsTrigger>
+              <TabsTrigger value="calendario">Calendario</TabsTrigger>
+              <TabsTrigger value="pazienti">Pazienti</TabsTrigger>
+              <TabsTrigger value="documenti">Documenti</TabsTrigger>
+              <TabsTrigger value="listino">Listino</TabsTrigger>
+              <TabsTrigger value="indisponibilita">Ferie e permessi</TabsTrigger>
+              <TabsTrigger value="turni">Turni</TabsTrigger>
+              <TabsTrigger value="messaggi">Messaggi</TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="agenda" className="mt-6">
             <div className="flex items-center gap-3">
