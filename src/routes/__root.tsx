@@ -125,7 +125,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             addressCountry: "IT",
           },
           telephone: "+39 02 8422 1170",
-          email: "ciao@studioevergreen.it",
+          email: "info@longobardi.com",
           priceRange: "€€",
         }),
       },

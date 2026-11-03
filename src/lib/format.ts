@@ -5,7 +5,7 @@ export const STUDIO = {
   address: "Via dei Tigli 14, 20144 Milano",
   phone: "+39 02 8422 1170",
   phoneHref: "tel:+390284221170",
-  email: "ciao@studioevergreen.it",
+  email: "info@longobardi.com",
   hours: [
     { day: "Lunedì – Giovedì", value: "09:00 – 13:00 · 14:00 – 19:00" },
     { day: "Venerdì", value: "09:00 – 13:00 · 14:00 – 17:00" },
