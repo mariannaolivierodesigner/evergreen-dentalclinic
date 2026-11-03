@@ -70,7 +70,7 @@ export function SiteHeader() {
         hidden && !open && "-translate-y-full",
         overlay
           ? compact
-            ? "fixed inset-x-0 top-0"
+            ? "fixed inset-x-0 top-0 border-b border-white/15 bg-[oklch(0.15_0.01_50/0.9)] backdrop-blur-xl"
             : "fixed inset-x-0 top-0"
           : cn(
               "sticky top-0",
@@ -85,9 +85,9 @@ export function SiteHeader() {
           "mx-auto flex h-18 max-w-6xl items-center justify-between px-5 py-3",
           overlay &&
             !compact &&
-            "h-16 max-w-none px-5 md:px-8",
+            "h-16",
           compact &&
-            "h-14 max-w-none rounded-none border-b border-white/15 bg-[oklch(0.15_0.01_50/0.9)] px-5 shadow-none backdrop-blur-xl md:px-8",
+            "h-14",
         )}
       >
         <Logo symbolOnlyMobile className={overlay ? "text-white" : undefined} />
