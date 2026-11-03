@@ -416,3 +416,10 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Menu laterale mobile */
+@keyframes drawer-in { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes drawer-fade { from { opacity: 0; } to { opacity: 1; } }
+.drawer-panel { animation: drawer-in 0.38s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.drawer-backdrop { animation: drawer-fade 0.3s ease; }
+@media (prefers-reduced-motion: reduce) { .drawer-panel, .drawer-backdrop { animation: none; } }

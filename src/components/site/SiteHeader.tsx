@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { CalendarPlus, Download, LogOut, Menu, User, X } from "lucide-react";
+import { ArrowUpRight, CalendarPlus, Download, LogOut, Menu, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -192,66 +193,92 @@ export function SiteHeader() {
         </Button>
       </div>
 
-      {open && (
-        <div
-          className={cn(
-            "animate-fade-up px-5 pt-2 pb-6",
-            !compact && "md:hidden",
-            overlay
-              ? compact
-                ? "border-b border-white/15 bg-[oklch(0.3_0.05_222/0.95)] px-5 text-white backdrop-blur-xl md:px-8"
-                : "mt-2 rounded-3xl border border-white/25 bg-[oklch(0.3_0.05_222/0.78)] text-white backdrop-blur-xl"
-              : "bg-background border-border border-t",
+      {open && <MobileDrawer onClose={() => setOpen(false)} isStaff={isStaff} signedIn={!!user} />}
+    </header>
+  );
+}
+
+/** Menu laterale (mobile): pannello che scorre da destra su sfondo sfocato. */
+function MobileDrawer({
+  onClose,
+  isStaff,
+  signedIn,
+}: {
+  onClose: () => void;
+  isStaff: boolean;
+  signedIn: boolean;
+}) {
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  const link =
+    "group flex items-center justify-between border-b border-white/15 py-4 text-xl font-medium tracking-tight";
+
+  return createPortal(
+    <div className="fixed inset-0 z-[60]" role="dialog" aria-modal="true" aria-label="Menu">
+      <button
+        type="button"
+        aria-label="Chiudi menu"
+        onClick={onClose}
+        className="drawer-backdrop absolute inset-0 bg-[oklch(0.2_0.04_222/0.45)] backdrop-blur-sm"
+      />
+      <div className="drawer-panel absolute inset-y-0 right-0 flex w-[min(86vw,22rem)] flex-col bg-[oklch(0.27_0.05_222)] px-5 pt-3 pb-8 text-white shadow-[-24px_0_60px_-20px_rgb(0_0_0/0.5)]">
+        <div className="flex h-14 items-center justify-between">
+          <Logo className="text-white" />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-white hover:bg-white/12 hover:text-white"
+            aria-label="Chiudi menu"
+            onClick={onClose}
+          >
+            <X />
+          </Button>
+        </div>
+        <nav aria-label="Navigazione mobile" className="mt-6 flex flex-col">
+          {NAV.map((item) => (
+            <Link key={item.to} to={item.to} onClick={onClose} className={link}>
+              {item.label}
+              <ArrowUpRight
+                aria-hidden="true"
+                className="h-5 w-5 text-[oklch(0.8_0.05_160)] opacity-70 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </Link>
+          ))}
+          {isStaff && (
+            <Link to="/staff" onClick={onClose} className={link}>
+              Gestionale studio
+              <ArrowUpRight aria-hidden="true" className="h-5 w-5 text-[oklch(0.8_0.05_160)] opacity-70" />
+            </Link>
           )}
-        >
-          <nav aria-label="Navigazione mobile" className="flex flex-col">
-            {NAV.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                onClick={() => setOpen(false)}
-                className={cn(
-                  "border-b py-3 text-base font-medium",
-                  overlay ? "border-white/20" : "border-border/60",
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
-            {isStaff && (
-              <Link
-                to="/staff"
-                onClick={() => setOpen(false)}
-                className={cn(
-                  "border-b py-3 text-base font-medium",
-                  overlay ? "border-white/20" : "border-border/60",
-                )}
-              >
-                Gestionale studio
-              </Link>
-            )}
-          </nav>
-          <Button variant="hero" className="mt-5 w-full" size="lg" asChild>
-            <Link to="/prenota" onClick={() => setOpen(false)}>
+        </nav>
+        <div className="mt-auto space-y-3 pt-8">
+          <Button variant="hero" className="w-full" size="lg" asChild>
+            <Link to="/prenota" onClick={onClose}>
               <CalendarPlus aria-hidden="true" /> Prenota una visita
             </Link>
           </Button>
           <Button
             variant="outline"
-            className={cn(
-              "mt-3 w-full",
-              overlay &&
-                "border-white/60 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white",
-            )}
+            className="w-full border-white/50 bg-white/10 text-white hover:border-white hover:bg-white/20 hover:text-white"
             size="lg"
             asChild
           >
-            <Link to={user ? "/area-personale" : "/auth"} onClick={() => setOpen(false)}>
+            <Link to={signedIn ? "/area-personale" : "/auth"} onClick={onClose}>
               <User aria-hidden="true" /> Accedi
             </Link>
           </Button>
         </div>
-      )}
-    </header>
+      </div>
+    </div>,
+    document.body,
   );
 }
