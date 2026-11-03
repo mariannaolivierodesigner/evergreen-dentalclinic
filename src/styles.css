@@ -426,58 +426,57 @@
 .drawer-backdrop { animation: drawer-fade 0.3s ease; }
 @media (prefers-reduced-motion: reduce) { .drawer-panel, .drawer-backdrop { animation: none; } }
 
-/* Palette del sito pubblico (calda, scura ma non nera):
-   Raisin Black #20201F · Pine Tree #322B25 · Platinum #E8E5E0 · Tuscany #B6A593, più salvia come accento.
-   Pine Tree è la base, Raisin Black dà profondità (fasce, footer, menu), Platinum è testo e fascia chiara,
-   Tuscany è il colore di enfasi dei titoli. Applicata con .site-dark (anche su <html> per dialog e menu). */
+/* Palette del sito pubblico: nero matto #20201F, bianco caldo #EEEBE5, sabbia #B6A593, salvia.
+   Il nero matto è la base e dà profondità (fasce, footer, menu), il bianco caldo è testo e fascia chiara,
+   la sabbia è il colore di enfasi dei titoli, la salvia l'accento di pulsanti e dettagli.
+   Applicata con .site-dark (anche su <html> per dialog e menu). */
 .site-dark {
   color-scheme: dark;
-  --raisin: #20201f;
-  --pine: #322b25;
-  --platinum: #e8e5e0;
-  --tuscany: #b6a593;
-  --background: #322b25;
-  --foreground: #e8e5e0;
-  --card: #3b332c;
-  --card-foreground: #e8e5e0;
-  --popover: #2a2521;
-  --popover-foreground: #e8e5e0;
+  --matte: #20201f;
+  --warm-white: #eeebe5;
+  --sand: #b6a593;
+  --background: #20201f;
+  --foreground: #eeebe5;
+  --card: #2b2b29;
+  --card-foreground: #eeebe5;
+  --popover: #262624;
+  --popover-foreground: #eeebe5;
   --primary: oklch(0.8 0.055 160);
   --primary-foreground: #20201f;
-  --primary-soft: #39382f;
+  --primary-soft: #2e3731;
   --primary-glow: oklch(0.72 0.05 160);
-  --secondary: #20201f;
-  --secondary-foreground: #e8e5e0;
-  --muted: #3b332c;
-  --muted-foreground: #c2b8ab;
+  --secondary: #2a2a28;
+  --secondary-foreground: #eeebe5;
+  --muted: #2b2b29;
+  --muted-foreground: #b9b4aa;
   --accent: oklch(0.8 0.055 160);
   --accent-foreground: #20201f;
-  --accent-soft: #3d3b31;
-  --peach: #b6a593;
-  --border: #4d4238;
-  --input: #4d4238;
+  --accent-soft: #2e3731;
+  --peach: #cdbfa9;
+  --border: #3b3b38;
+  --input: #3b3b38;
   --ring: oklch(0.8 0.055 160);
-  --gradient-calm: linear-gradient(160deg, #3b332c 0%, #322b25 55%, #2c2a26 100%);
-  --gradient-primary: linear-gradient(135deg, #3d3b31 0%, #322b25 100%);
+  --gradient-calm: linear-gradient(160deg, #2a2a28 0%, #20201f 60%, #222621 100%);
+  --gradient-primary: linear-gradient(135deg, #2e3731 0%, #20201f 100%);
   --gradient-accent: linear-gradient(135deg, oklch(0.84 0.05 160) 0%, oklch(0.76 0.05 170) 100%);
-  --shadow-soft: 0 1px 2px rgb(0 0 0 / 25%), 0 14px 34px -16px rgb(0 0 0 / 50%);
-  --shadow-lift: 0 2px 6px rgb(0 0 0 / 30%), 0 30px 60px -28px rgb(0 0 0 / 60%);
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 30%), 0 14px 34px -16px rgb(0 0 0 / 55%);
+  --shadow-lift: 0 2px 6px rgb(0 0 0 / 35%), 0 30px 60px -28px rgb(0 0 0 / 65%);
   background-color: var(--background);
   color: var(--foreground);
 }
-/* Fascia chiara (Platinum) dentro il sito scuro, per dare ritmo: testo Raisin Black. */
+/* Fascia chiara (bianco caldo) dentro il sito scuro, per dare ritmo: testo nero matto. */
 .site-dark .band-light {
   color-scheme: light;
-  --background: #e8e5e0;
+  --background: #eeebe5;
   --foreground: #20201f;
   --primary: #20201f;
-  --primary-foreground: #e8e5e0;
-  --accent-foreground: #e8e5e0;
-  --muted-foreground: #5b5249;
-  --border: #cfc8be;
-  --peach: #7d6b58;
-  --gradient-accent: linear-gradient(135deg, #2c2a26 0%, #20201f 100%);
-  background: #e8e5e0;
+  --primary-foreground: #eeebe5;
+  --accent-foreground: #eeebe5;
+  --muted-foreground: #57554f;
+  --border: #d3cec4;
+  --peach: #8b7a65;
+  --gradient-accent: linear-gradient(135deg, #2b2b29 0%, #20201f 100%);
+  background: #eeebe5;
   color: #20201f;
 }
 .site-dark :is(h1, h2) {
