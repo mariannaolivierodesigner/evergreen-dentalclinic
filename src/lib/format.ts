@@ -1,7 +1,7 @@
 export const STUDIO = {
   name: "Studio Dentistico Longobardi",
   short: "Longobardi",
-  claim: "Il tuo sorriso, la nostra missione",
+  claim: "Liberi di sorridere",
   address: "Via dei Tigli 14, 20144 Milano",
   phone: "+39 02 8422 1170",
   phoneHref: "tel:+390284221170",

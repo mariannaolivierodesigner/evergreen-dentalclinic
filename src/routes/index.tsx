@@ -60,7 +60,7 @@ const TREATMENT_ORDER = Object.values(TREATMENT_PHOTOS);
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Studio Dentistico Longobardi — Il tuo sorriso, la nostra missione" },
+      { title: "Studio Dentistico Longobardi — Liberi di sorridere" },
       {
         name: "description",
         content:
@@ -202,9 +202,9 @@ function Index() {
         />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-5 pb-12 md:pb-16">
           <h1 className="max-w-3xl text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-7xl">
-            <Words text="Il tuo sorriso," startDelay={250} />
+            <Words text="Liberi di" startDelay={250} />
             <br />
-            <Words text="la nostra missione" startDelay={250 + 3 * 80} />
+            <Words text="sorridere" startDelay={250 + 2 * 80} />
           </h1>
           <div className="animate-fade-up mt-8 [animation-delay:1.1s]">
             <Button
