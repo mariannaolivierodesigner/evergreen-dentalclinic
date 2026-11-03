@@ -460,6 +460,15 @@
   background-color: var(--background);
   color: var(--foreground);
 }
+/* Pannello chiaro (card #FBFBF8 su fondo #EBEAE4): per le sezioni che si staccano dalla pagina senza scurirsi. */
+.site-dark .band-light {
+  --background: #ebeae4;
+  --card: #fbfbf8;
+  --secondary: #e3e2db;
+  --muted: #e3e2db;
+  --border: #d4d4cc;
+  background: #ebeae4;
+}
 /* Pannello scuro (come nel riferimento): nero-verde #0E1311, testo #F1F0EA. */
 .site-dark .band-dark {
   color-scheme: dark;

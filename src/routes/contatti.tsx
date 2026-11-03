@@ -81,8 +81,8 @@ function Contatti() {
         description="Per urgenze chiama: rispondiamo negli orari di apertura e teniamo sempre uno slot libero al mattino."
       />
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[1fr_1.1fr]">
-        <Reveal variant="left">
-          <ul className="space-y-5">
+        <Reveal variant="left" className="h-full">
+          <ul className="flex h-full flex-col gap-5">
             {[
               { icon: MapPin, label: "Indirizzo", value: STUDIO.address },
               { icon: Phone, label: "Telefono", value: STUDIO.phone, href: STUDIO.phoneHref },
@@ -104,7 +104,7 @@ function Contatti() {
                 </div>
               </li>
             ))}
-            <li className="surface-card flex items-start gap-4 p-5">
+            <li className="surface-card flex flex-1 items-start gap-4 p-5">
               <span className="bg-primary-soft text-primary grid h-10 w-10 shrink-0 place-items-center rounded-2xl">
                 <Clock className="h-4 w-4" aria-hidden="true" />
               </span>
@@ -123,8 +123,8 @@ function Contatti() {
           </ul>
         </Reveal>
 
-        <Reveal delay={90} variant="right">
-          <form onSubmit={onSubmit} noValidate className="surface-card space-y-5 p-6 md:p-8">
+        <Reveal delay={90} variant="right" className="h-full">
+          <form onSubmit={onSubmit} noValidate className="surface-card h-full space-y-5 p-6 md:p-8">
             <h2 className="text-2xl font-semibold">Scrivici</h2>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>

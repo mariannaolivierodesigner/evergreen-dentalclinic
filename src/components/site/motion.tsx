@@ -183,7 +183,7 @@ export function Marquee({ items, className }: { items: string[]; className?: str
       {items.map((t, i) => (
         <li key={`${t}-${i}`} className="flex items-center gap-8">
           <span>{t}</span>
-          <span className="bg-accent h-1.5 w-1.5 rounded-full" />
+          <span className="h-1.5 w-1.5 rounded-full bg-[#f3f2ed]" />
         </li>
       ))}
     </ul>

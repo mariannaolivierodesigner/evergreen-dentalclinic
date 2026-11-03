@@ -85,21 +85,25 @@ export const Route = createFileRoute("/")({
 const REASONS = [
   {
     icon: MonitorSmartphone,
+    image: treat6,
     title: "Tecnologia che riduce i tempi",
     text: "Scanner intraorale, radiologia digitale a basso dosaggio e implantologia guidata: meno sedute, più precisione.",
   },
   {
     icon: HeartHandshake,
+    image: treat1,
     title: "Sedazione cosciente",
     text: "Per chi vive l'odontoiatra con ansia: resti sveglio e collaborativo, ma profondamente rilassato.",
   },
   {
     icon: ShieldCheck,
+    image: treat3,
     title: "Preventivi chiari",
     text: "Costi, alternative e tempi scritti nero su bianco prima di iniziare. Nessuna sorpresa in fattura.",
   },
   {
     icon: Leaf,
+    image: heroStudio,
     title: "Ambiente che rassicura",
     text: "Niente odore di studio dentistico, luce naturale, musica a scelta e tempi mai compressi.",
   },
@@ -113,55 +117,105 @@ function ReasonsPinned() {
       mode="pin"
       onProgress={(p) => setActive(Math.min(n - 1, Math.floor(p * n)))}
       className="relative hidden lg:block motion-reduce:hidden"
-      style={{ height: `${n * 75 + 100}vh` }}
+      style={{ height: `calc(40rem + ${n * 48}vh)` }}
     >
-      <div className="sticky top-0 flex h-screen items-center pt-16">
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-2 items-center gap-16 px-5">
+      <div className="sticky top-[max(5rem,calc(50vh-19rem))] flex h-[38rem] items-center">
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-[1fr_1.15fr] items-center gap-16 px-5">
           <div>
-            <h2 className="max-w-md text-4xl font-semibold">
+            <p className="text-muted-foreground text-xs font-semibold tracking-[0.2em] uppercase">
+              Perché noi
+            </p>
+            <h2 className="mt-4 max-w-md text-4xl font-semibold text-balance">
               Perché i pazienti scelgono Longobardi
             </h2>
-            <ol className="mt-10 space-y-2">
-              {REASONS.map((r, i) => (
-                <li key={r.title}>
-                  <span
-                    className={
-                      "block text-xl font-semibold transition-all duration-500 " +
-                      (i === active
-                        ? "text-primary translate-x-2 opacity-100"
-                        : "text-foreground translate-x-0 opacity-30")
-                    }
-                  >
-                    {r.title}
-                  </span>
-                </li>
-              ))}
-            </ol>
+            <div className="relative mt-10 pl-7">
+              {/* linea di avanzamento: si riempie con lo scroll */}
+              <span className="bg-border absolute top-1 bottom-1 left-0 w-px" aria-hidden="true" />
+              <span
+                className="bg-accent absolute top-1 left-0 w-px origin-top"
+                style={{ height: "calc(var(--p) * (100% - 0.5rem))" }}
+                aria-hidden="true"
+              />
+              <ol className="space-y-1">
+                {REASONS.map((r, i) => (
+                  <li key={r.title}>
+                    <span
+                      className={
+                        "flex items-baseline gap-3 text-xl font-semibold transition-all duration-500 " +
+                        (i === active ? "translate-x-1 opacity-100" : "opacity-35")
+                      }
+                    >
+                      <span className="text-accent text-sm tabular-nums">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      {r.title}
+                    </span>
+                    <span
+                      className="text-muted-foreground block overflow-hidden pl-9 text-sm leading-relaxed transition-all duration-500"
+                      style={{
+                        maxHeight: i === active ? "4.5rem" : 0,
+                        opacity: i === active ? 1 : 0,
+                        marginBottom: i === active ? "0.5rem" : 0,
+                      }}
+                    >
+                      {r.text}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
-          <div className="relative h-[26rem]">
+          <div className="relative h-[34rem]">
             {REASONS.map((r, i) => (
               <div
                 key={r.title}
                 aria-hidden={i !== active}
-                className="surface-card absolute inset-0 flex flex-col justify-center gap-6 p-10 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                className="surface-card absolute inset-0 flex flex-col overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
                 style={{
                   opacity: i === active ? 1 : 0,
                   transform:
                     i === active
                       ? "translateY(0) scale(1)"
                       : i < active
-                        ? "translateY(-36px) scale(0.95)"
-                        : "translateY(36px) scale(0.95)",
+                        ? "translateY(-36px) scale(0.96)"
+                        : "translateY(36px) scale(0.96)",
                 }}
               >
-                <span className="bg-accent-soft text-primary grid h-20 w-20 place-items-center rounded-3xl">
-                  <r.icon className="h-9 w-9" aria-hidden="true" />
-                </span>
-                <h3 className="text-2xl font-semibold">{r.title}</h3>
-                <p className="text-muted-foreground text-lg leading-relaxed">{r.text}</p>
-                <span className="text-muted-foreground mt-auto text-sm tabular-nums">
-                  {String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
-                </span>
+                <div className="relative h-72 overflow-hidden">
+                  <img
+                    src={r.image}
+                    alt=""
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-[2600ms] ease-out"
+                    style={{ transform: i === active ? "scale(1.08)" : "scale(1)" }}
+                  />
+                  <span className="bg-card text-foreground absolute bottom-5 left-6 grid h-14 w-14 place-items-center rounded-2xl shadow-[var(--shadow-soft)]">
+                    <r.icon
+                      className={"h-6 w-6 transition-transform duration-700 " + (i === active ? "scale-110" : "scale-90")}
+                      aria-hidden="true"
+                    />
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col gap-3 p-7">
+                  <h3 className="text-2xl font-semibold">{r.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{r.text}</p>
+                  <div className="mt-auto flex items-center gap-3">
+                    <span className="text-muted-foreground text-sm tabular-nums">
+                      {String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
+                    </span>
+                    <span className="flex gap-1.5" aria-hidden="true">
+                      {REASONS.map((_, d) => (
+                        <span
+                          key={d}
+                          className={
+                            "h-1.5 rounded-full transition-all duration-500 " +
+                            (d === i ? "bg-accent w-6" : "bg-border w-1.5")
+                          }
+                        />
+                      ))}
+                    </span>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -201,9 +255,8 @@ function Index() {
           className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(11_14_13/0.85)_0%,rgb(11_14_13/0.4)_38%,transparent_70%),linear-gradient(180deg,rgb(11_14_13/0.78)_0%,rgb(11_14_13/0.4)_14%,transparent_32%)]"
         />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-5 pb-12 md:pb-16">
-          <h1 className="max-w-3xl text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-7xl">
-            <Words text="Liberi di" startDelay={250} />
-            <br />
+          <h1 className="text-[2.15rem] leading-[1.05] font-semibold whitespace-nowrap text-white sm:text-5xl lg:text-7xl">
+            <Words text="Liberi di" startDelay={250} />{" "}
             <Words className="text-peach" text="sorridere" startDelay={250 + 2 * 80} />
           </h1>
           <div className="animate-fade-up mt-8 [animation-delay:1.1s]">
@@ -388,8 +441,8 @@ function Index() {
       </section>
 
       {/* PERCHÉ NOI */}
-      <section className="band-dark mx-3 rounded-[2rem] md:mx-5" aria-labelledby="perche-title">
-        <div className="mx-auto max-w-6xl px-5 py-20 lg:hidden motion-reduce:block">
+      <section className="band-light mx-3 rounded-[2rem] md:mx-5" aria-labelledby="perche-title">
+        <div className="mx-auto max-w-6xl px-5 py-14 lg:hidden motion-reduce:block">
           <Reveal>
             <h2 id="perche-title" className="max-w-2xl text-3xl font-semibold md:text-4xl">
               Perché i pazienti scelgono Longobardi
@@ -483,11 +536,11 @@ function Index() {
           />
           <div className="text-muted-foreground mt-5 grid gap-4 text-sm md:grid-cols-2 md:gap-6">
             <p>
-              <span className="text-foreground font-semibold">Prima · </span>
+              <span className="text-foreground block font-semibold">Prima</span>
               Sorriso con smalto opacizzato da caffè e tè, lieve disallineamento degli incisivi.
             </p>
             <p>
-              <span className="text-foreground font-semibold">Dopo · </span>
+              <span className="text-foreground block font-semibold">Dopo</span>
               Sbiancamento professionale e rifinitura estetica: 4 gradi di colore in una seduta.
             </p>
           </div>
