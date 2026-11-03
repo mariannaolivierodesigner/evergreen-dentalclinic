@@ -182,7 +182,7 @@ function Index() {
       <ScrollVars
         as="section"
         mode="hero"
-        className="relative isolate h-[100svh] min-h-[560px] overflow-hidden bg-[#161615]"
+        className="relative isolate h-[100svh] min-h-[560px] overflow-hidden bg-[#0e1311]"
       >
         <img
           src={heroSmile}
@@ -198,7 +198,7 @@ function Index() {
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(22_22_21/0.85)_0%,rgb(22_22_21/0.4)_38%,transparent_70%),linear-gradient(180deg,rgb(22_22_21/0.78)_0%,rgb(22_22_21/0.4)_14%,transparent_32%)]"
+          className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(11_14_13/0.85)_0%,rgb(11_14_13/0.4)_38%,transparent_70%),linear-gradient(180deg,rgb(11_14_13/0.78)_0%,rgb(11_14_13/0.4)_14%,transparent_32%)]"
         />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-5 pb-12 md:pb-16">
           <h1 className="max-w-3xl text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-7xl">
@@ -316,7 +316,7 @@ function Index() {
 
       {/* STRISCIA TRATTAMENTI */}
       <div
-        className="bg-[#d9c7a8] text-[#161615] py-4 text-sm font-medium"
+        className="bg-[#0e1311] text-[#f1f0ea] py-4 text-sm font-medium"
         aria-hidden="true"
       >
         <Marquee items={services.map((s) => s.name)} />
@@ -388,7 +388,7 @@ function Index() {
       </section>
 
       {/* PERCHÉ NOI */}
-      <section className="bg-secondary/50 border-border border-y" aria-labelledby="perche-title">
+      <section className="band-dark mx-3 rounded-[2rem] md:mx-5" aria-labelledby="perche-title">
         <div className="mx-auto max-w-6xl px-5 py-20 lg:hidden motion-reduce:block">
           <Reveal>
             <h2 id="perche-title" className="max-w-2xl text-3xl font-semibold md:text-4xl">
@@ -495,7 +495,7 @@ function Index() {
       </section>
 
       {/* CTA FINALE */}
-      <section className="band-light">
+      <section className="band-dark mx-3 mb-3 rounded-[2rem] md:mx-5 md:mb-5">
         <div className="mx-auto max-w-4xl px-5 py-20 text-center">
           <Reveal variant="blur">
             <h2 className="text-foreground text-3xl font-semibold text-balance md:text-4xl">

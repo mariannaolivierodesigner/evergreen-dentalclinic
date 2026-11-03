@@ -426,93 +426,73 @@
 .drawer-backdrop { animation: drawer-fade 0.3s ease; }
 @media (prefers-reduced-motion: reduce) { .drawer-panel, .drawer-backdrop { animation: none; } }
 
-/* Palette del sito pubblico: nero matto neutro come base, bianco caldo e sabbia per le fasce chiare,
-   salvia come accento. Le sezioni alternano scuro e chiaro (.band-light = bianco caldo, .band-sand = sabbia).
+/* Palette del sito pubblico (presa dal sito di riferimento): bianco caldo di base, testi nero-verde,
+   card quasi bianche e pannelli scuri arrotondati (.band-dark) per dare ritmo. Accento verde #1C7353.
    Applicata con .site-dark (anche su <html> per dialog e menu). */
 .site-dark {
-  color-scheme: dark;
-  --matte: #1c1c1b;
-  --warm-white: #f4f0e8;
-  --sand: #d9c7a8;
-  --sage: #a8bfad;
-  --background: #1c1c1b;
-  --foreground: #f4f0e8;
-  --card: #272726;
-  --card-foreground: #f4f0e8;
-  --popover: #232322;
-  --popover-foreground: #f4f0e8;
-  --primary: #a8bfad;
-  --primary-foreground: #161615;
-  --primary-soft: #2b312d;
-  --primary-glow: #bfd0c3;
-  --secondary: #161615;
-  --secondary-foreground: #f4f0e8;
-  --muted: #272726;
-  --muted-foreground: #b8b4aa;
-  --accent: #a8bfad;
-  --accent-foreground: #161615;
-  --accent-soft: #2b312d;
-  --peach: #d9c7a8;
-  --border: #3a3a37;
-  --input: #3a3a37;
-  --ring: #a8bfad;
-  --gradient-calm: linear-gradient(165deg, #262625 0%, #1c1c1b 60%, #191918 100%);
-  --gradient-primary: linear-gradient(135deg, #2b312d 0%, #1c1c1b 100%);
-  --gradient-accent: linear-gradient(135deg, #bfd0c3 0%, #a8bfad 100%);
-  --shadow-soft: 0 1px 2px rgb(0 0 0 / 30%), 0 14px 34px -16px rgb(0 0 0 / 55%);
-  --shadow-lift: 0 2px 6px rgb(0 0 0 / 35%), 0 30px 60px -28px rgb(0 0 0 / 65%);
+  color-scheme: light;
+  --background: #f3f2ed;
+  --foreground: #0e1311;
+  --card: #fbfbf8;
+  --card-foreground: #0e1311;
+  --popover: #fbfbf8;
+  --popover-foreground: #0e1311;
+  --primary: #0e1311;
+  --primary-foreground: #f3f2ed;
+  --primary-soft: #e4e7e1;
+  --primary-glow: #4c5650;
+  --secondary: #ebeae4;
+  --secondary-foreground: #0e1311;
+  --muted: #ebeae4;
+  --muted-foreground: #4c5650;
+  --accent: #1c7353;
+  --accent-foreground: #f3f2ed;
+  --accent-soft: #e0ebe5;
+  --peach: #858d87;
+  --border: #dcdcd5;
+  --input: #dcdcd5;
+  --ring: #1c7353;
+  --gradient-calm: linear-gradient(180deg, #f3f2ed 0%, #f3f2ed 100%);
+  --gradient-primary: linear-gradient(135deg, #1a211e 0%, #0e1311 100%);
+  --gradient-accent: linear-gradient(135deg, #1a211e 0%, #0e1311 100%);
+  --shadow-soft: 0 1px 2px rgb(14 19 17 / 6%), 0 14px 34px -18px rgb(14 19 17 / 22%);
+  --shadow-lift: 0 2px 6px rgb(14 19 17 / 8%), 0 30px 60px -28px rgb(14 19 17 / 35%);
   background-color: var(--background);
   color: var(--foreground);
 }
-/* Fascia chiara: bianco caldo, testo nero matto. */
-.site-dark .band-light {
-  color-scheme: light;
-  --background: #f4f0e8;
-  --foreground: #1c1c1b;
-  --card: #fffdf8;
-  --card-foreground: #1c1c1b;
-  --secondary: #e9e3d6;
-  --muted: #e9e3d6;
-  --muted-foreground: #5a574f;
-  --border: #dad3c4;
-  --primary: #1c1c1b;
-  --primary-foreground: #f4f0e8;
-  --primary-soft: #dfe6dc;
-  --accent: #6b8574;
-  --accent-soft: #dfe6dc;
-  --accent-foreground: #f4f0e8;
-  --peach: #8b7757;
-  --gradient-accent: linear-gradient(135deg, #2b2b2a 0%, #1c1c1b 100%);
-  --shadow-soft: 0 1px 2px rgb(28 28 27 / 6%), 0 14px 34px -18px rgb(28 28 27 / 22%);
-  background: #f4f0e8;
-  color: #1c1c1b;
-}
-/* Fascia sabbia. */
-.site-dark .band-sand {
-  color-scheme: light;
-  --background: #d9c9ad;
-  --foreground: #1c1c1b;
-  --card: #ebe2cf;
-  --card-foreground: #1c1c1b;
-  --secondary: #cdbc9d;
-  --muted: #ebe2cf;
-  --muted-foreground: #4d493f;
-  --border: #bfae8f;
-  --primary: #1c1c1b;
-  --primary-foreground: #f4f0e8;
-  --primary-soft: #cfd8c9;
-  --accent: #5f7a68;
-  --accent-soft: #cfd8c9;
-  --accent-foreground: #f4f0e8;
-  --peach: #6d5a3d;
-  --gradient-accent: linear-gradient(135deg, #2b2b2a 0%, #1c1c1b 100%);
-  background: #d9c9ad;
-  color: #1c1c1b;
+/* Pannello scuro (come nel riferimento): nero-verde #0E1311, testo #F1F0EA. */
+.site-dark .band-dark {
+  color-scheme: dark;
+  --background: #0e1311;
+  --foreground: #f1f0ea;
+  --card: #151b18;
+  --card-foreground: #f1f0ea;
+  --popover: #151b18;
+  --popover-foreground: #f1f0ea;
+  --primary: #f3f2ed;
+  --primary-foreground: #0e1311;
+  --primary-soft: #1a221e;
+  --secondary: #0b0e0d;
+  --secondary-foreground: #f1f0ea;
+  --muted: #151b18;
+  --muted-foreground: #b3bbb5;
+  --accent: #5aa583;
+  --accent-foreground: #0e1311;
+  --accent-soft: #1a221e;
+  --peach: #858d87;
+  --border: #2a312d;
+  --input: #2a312d;
+  --ring: #5aa583;
+  --gradient-accent: linear-gradient(135deg, #f3f2ed 0%, #e4e3dc 100%);
+  --gradient-primary: linear-gradient(135deg, #1a221e 0%, #0e1311 100%);
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 30%), 0 14px 34px -16px rgb(0 0 0 / 55%);
+  background: #0e1311;
+  color: #f1f0ea;
 }
 .site-dark :is(h1, h2) {
   font-weight: 400;
   letter-spacing: -0.025em;
 }
 .site-dark ::selection {
-  background: rgb(217 199 168 / 30%);
+  background: rgb(28 115 83 / 25%);
 }
