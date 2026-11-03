@@ -71,7 +71,7 @@ export function SiteHeader() {
         overlay
           ? compact
             ? "fixed inset-x-0 top-0"
-            : "fixed inset-x-3 top-3 md:inset-x-6"
+            : "fixed inset-x-0 top-0"
           : cn(
               "sticky top-0",
               scrolled
@@ -85,7 +85,7 @@ export function SiteHeader() {
           "mx-auto flex h-18 max-w-6xl items-center justify-between px-5 py-3",
           overlay &&
             !compact &&
-            "h-16 rounded-full border border-white/25 bg-[oklch(0.3_0.05_222/0.38)] px-4 shadow-[0_8px_32px_-8px_rgb(0_0_0/0.35)] backdrop-blur-xl backdrop-saturate-150 md:px-6",
+            "h-16 max-w-none px-5 md:px-8",
           compact &&
             "h-14 max-w-none rounded-none border-b border-white/15 bg-[oklch(0.3_0.05_222/0.9)] px-5 shadow-none backdrop-blur-xl md:px-8",
         )}

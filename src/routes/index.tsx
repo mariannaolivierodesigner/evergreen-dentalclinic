@@ -198,7 +198,7 @@ function Index() {
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,oklch(0.2_0.04_222/0.78)_0%,oklch(0.2_0.04_222/0.4)_38%,transparent_70%),linear-gradient(180deg,oklch(0.22_0.04_222/0.4)_0%,transparent_22%)]"
+          className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,oklch(0.2_0.04_222/0.78)_0%,oklch(0.2_0.04_222/0.4)_38%,transparent_70%),linear-gradient(180deg,oklch(0.18_0.04_222/0.72)_0%,oklch(0.18_0.04_222/0.38)_14%,transparent_32%)]"
         />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-5 pb-12 md:pb-16">
           <h1 className="max-w-3xl text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-7xl">
