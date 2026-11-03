@@ -59,6 +59,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-peach: var(--peach);
   --color-primary-soft: var(--primary-soft);
   --color-primary-glow: var(--primary-glow);
   --color-accent-soft: var(--accent-soft);
@@ -119,6 +120,7 @@
   --accent: oklch(0.80 0.05 160);
   --accent-foreground: oklch(0.227 0.027 225);
   --accent-soft: oklch(0.955 0.015 160);
+  --peach: oklch(0.62 0.08 60);
   --destructive: oklch(0.55 0.19 25);
   --destructive-foreground: oklch(0.99 0.005 60);
   --success: oklch(0.55 0.11 160);
@@ -423,3 +425,44 @@
 .drawer-panel { animation: drawer-in 0.38s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .drawer-backdrop { animation: drawer-fade 0.3s ease; }
 @media (prefers-reduced-motion: reduce) { .drawer-panel, .drawer-backdrop { animation: none; } }
+
+/* Tema scuro del sito pubblico: nero caldo, crema/pesca per i titoli, salvia per gli accenti.
+   Applicato con la classe .site-dark (anche su <html> per dialog e menu che escono dal contenuto). */
+.site-dark {
+  color-scheme: dark;
+  --background: oklch(0.145 0.008 50);
+  --foreground: oklch(0.955 0.014 78);
+  --card: oklch(0.195 0.01 50);
+  --card-foreground: oklch(0.955 0.014 78);
+  --popover: oklch(0.205 0.01 50);
+  --popover-foreground: oklch(0.955 0.014 78);
+  --primary: oklch(0.8 0.055 160);
+  --primary-foreground: oklch(0.17 0.01 50);
+  --primary-soft: oklch(0.25 0.022 160);
+  --primary-glow: oklch(0.72 0.05 160);
+  --secondary: oklch(0.225 0.01 50);
+  --secondary-foreground: oklch(0.93 0.014 78);
+  --muted: oklch(0.21 0.01 50);
+  --muted-foreground: oklch(0.74 0.02 72);
+  --accent: oklch(0.8 0.055 160);
+  --accent-foreground: oklch(0.17 0.01 50);
+  --accent-soft: oklch(0.26 0.024 160);
+  --peach: oklch(0.87 0.065 70);
+  --border: oklch(0.32 0.012 55);
+  --input: oklch(0.32 0.012 55);
+  --ring: oklch(0.8 0.055 160);
+  --gradient-calm: linear-gradient(160deg, oklch(0.185 0.014 55) 0%, oklch(0.145 0.008 50) 55%, oklch(0.165 0.018 160) 100%);
+  --gradient-primary: linear-gradient(135deg, oklch(0.27 0.03 160) 0%, oklch(0.2 0.015 55) 100%);
+  --gradient-accent: linear-gradient(135deg, oklch(0.84 0.05 160) 0%, oklch(0.76 0.05 170) 100%);
+  --shadow-soft: 0 1px 2px oklch(0 0 0 / 30%), 0 14px 34px -16px oklch(0 0 0 / 60%);
+  --shadow-lift: 0 2px 6px oklch(0 0 0 / 35%), 0 30px 60px -28px oklch(0 0 0 / 70%);
+  background-color: var(--background);
+  color: var(--foreground);
+}
+.site-dark :is(h1, h2) {
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+.site-dark ::selection {
+  background: oklch(0.8 0.055 160 / 35%);
+}

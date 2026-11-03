@@ -182,7 +182,7 @@ function Index() {
       <ScrollVars
         as="section"
         mode="hero"
-        className="relative isolate h-[100svh] min-h-[560px] overflow-hidden bg-[oklch(0.25_0.04_222)]"
+        className="relative isolate h-[100svh] min-h-[560px] overflow-hidden bg-[oklch(0.15_0.01_50)]"
       >
         <img
           src={heroSmile}
@@ -198,13 +198,13 @@ function Index() {
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,oklch(0.2_0.04_222/0.78)_0%,oklch(0.2_0.04_222/0.4)_38%,transparent_70%),linear-gradient(180deg,oklch(0.18_0.04_222/0.72)_0%,oklch(0.18_0.04_222/0.38)_14%,transparent_32%)]"
+          className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,oklch(0.12_0.008_50/0.78)_0%,oklch(0.12_0.008_50/0.4)_38%,transparent_70%),linear-gradient(180deg,oklch(0.1_0.008_50/0.72)_0%,oklch(0.1_0.008_50/0.38)_14%,transparent_32%)]"
         />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-5 pb-12 md:pb-16">
           <h1 className="max-w-3xl text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-7xl">
             <Words text="Liberi di" startDelay={250} />
             <br />
-            <Words text="sorridere" startDelay={250 + 2 * 80} />
+            <Words className="text-peach" text="sorridere" startDelay={250 + 2 * 80} />
           </h1>
           <div className="animate-fade-up mt-8 [animation-delay:1.1s]">
             <Button
@@ -254,8 +254,8 @@ function Index() {
               >
                 Milano · Aperti anche il sabato per le urgenze
               </Badge>
-              <h2 className="text-primary text-4xl leading-[1.05] font-semibold text-balance sm:text-5xl lg:text-6xl">
-                Cure serene, spiegate passo dopo passo
+              <h2 className="text-4xl leading-[1.05] font-semibold text-balance sm:text-5xl lg:text-6xl">
+                Cure serene, <span className="text-peach">spiegate passo dopo passo</span>
               </h2>
               <p className="text-muted-foreground mt-6 max-w-lg text-lg leading-relaxed">
                 Uno studio pensato anche per chi il dentista lo teme: tempi distesi, ogni passaggio

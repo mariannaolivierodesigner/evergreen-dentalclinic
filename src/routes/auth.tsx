@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Logo } from "@/components/site/Logo";
+import { useSiteDark } from "@/components/site/SiteLayout";
 
 const searchSchema = z.object({ redirect: z.string().optional() });
 
@@ -39,6 +40,7 @@ function safePath(value?: string) {
 }
 
 function AuthPage() {
+  useSiteDark();
   const search = Route.useSearch();
   const navigate = useNavigate();
   const { user, loading } = useSession();
@@ -103,7 +105,7 @@ function AuthPage() {
   }
 
   return (
-    <div className="bg-calm flex min-h-dvh flex-col items-center justify-center px-5 py-12">
+    <div className="site-dark bg-calm flex min-h-dvh flex-col items-center justify-center px-5 py-12">
       <Link to="/" className="mb-8">
         <Logo />
       </Link>

@@ -213,8 +213,8 @@ function Prenota() {
         description="Scegli il trattamento e l'orario. Ricevi conferma nell'area personale e un promemoria il giorno prima."
       />
 
-      <div className="mx-auto grid max-w-6xl gap-8 px-5 py-16 lg:grid-cols-[1fr_20rem]">
-        <div className="space-y-10">
+      <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] gap-8 px-5 py-16 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <div className="min-w-0 space-y-10">
           {/* Step 1 */}
           <section aria-labelledby="step-1">
             <h2 id="step-1" className="text-xl font-semibold">
