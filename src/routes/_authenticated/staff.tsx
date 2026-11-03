@@ -206,7 +206,7 @@ function StaffPage() {
 
   if (!isPending && !isStaff) {
     return (
-      <SiteLayout progress={false} theme="light">
+      <SiteLayout progress={false}>
         <PageHeader
           title="Area riservata allo staff"
           description="Il tuo account non ha i permessi per accedere al gestionale."
@@ -216,7 +216,7 @@ function StaffPage() {
   }
 
   return (
-    <SiteLayout progress={false} theme="light">
+    <SiteLayout progress={false}>
       <PageHeader
         eyebrow="Gestionale"
         title="Agenda dello studio"
