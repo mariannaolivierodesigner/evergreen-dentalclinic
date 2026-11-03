@@ -426,59 +426,88 @@
 .drawer-backdrop { animation: drawer-fade 0.3s ease; }
 @media (prefers-reduced-motion: reduce) { .drawer-panel, .drawer-backdrop { animation: none; } }
 
-/* Palette del sito pubblico "Notte salvia": verde notte profondo come base (la salvia del logo, scurita),
-   bianco caldo per testi, sabbia chiara per enfasi e pulsanti principali, salvia per icone e dettagli.
+/* Palette del sito pubblico: nero matto neutro come base, bianco caldo e sabbia per le fasce chiare,
+   salvia come accento. Le sezioni alternano scuro e chiaro (.band-light = bianco caldo, .band-sand = sabbia).
    Applicata con .site-dark (anche su <html> per dialog e menu). */
 .site-dark {
   color-scheme: dark;
-  --night: #1a211d;
-  --deep: #121815;
-  --warm-white: #f3efe7;
+  --matte: #1c1c1b;
+  --warm-white: #f4f0e8;
   --sand: #d9c7a8;
-  --sage: #a9bfae;
-  --background: #1a211d;
-  --foreground: #f3efe7;
-  --card: #232c27;
-  --card-foreground: #f3efe7;
-  --popover: #1f2722;
-  --popover-foreground: #f3efe7;
-  --primary: #d9c7a8;
-  --primary-foreground: #121815;
-  --primary-soft: #2a352f;
-  --primary-glow: #e6d8bd;
-  --secondary: #161d19;
-  --secondary-foreground: #f3efe7;
-  --muted: #232c27;
-  --muted-foreground: #b3bdb4;
-  --accent: #a9bfae;
-  --accent-foreground: #121815;
-  --accent-soft: #2a352f;
+  --sage: #a8bfad;
+  --background: #1c1c1b;
+  --foreground: #f4f0e8;
+  --card: #272726;
+  --card-foreground: #f4f0e8;
+  --popover: #232322;
+  --popover-foreground: #f4f0e8;
+  --primary: #a8bfad;
+  --primary-foreground: #161615;
+  --primary-soft: #2b312d;
+  --primary-glow: #bfd0c3;
+  --secondary: #161615;
+  --secondary-foreground: #f4f0e8;
+  --muted: #272726;
+  --muted-foreground: #b8b4aa;
+  --accent: #a8bfad;
+  --accent-foreground: #161615;
+  --accent-soft: #2b312d;
   --peach: #d9c7a8;
-  --border: #33403a;
-  --input: #33403a;
-  --ring: #a9bfae;
-  --gradient-calm: linear-gradient(165deg, #232c27 0%, #1a211d 55%, #161d19 100%);
-  --gradient-primary: linear-gradient(135deg, #2a352f 0%, #1a211d 100%);
-  --gradient-accent: linear-gradient(135deg, #e6d8bd 0%, #d9c7a8 100%);
+  --border: #3a3a37;
+  --input: #3a3a37;
+  --ring: #a8bfad;
+  --gradient-calm: linear-gradient(165deg, #262625 0%, #1c1c1b 60%, #191918 100%);
+  --gradient-primary: linear-gradient(135deg, #2b312d 0%, #1c1c1b 100%);
+  --gradient-accent: linear-gradient(135deg, #bfd0c3 0%, #a8bfad 100%);
   --shadow-soft: 0 1px 2px rgb(0 0 0 / 30%), 0 14px 34px -16px rgb(0 0 0 / 55%);
   --shadow-lift: 0 2px 6px rgb(0 0 0 / 35%), 0 30px 60px -28px rgb(0 0 0 / 65%);
   background-color: var(--background);
   color: var(--foreground);
 }
-/* Fascia chiara (sabbia-bianco caldo) dentro il sito scuro, per dare ritmo: testo verde notte. */
+/* Fascia chiara: bianco caldo, testo nero matto. */
 .site-dark .band-light {
   color-scheme: light;
-  --background: #f3efe7;
-  --foreground: #121815;
-  --primary: #1a211d;
-  --primary-foreground: #f3efe7;
-  --accent-foreground: #f3efe7;
-  --muted-foreground: #4f5a53;
-  --border: #d6cfc0;
-  --peach: #7a6a50;
-  --gradient-accent: linear-gradient(135deg, #26302a 0%, #1a211d 100%);
-  background: #f3efe7;
-  color: #121815;
+  --background: #f4f0e8;
+  --foreground: #1c1c1b;
+  --card: #fffdf8;
+  --card-foreground: #1c1c1b;
+  --secondary: #e9e3d6;
+  --muted: #e9e3d6;
+  --muted-foreground: #5a574f;
+  --border: #dad3c4;
+  --primary: #1c1c1b;
+  --primary-foreground: #f4f0e8;
+  --primary-soft: #dfe6dc;
+  --accent: #6b8574;
+  --accent-soft: #dfe6dc;
+  --accent-foreground: #f4f0e8;
+  --peach: #8b7757;
+  --gradient-accent: linear-gradient(135deg, #2b2b2a 0%, #1c1c1b 100%);
+  --shadow-soft: 0 1px 2px rgb(28 28 27 / 6%), 0 14px 34px -18px rgb(28 28 27 / 22%);
+  background: #f4f0e8;
+  color: #1c1c1b;
+}
+/* Fascia sabbia. */
+.site-dark .band-sand {
+  color-scheme: light;
+  --background: #d9c9ad;
+  --foreground: #1c1c1b;
+  --card: #ebe2cf;
+  --card-foreground: #1c1c1b;
+  --secondary: #cdbc9d;
+  --muted: #ebe2cf;
+  --muted-foreground: #4d493f;
+  --border: #bfae8f;
+  --primary: #1c1c1b;
+  --primary-foreground: #f4f0e8;
+  --primary-soft: #cfd8c9;
+  --accent: #5f7a68;
+  --accent-soft: #cfd8c9;
+  --accent-foreground: #f4f0e8;
+  --peach: #6d5a3d;
+  --gradient-accent: linear-gradient(135deg, #2b2b2a 0%, #1c1c1b 100%);
+  background: #d9c9ad;
+  color: #1c1c1b;
 }
 .site-dark :is(h1, h2) {
   font-weight: 400;

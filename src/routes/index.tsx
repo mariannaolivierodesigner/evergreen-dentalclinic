@@ -182,7 +182,7 @@ function Index() {
       <ScrollVars
         as="section"
         mode="hero"
-        className="relative isolate h-[100svh] min-h-[560px] overflow-hidden bg-[#121815]"
+        className="relative isolate h-[100svh] min-h-[560px] overflow-hidden bg-[#161615]"
       >
         <img
           src={heroSmile}
@@ -198,7 +198,7 @@ function Index() {
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(18_24_21/0.85)_0%,rgb(18_24_21/0.4)_38%,transparent_70%),linear-gradient(180deg,rgb(18_24_21/0.78)_0%,rgb(18_24_21/0.4)_14%,transparent_32%)]"
+          className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(22_22_21/0.85)_0%,rgb(22_22_21/0.4)_38%,transparent_70%),linear-gradient(180deg,rgb(22_22_21/0.78)_0%,rgb(22_22_21/0.4)_14%,transparent_32%)]"
         />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-5 pb-12 md:pb-16">
           <h1 className="max-w-3xl text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-7xl">
@@ -316,7 +316,7 @@ function Index() {
 
       {/* STRISCIA TRATTAMENTI */}
       <div
-        className="bg-[#d9c7a8] text-[#121815] py-4 text-sm font-medium"
+        className="bg-[#d9c7a8] text-[#161615] py-4 text-sm font-medium"
         aria-hidden="true"
       >
         <Marquee items={services.map((s) => s.name)} />
