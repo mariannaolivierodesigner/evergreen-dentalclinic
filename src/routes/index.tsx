@@ -334,7 +334,7 @@ function Index() {
             </h2>
           </Reveal>
           <ScrollText
-            className="mt-6 max-w-4xl text-2xl leading-snug font-semibold tracking-tight md:text-4xl"
+            className="text-muted-foreground mt-4 max-w-2xl text-lg leading-relaxed"
             text="Dalla prevenzione quotidiana alle riabilitazioni complesse, con un unico team che ti segue dall'inizio alla fine."
           />
         </div>

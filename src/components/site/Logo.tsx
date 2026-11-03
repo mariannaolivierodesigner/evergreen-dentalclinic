@@ -13,14 +13,30 @@ export function LogoMark({ className }: { className?: string }) {
   );
 }
 
-export function Logo({ className }: { className?: string | undefined }) {
+export function Logo({
+  className,
+  symbolOnlyMobile = false,
+}: {
+  className?: string | undefined;
+  /** Su telefono (sotto md) mostra solo il simbolo, senza il nome per esteso. */
+  symbolOnlyMobile?: boolean;
+}) {
   return (
     <Link to="/" className={className} aria-label="Studio Dentistico Longobardi — home">
-      <span className="font-display flex items-baseline text-[1.65rem] leading-none font-bold tracking-tight">
+      <span
+        className={
+          symbolOnlyMobile
+            ? "font-display hidden items-baseline text-[1.65rem] leading-none font-bold tracking-tight md:flex"
+            : "font-display flex items-baseline text-[1.65rem] leading-none font-bold tracking-tight"
+        }
+      >
         L
         <LogoMark className="mx-[0.04em] h-[0.56em] w-[0.56em] shrink-0 self-baseline text-[oklch(0.76_0.05_160)]" />
         ngobardi
       </span>
+      {symbolOnlyMobile && (
+        <LogoMark className="block h-9 w-9 text-[oklch(0.76_0.05_160)] md:hidden" />
+      )}
     </Link>
   );
 }

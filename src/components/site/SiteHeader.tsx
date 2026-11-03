@@ -90,7 +90,7 @@ export function SiteHeader() {
             "h-14 max-w-none rounded-none border-b border-white/15 bg-[oklch(0.3_0.05_222/0.9)] px-5 shadow-none backdrop-blur-xl md:px-8",
         )}
       >
-        <Logo className={overlay ? "text-white" : undefined} />
+        <Logo symbolOnlyMobile className={overlay ? "text-white" : undefined} />
 
         <nav
           aria-label="Navigazione principale"
@@ -232,7 +232,7 @@ function MobileDrawer({
       />
       <div className="drawer-panel absolute inset-y-0 right-0 flex w-[min(86vw,22rem)] flex-col bg-[oklch(0.27_0.05_222)] px-5 pt-3 pb-8 text-white shadow-[-24px_0_60px_-20px_rgb(0_0_0/0.5)]">
         <div className="flex h-14 items-center justify-between">
-          <Logo className="text-white" />
+          <Logo symbolOnlyMobile className="text-white" />
           <Button
             variant="ghost"
             size="icon"
