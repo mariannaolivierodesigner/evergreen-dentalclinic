@@ -182,7 +182,7 @@ function Index() {
       <ScrollVars
         as="section"
         mode="hero"
-        className="relative isolate h-[100svh] min-h-[560px] overflow-hidden bg-[oklch(0.15_0.01_50)]"
+        className="relative isolate h-[100svh] min-h-[560px] overflow-hidden bg-[#20201f]"
       >
         <img
           src={heroSmile}
@@ -198,7 +198,7 @@ function Index() {
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,oklch(0.12_0.008_50/0.78)_0%,oklch(0.12_0.008_50/0.4)_38%,transparent_70%),linear-gradient(180deg,oklch(0.1_0.008_50/0.72)_0%,oklch(0.1_0.008_50/0.38)_14%,transparent_32%)]"
+          className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(32_32_31/0.8)_0%,rgb(32_32_31/0.42)_38%,transparent_70%),linear-gradient(180deg,rgb(32_32_31/0.78)_0%,rgb(32_32_31/0.4)_14%,transparent_32%)]"
         />
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-5 pb-12 md:pb-16">
           <h1 className="max-w-3xl text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-7xl">
@@ -495,13 +495,13 @@ function Index() {
       </section>
 
       {/* CTA FINALE */}
-      <section className="bg-[image:var(--gradient-primary)]">
+      <section className="band-light">
         <div className="mx-auto max-w-4xl px-5 py-20 text-center">
           <Reveal variant="blur">
-            <h2 className="text-primary-foreground text-3xl font-semibold text-balance md:text-4xl">
+            <h2 className="text-foreground text-3xl font-semibold text-balance md:text-4xl">
               Prenota la tua visita in meno di due minuti
             </h2>
-            <p className="text-primary-foreground/85 mx-auto mt-4 max-w-xl">
+            <p className="text-muted-foreground mx-auto mt-4 max-w-xl">
               Scegli il trattamento e l'orario che preferisci. Ricevi conferma immediata
               e un promemoria il giorno prima.
             </p>
@@ -514,7 +514,7 @@ function Index() {
               <Button
                 variant="outline"
                 size="xl"
-                className="border-primary-foreground/40 text-primary-foreground bg-transparent hover:bg-primary-foreground/10"
+                className="border-foreground/40 text-foreground bg-transparent hover:bg-foreground/10"
                 asChild
               >
                 <a href={STUDIO.phoneHref}>Preferisco chiamare</a>

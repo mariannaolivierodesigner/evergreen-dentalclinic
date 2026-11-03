@@ -1,8 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader, SiteLayout } from "@/components/site/SiteLayout";
 import { Reveal } from "@/components/site/Reveal";
 import { Parallax } from "@/components/site/motion";
-import { Button } from "@/components/ui/button";
 import { STUDIO } from "@/lib/format";
 import heroStudio from "@/assets/hero-studio.jpg";
 
@@ -89,14 +88,6 @@ function ChiSiamo() {
               </Reveal>
             ))}
           </ul>
-        </Reveal>
-      </section>
-
-      <section className="bg-secondary/50 border-border border-y">
-        <Reveal className="mx-auto max-w-6xl px-5 py-14" variant="blur">
-          <Button variant="hero" size="lg" className="sheen" asChild>
-            <Link to="/prenota">Prenota una visita</Link>
-          </Button>
         </Reveal>
       </section>
     </SiteLayout>

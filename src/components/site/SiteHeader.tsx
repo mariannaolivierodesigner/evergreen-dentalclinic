@@ -70,7 +70,7 @@ export function SiteHeader() {
         hidden && !open && "-translate-y-full",
         overlay
           ? compact
-            ? "fixed inset-x-0 top-0 border-b border-white/15 bg-[oklch(0.15_0.01_50/0.9)] backdrop-blur-xl"
+            ? "fixed inset-x-0 top-0 border-b border-white/15 bg-[rgb(32_32_31/0.88)] backdrop-blur-xl"
             : "fixed inset-x-0 top-0"
           : cn(
               "sticky top-0",
@@ -229,9 +229,9 @@ function MobileDrawer({
         type="button"
         aria-label="Chiudi menu"
         onClick={onClose}
-        className="drawer-backdrop absolute inset-0 bg-[oklch(0.12_0.008_50/0.45)] backdrop-blur-sm"
+        className="drawer-backdrop absolute inset-0 bg-[rgb(32_32_31/0.5)] backdrop-blur-sm"
       />
-      <div className="drawer-panel absolute inset-y-0 right-0 flex w-[min(86vw,22rem)] flex-col bg-[oklch(0.17_0.01_50)] px-5 pt-3 pb-8 text-white shadow-[-24px_0_60px_-20px_rgb(0_0_0/0.5)]">
+      <div className="drawer-panel absolute inset-y-0 right-0 flex w-[min(86vw,22rem)] flex-col bg-[#20201f] px-5 pt-3 pb-8 text-white shadow-[-24px_0_60px_-20px_rgb(0_0_0/0.5)]">
         <div className="flex h-14 items-center justify-between">
           <Logo symbolOnlyMobile className="text-white" />
           <Button

@@ -7,7 +7,7 @@ import { Logo } from "./Logo";
 
 export function SiteFooter({ className }: { className?: string }) {
   return (
-    <footer className={cn("bg-secondary/60 border-border border-t", className)}>
+    <footer className={cn("bg-secondary border-border border-t", className)}>
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-4">
         <div className="md:col-span-1">
           <Logo />
