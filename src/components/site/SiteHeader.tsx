@@ -182,6 +182,7 @@ export function SiteHeader() {
           variant="ghost"
           size="icon"
           className={cn(
+            "-mr-2 h-12 w-12 [&_svg]:!size-8",
             !compact && "md:hidden",
             overlay && "text-white hover:bg-white/12 hover:text-white",
           )}
@@ -189,7 +190,7 @@ export function SiteHeader() {
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
-          {open ? <X /> : <Menu />}
+          {open ? <X strokeWidth={1.5} /> : <Menu strokeWidth={1.5} />}
         </Button>
       </div>
 
@@ -236,11 +237,11 @@ function MobileDrawer({
           <Button
             variant="ghost"
             size="icon"
-            className="text-white hover:bg-white/12 hover:text-white"
+            className="-mr-2 h-12 w-12 text-white hover:bg-white/12 hover:text-white [&_svg]:!size-8"
             aria-label="Chiudi menu"
             onClick={onClose}
           >
-            <X />
+            <X strokeWidth={1.5} />
           </Button>
         </div>
         <nav aria-label="Navigazione mobile" className="mt-6 flex flex-col">
