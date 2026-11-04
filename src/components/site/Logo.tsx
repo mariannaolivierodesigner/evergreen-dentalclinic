@@ -16,10 +16,13 @@ export function LogoMark({ className }: { className?: string }) {
 export function Logo({
   className,
   symbolOnlyMobile = false,
+  ivoryMarkMobile = false,
 }: {
   className?: string | undefined;
   /** Su telefono (sotto md) mostra solo il simbolo, senza il nome per esteso. */
   symbolOnlyMobile?: boolean;
+  /** Su telefono il simbolo prende il colore del testo (avorio sopra la foto) invece del verde. */
+  ivoryMarkMobile?: boolean;
 }) {
   return (
     <Link to="/" className={className} aria-label="Studio Dentistico Longobardi — home">
@@ -35,7 +38,13 @@ export function Logo({
         ngobardi
       </span>
       {symbolOnlyMobile && (
-        <LogoMark className="block h-9 w-9 text-[oklch(0.76_0.05_160)] md:hidden" />
+        <LogoMark
+          className={
+            ivoryMarkMobile
+              ? "block h-9 w-9 md:hidden"
+              : "block h-9 w-9 text-[oklch(0.76_0.05_160)] md:hidden"
+          }
+        />
       )}
     </Link>
   );

@@ -90,7 +90,11 @@ export function SiteHeader() {
             "h-14",
         )}
       >
-        <Logo symbolOnlyMobile className={overlay ? "text-white" : undefined} />
+        <Logo
+          symbolOnlyMobile
+          ivoryMarkMobile={overlay}
+          className={overlay ? "text-white" : undefined}
+        />
 
         <nav
           aria-label="Navigazione principale"
