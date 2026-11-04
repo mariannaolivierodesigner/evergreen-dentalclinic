@@ -18,7 +18,6 @@ import {
   CompareSlider,
   CountUp,
   CardMarquee,
-  Marquee,
   Parallax,
   ScrollText,
   ScrollVars,
@@ -366,14 +365,6 @@ function Index() {
 
         <div className="pb-10" />
       </ScrollVars>
-
-      {/* STRISCIA TRATTAMENTI */}
-      <div
-        className="bg-[#0e1311] text-[#f1f0ea] py-4 text-sm font-medium"
-        aria-hidden="true"
-      >
-        <Marquee items={services.map((s) => s.name)} />
-      </div>
 
       {/* SERVIZI */}
       <section className="pt-20 pb-10" aria-labelledby="servizi-title">

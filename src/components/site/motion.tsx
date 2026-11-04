@@ -205,7 +205,7 @@ export function Marquee({ items, className }: { items: string[]; className?: str
 export function CardMarquee({
   children,
   label,
-  seconds = 46,
+  seconds = 24,
 }: {
   children: ReactNode;
   label: string;
