@@ -33,7 +33,7 @@ export function SiteFooter({ className }: { className?: string }) {
           </div>
         </div>
 
-        <div>
+        <div className="hidden md:block">
           <h2 className="font-display mb-4 text-sm font-semibold">Contatti</h2>
           <ul className="text-muted-foreground space-y-3 text-sm">
             <li className="flex gap-2">
@@ -55,7 +55,7 @@ export function SiteFooter({ className }: { className?: string }) {
           </ul>
         </div>
 
-        <div>
+        <div className="hidden md:block">
           <h2 className="font-display mb-4 text-sm font-semibold">Orari</h2>
           <ul className="text-muted-foreground space-y-2 text-sm">
             {STUDIO.hours.map((h) => (
