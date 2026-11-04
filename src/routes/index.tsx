@@ -36,7 +36,7 @@ import {
 import { servicesQuery, testimonialsQuery } from "@/lib/public-queries";
 import { formatDuration, formatPrice, STUDIO } from "@/lib/format";
 import heroSmileMobile from "@/assets/hero-smile-mobile.jpg";
-import heroSmile from "@/assets/hero-smile.jpg";
+import heroSmile from "@/assets/hero-smile-desktop.jpg";
 import heroStudio from "@/assets/hero-studio.jpg";
 import beforeSmile from "@/assets/before-smile.jpg";
 import afterSmile from "@/assets/after-smile.jpg";
@@ -243,10 +243,10 @@ function Index() {
           <img
             src={heroSmile}
             alt="Primo piano del sorriso di una paziente durante la scelta del colore dei denti"
-            width={2000}
-            height={1333}
+            width={2576}
+            height={1444}
             fetchPriority="high"
-            className="photo-settle absolute inset-0 -z-20 h-full w-full object-cover object-[58%_50%]"
+            className="photo-settle absolute inset-0 -z-20 h-full w-full object-cover object-[50%_50%]"
             style={{
               transform: "scale(calc(1 + var(--p) * 0.06))",
               transformOrigin: "50% 50%",
