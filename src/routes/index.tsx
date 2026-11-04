@@ -253,10 +253,10 @@ function Index() {
           aria-hidden="true"
           className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(11_14_13/0.85)_0%,rgb(11_14_13/0.4)_38%,transparent_70%),linear-gradient(180deg,rgb(11_14_13/0.78)_0%,rgb(11_14_13/0.4)_14%,transparent_32%)]"
         />
-        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-5 pb-12 md:pb-16">
+        <div className="absolute inset-0 mx-auto flex max-w-6xl flex-col items-center justify-center px-5 pt-16 text-center">
           <h1 className="text-[2.15rem] leading-[1.05] font-semibold whitespace-nowrap text-white sm:text-5xl lg:text-7xl">
-            <Words text="Liberi di" startDelay={250} />{" "}
-            <Words className="text-peach" text="sorridere" startDelay={250 + 2 * 80} />
+            <Words className="font-semibold text-white" text="Liberi di" startDelay={250} />{" "}
+            <Words className="font-semibold text-white" text="sorridere" startDelay={250 + 2 * 80} />
           </h1>
           <div className="animate-fade-up mt-8 [animation-delay:1.1s]">
             <Button
