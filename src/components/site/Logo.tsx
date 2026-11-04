@@ -41,8 +41,8 @@ export function Logo({
         <LogoMark
           className={
             ivoryMarkMobile
-              ? "block h-7 w-7 md:hidden"
-              : "block h-7 w-7 text-[oklch(0.76_0.05_160)] md:hidden"
+              ? "block h-6 w-6 md:hidden"
+              : "block h-6 w-6 text-[oklch(0.76_0.05_160)] md:hidden"
           }
         />
       )}

@@ -186,7 +186,7 @@ export function SiteHeader() {
           variant="ghost"
           size="icon"
           className={cn(
-            "-mr-2 h-12 w-12 [&_svg]:!size-8",
+            "-mr-2 h-12 w-12 [&_svg]:!size-6",
             !compact && "md:hidden",
             overlay && "text-white hover:bg-white/12 hover:text-white",
           )}
@@ -241,7 +241,7 @@ function MobileDrawer({
           <Button
             variant="ghost"
             size="icon"
-            className="-mr-2 h-12 w-12 text-white hover:bg-white/12 hover:text-white [&_svg]:!size-8"
+            className="-mr-2 h-12 w-12 text-white hover:bg-white/12 hover:text-white [&_svg]:!size-6"
             aria-label="Chiudi menu"
             onClick={onClose}
           >
