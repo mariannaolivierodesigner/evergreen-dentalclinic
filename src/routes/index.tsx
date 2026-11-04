@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/carousel";
 import { servicesQuery, testimonialsQuery } from "@/lib/public-queries";
 import { formatDuration, formatPrice, STUDIO } from "@/lib/format";
+import heroSmileMobile from "@/assets/hero-smile-mobile.jpg";
 import heroSmile from "@/assets/hero-smile.jpg";
 import heroStudio from "@/assets/hero-studio.jpg";
 import beforeSmile from "@/assets/before-smile.jpg";
@@ -237,23 +238,26 @@ function Index() {
         mode="hero"
         className="relative isolate h-[100svh] min-h-[560px] overflow-hidden bg-[#0e1311]"
       >
-        <img
-          src={heroSmile}
-          alt="Primo piano del sorriso di una paziente durante la scelta del colore dei denti"
-          width={2000}
-          height={1333}
-          fetchPriority="high"
-          className="photo-settle absolute inset-0 -z-20 h-full w-full object-cover object-[58%_50%]"
-          style={{
-            transform: "scale(calc(1 + var(--p) * 0.06))",
-            transformOrigin: "50% 50%",
-          }}
-        />
+        <picture>
+          <source media="(max-width: 767px)" srcSet={heroSmileMobile} width={1080} height={1920} />
+          <img
+            src={heroSmile}
+            alt="Primo piano del sorriso di una paziente durante la scelta del colore dei denti"
+            width={2000}
+            height={1333}
+            fetchPriority="high"
+            className="photo-settle absolute inset-0 -z-20 h-full w-full object-cover object-[58%_50%]"
+            style={{
+              transform: "scale(calc(1 + var(--p) * 0.06))",
+              transformOrigin: "50% 50%",
+            }}
+          />
+        </picture>
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(11_14_13/0.85)_0%,rgb(11_14_13/0.4)_38%,transparent_70%),linear-gradient(180deg,rgb(11_14_13/0.78)_0%,rgb(11_14_13/0.4)_14%,transparent_32%)]"
         />
-        <div className="absolute inset-0 mx-auto flex max-w-6xl flex-col items-center justify-center px-5 pt-16 text-center">
+        <div className="absolute inset-0 mx-auto flex max-w-6xl flex-col items-center justify-end px-5 pb-20 text-center md:justify-center md:pt-16 md:pb-0">
           <h1 className="text-[2.15rem] leading-[1.05] font-semibold whitespace-nowrap text-white sm:text-5xl lg:text-7xl">
             <Words className="font-semibold text-white" text="Liberi di" startDelay={250} />{" "}
             <Words className="font-semibold text-white" text="sorridere" startDelay={250 + 2 * 80} />
