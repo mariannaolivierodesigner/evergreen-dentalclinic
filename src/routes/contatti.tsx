@@ -110,9 +110,9 @@ function Contatti() {
               </span>
               <div className="w-full">
                 <p className="text-muted-foreground text-xs tracking-wide uppercase">Orari</p>
-                <dl className="mt-2 space-y-1 text-sm">
+                <dl className="mt-3 space-y-3 text-sm sm:space-y-1">
                   {STUDIO.hours.map((h) => (
-                    <div key={h.day} className="flex justify-between gap-4">
+                    <div key={h.day} className="flex flex-col gap-0.5 sm:flex-row sm:justify-between sm:gap-4">
                       <dt className="text-muted-foreground">{h.day}</dt>
                       <dd className="font-medium">{h.value}</dd>
                     </div>
