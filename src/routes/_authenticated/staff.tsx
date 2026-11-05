@@ -8,6 +8,7 @@ import {
   ChevronRight,
   ClipboardList,
   Clock,
+  Euro,
   Download,
   FileText,
   MessageSquare,
@@ -56,11 +57,12 @@ import { BlockedSlotsManager } from "@/components/site/BlockedSlotsManager";
 import { ShiftsManager } from "@/components/site/ShiftsManager";
 import { ServicesManager } from "@/components/site/ServicesManager";
 import { StaffCalendar } from "@/components/site/StaffCalendar";
+import { StaffRevenue } from "@/components/site/StaffRevenue";
 import { useRoles, useSession } from "@/hooks/useAuth";
 import { STATUS_LABEL, formatDate, formatPrice, formatTime, isoDay } from "@/lib/format";
 
 const tabTrigger =
-  "flex-1 gap-2 rounded-xl px-4 py-3 text-[0.95rem] font-medium data-[state=active]:font-semibold";
+  "flex-1 gap-1.5 rounded-xl px-3 py-3 text-[0.9rem] font-medium data-[state=active]:font-semibold";
 
 export const Route = createFileRoute("/_authenticated/staff")({
   head: () => ({
@@ -99,6 +101,22 @@ function StaffPage() {
   const { isStaff, isAdmin, isPending } = useRoles(user?.id);
   const queryClient = useQueryClient();
   const [day, setDay] = useState(isoDay(new Date()));
+  const [agendaPeriod, setAgendaPeriod] = useState<"day" | "week" | "month">("week");
+  const agendaRange = (() => {
+    const d = new Date(`${day}T12:00:00`);
+    if (agendaPeriod === "day") return { from: day, to: day };
+    if (agendaPeriod === "week") {
+      const from = new Date(d);
+      from.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+      const to = new Date(from);
+      to.setDate(from.getDate() + 6);
+      return { from: isoDay(from), to: isoDay(to) };
+    }
+    return {
+      from: isoDay(new Date(d.getFullYear(), d.getMonth(), 1)),
+      to: isoDay(new Date(d.getFullYear(), d.getMonth() + 1, 0)),
+    };
+  })();
   const [docPatientId, setDocPatientId] = useState<string>("");
   const [docTitle, setDocTitle] = useState("");
   const [docKind, setDocKind] = useState<(typeof DOCUMENT_KINDS)[number]>("referto");
@@ -120,9 +138,12 @@ function StaffPage() {
   } | null>(null);
 
   const agenda = useQuery({
-    queryKey: ["agenda", day],
+    queryKey: ["agenda", agendaRange.from, agendaRange.to],
     enabled: isStaff,
-    queryFn: () => fetchAgenda({ data: { from: `${day}T00:00:00Z`, to: `${day}T23:59:59Z` } }),
+    queryFn: () =>
+      fetchAgenda({
+        data: { from: `${agendaRange.from}T00:00:00Z`, to: `${agendaRange.to}T23:59:59Z` },
+      }),
   });
   const patients = useQuery({
     queryKey: ["staff-patients"],
@@ -210,7 +231,8 @@ function StaffPage() {
 
   function shiftDay(delta: number) {
     const d = new Date(`${day}T12:00:00`);
-    d.setDate(d.getDate() + delta);
+    if (agendaPeriod === "month") d.setMonth(d.getMonth() + delta);
+    else d.setDate(d.getDate() + delta * (agendaPeriod === "week" ? 7 : 1));
     setDay(isoDay(d));
   }
 
@@ -269,6 +291,10 @@ function StaffPage() {
                 <Clock aria-hidden="true" className="size-[1.05rem]" />
                 Turni
               </TabsTrigger>
+              <TabsTrigger value="fatturato" className={tabTrigger}>
+                <Euro aria-hidden="true" className="size-[1.05rem]" />
+                Fatturato
+              </TabsTrigger>
               <TabsTrigger value="messaggi" className={tabTrigger}>
                 <MessageSquare aria-hidden="true" className="size-[1.05rem]" />
                 Messaggi
@@ -277,22 +303,50 @@ function StaffPage() {
           </div>
 
           <TabsContent value="agenda" className="mt-6">
+            <div className="bg-muted mb-4 inline-flex gap-1 rounded-2xl p-1.5">
+              {(
+                [
+                  ["day", "Giorno"],
+                  ["week", "Settimana"],
+                  ["month", "Mese"],
+                ] as const
+              ).map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setAgendaPeriod(id)}
+                  className={`cursor-pointer rounded-xl px-4 py-2 text-sm font-medium transition-all ${
+                    agendaPeriod === id
+                      ? "bg-background text-foreground font-semibold shadow"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
             <div className="flex items-center gap-3">
               <Button
                 variant="outline"
                 size="icon"
-                aria-label="Giorno precedente"
+                aria-label="Periodo precedente"
                 onClick={() => shiftDay(-1)}
               >
                 <ChevronLeft />
               </Button>
               <p className="font-display flex-1 text-lg font-semibold capitalize">
-                {formatDate(`${day}T12:00:00`)}
+                {agendaPeriod === "day"
+                  ? formatDate(`${day}T12:00:00`)
+                  : agendaPeriod === "week"
+                    ? `${formatDate(`${agendaRange.from}T12:00:00`)} – ${formatDate(`${agendaRange.to}T12:00:00`)}`
+                    : new Intl.DateTimeFormat("it-IT", { month: "long", year: "numeric" }).format(
+                        new Date(`${day}T12:00:00`),
+                      )}
               </p>
               <Button
                 variant="outline"
                 size="icon"
-                aria-label="Giorno successivo"
+                aria-label="Periodo successivo"
                 onClick={() => shiftDay(1)}
               >
                 <ChevronRight />
@@ -303,83 +357,91 @@ function StaffPage() {
               {agenda.isPending ? (
                 <Skeleton className="h-40 w-full rounded-3xl" />
               ) : (agenda.data ?? []).length === 0 ? (
-                <p className="text-muted-foreground text-sm">Nessun appuntamento in questa data.</p>
+                <p className="text-muted-foreground text-sm">
+                  Nessun appuntamento in questo periodo.
+                </p>
               ) : (
                 <ul className="space-y-3">
-                  {(agenda.data ?? []).map((a) => (
-                    <li key={a.id} className="surface-card flex flex-wrap items-center gap-4 p-5">
-                      <span className="font-display w-20 text-lg font-semibold">
-                        {formatTime(a.starts_at)}
-                      </span>
-                      <div className="min-w-52 flex-1">
-                        <p className="font-medium">{a.profiles?.full_name}</p>
-                        <p className="text-muted-foreground text-sm">
-                          {a.services?.name} · {a.doctors?.full_name}
+                  {(agenda.data ?? []).map((a, idx, arr) => (
+                    <li key={a.id} className="space-y-3 list-none">
+                      {agendaPeriod !== "day" &&
+                      (idx === 0 ||
+                        a.starts_at.slice(0, 10) !== arr[idx - 1]?.starts_at.slice(0, 10)) ? (
+                        <p className="font-display text-muted-foreground pt-3 text-sm font-semibold capitalize">
+                          {formatDate(a.starts_at)}
                         </p>
-                        {a.patient_note && (
-                          <p className="text-muted-foreground mt-1 text-xs italic">
-                            “{a.patient_note}”
+                      ) : null}
+                      <div className="surface-card flex flex-wrap items-center gap-4 p-5">
+                        <span className="font-display w-20 text-lg font-semibold">
+                          {formatTime(a.starts_at)}
+                        </span>
+                        <div className="min-w-52 flex-1">
+                          <p className="font-medium">{a.profiles?.full_name}</p>
+                          <p className="text-muted-foreground text-sm">
+                            {a.services?.name} · {a.doctors?.full_name}
                           </p>
-                        )}
-                        {a.status === "confirmed" && (
-                          <div className="mt-3 flex flex-wrap items-center gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setReminderTarget({ appointment: a, channel: "sms" })}
-                            >
-                              SMS
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() =>
-                                setReminderTarget({ appointment: a, channel: "whatsapp" })
-                              }
-                            >
-                              WhatsApp
-                            </Button>
-                            {a.reminder_sent_at && (
-                              <span className="text-muted-foreground text-xs">
-                                Inviato via {a.reminder_channel === "whatsapp" ? "WhatsApp" : "SMS"}{" "}
-                                il {formatDate(a.reminder_sent_at)} alle{" "}
-                                {formatTime(a.reminder_sent_at)}
-                              </span>
-                            )}
-                          </div>
-                        )}
+                          {a.patient_note && (
+                            <p className="text-muted-foreground mt-1 text-xs italic">
+                              “{a.patient_note}”
+                            </p>
+                          )}
+                          {a.status === "confirmed" && (
+                            <div className="mt-3 flex flex-wrap items-center gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  setReminderTarget({ appointment: a, channel: "sms" })
+                                }
+                              >
+                                SMS
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  setReminderTarget({ appointment: a, channel: "whatsapp" })
+                                }
+                              >
+                                WhatsApp
+                              </Button>
+                              {a.reminder_sent_at && (
+                                <span className="text-muted-foreground text-xs">
+                                  Inviato via{" "}
+                                  {a.reminder_channel === "whatsapp" ? "WhatsApp" : "SMS"} il{" "}
+                                  {formatDate(a.reminder_sent_at)} alle{" "}
+                                  {formatTime(a.reminder_sent_at)}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <Badge variant="secondary">{STATUS_LABEL[a.status]}</Badge>
+                        <Select
+                          value={a.status}
+                          onValueChange={(value) =>
+                            statusMutation.mutate({
+                              data: { id: a.id, status: value as (typeof STATUSES)[number] },
+                            })
+                          }
+                        >
+                          <SelectTrigger className="w-44" aria-label="Cambia stato">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {STATUSES.map((s) => (
+                              <SelectItem key={s} value={s}>
+                                {STATUS_LABEL[s]}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
-                      <Badge variant="secondary">{STATUS_LABEL[a.status]}</Badge>
-                      <Select
-                        value={a.status}
-                        onValueChange={(value) =>
-                          statusMutation.mutate({
-                            data: { id: a.id, status: value as (typeof STATUSES)[number] },
-                          })
-                        }
-                      >
-                        <SelectTrigger className="w-44" aria-label="Cambia stato">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {STATUSES.map((s) => (
-                            <SelectItem key={s} value={s}>
-                              {STATUS_LABEL[s]}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
                     </li>
                   ))}
                 </ul>
               )}
             </div>
-            <p className="text-muted-foreground mt-8 text-xs">
-              Fatturato indicativo di giornata:{" "}
-              {formatPrice(
-                (agenda.data ?? []).reduce((sum, a) => sum + (a.services?.price_cents ?? 0), 0),
-              )}
-            </p>
           </TabsContent>
 
           <TabsContent value="calendario" className="mt-6">
@@ -554,6 +616,10 @@ function StaffPage() {
 
           <TabsContent value="turni" className="mt-6">
             <ShiftsManager />
+          </TabsContent>
+
+          <TabsContent value="fatturato" className="mt-6">
+            <StaffRevenue />
           </TabsContent>
 
           <TabsContent value="messaggi" className="mt-6">

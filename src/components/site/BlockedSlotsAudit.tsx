@@ -83,13 +83,10 @@ export function BlockedSlotsAudit() {
         <h2 className="flex items-center gap-2 text-lg font-semibold">
           <History className="size-4" aria-hidden="true" /> Registro modifiche
         </h2>
-        <p className="text-muted-foreground mt-1 text-sm">
-          Chi ha creato, modificato o eliminato ferie e permessi, e quando.
-        </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="grid gap-2">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <div className="col-span-2 grid gap-2 sm:col-span-1">
           <Label>Azione</Label>
           <Select value={action} onValueChange={resetPage((v) => setAction(v as typeof action))}>
             <SelectTrigger>
@@ -103,7 +100,7 @@ export function BlockedSlotsAudit() {
             </SelectContent>
           </Select>
         </div>
-        <div className="grid gap-2">
+        <div className="col-span-2 grid gap-2 sm:col-span-1">
           <Label>Medico</Label>
           <Select value={doctorId} onValueChange={resetPage(setDoctorId)}>
             <SelectTrigger>
@@ -142,55 +139,85 @@ export function BlockedSlotsAudit() {
       {rows.length === 0 ? (
         <p className="text-muted-foreground text-sm">Nessuna modifica per i filtri scelti.</p>
       ) : (
-        <div className="surface-card overflow-x-auto">
-          <table className="w-full min-w-[720px] text-sm">
-            <caption className="sr-only">Registro modifiche di ferie e permessi</caption>
-            <thead className="text-muted-foreground border-border border-b text-left text-xs uppercase">
-              <tr>
-                <th scope="col" className="p-4">
-                  Quando
-                </th>
-                <th scope="col" className="p-4">
-                  Azione
-                </th>
-                <th scope="col" className="p-4">
-                  Autore
-                </th>
-                <th scope="col" className="p-4">
-                  Medico
-                </th>
-                <th scope="col" className="p-4">
-                  Periodo
-                </th>
-                <th scope="col" className="p-4">
-                  Motivo
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r: any) => {
-                const starts = r.new_starts_at ?? r.old_starts_at;
-                const ends = r.new_ends_at ?? r.old_ends_at;
-                return (
-                  <tr key={r.id} className="border-border/60 border-b last:border-0">
-                    <td className="p-4 whitespace-nowrap">{formatDateTime(r.created_at)}</td>
-                    <td className="p-4">
-                      <Badge variant={ACTION_VARIANT[r.action] ?? "secondary"}>
-                        {ACTION_LABEL[r.action] ?? r.action}
-                      </Badge>
-                    </td>
-                    <td className="p-4">{r.actor_name}</td>
-                    <td className="p-4">{r.doctor_name}</td>
-                    <td className="p-4 whitespace-nowrap">
-                      {starts ? `${formatDateTime(starts)} → ${formatDateTime(ends)}` : "—"}
-                    </td>
-                    <td className="p-4">{r.new_reason ?? r.old_reason ?? "—"}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        <>
+          <ul className="space-y-3 md:hidden">
+            {rows.map((r: any) => {
+              const starts = r.new_starts_at ?? r.old_starts_at;
+              const ends = r.new_ends_at ?? r.old_ends_at;
+              return (
+                <li key={r.id} className="surface-card space-y-2 p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <Badge variant={ACTION_VARIANT[r.action] ?? "secondary"}>
+                      {ACTION_LABEL[r.action] ?? r.action}
+                    </Badge>
+                    <span className="text-muted-foreground text-xs">
+                      {formatDateTime(r.created_at)}
+                    </span>
+                  </div>
+                  <p className="font-medium">{r.doctor_name}</p>
+                  {starts ? (
+                    <p className="text-sm">
+                      {formatDateTime(starts)} → {formatDateTime(ends)}
+                    </p>
+                  ) : null}
+                  {(r.new_reason ?? r.old_reason) ? (
+                    <p className="text-muted-foreground text-sm">{r.new_reason ?? r.old_reason}</p>
+                  ) : null}
+                  <p className="text-muted-foreground text-xs">di {r.actor_name}</p>
+                </li>
+              );
+            })}
+          </ul>
+          <div className="surface-card hidden overflow-x-auto md:block">
+            <table className="w-full min-w-[720px] text-sm">
+              <caption className="sr-only">Registro modifiche di ferie e permessi</caption>
+              <thead className="text-muted-foreground border-border border-b text-left text-xs uppercase">
+                <tr>
+                  <th scope="col" className="p-4">
+                    Quando
+                  </th>
+                  <th scope="col" className="p-4">
+                    Azione
+                  </th>
+                  <th scope="col" className="p-4">
+                    Autore
+                  </th>
+                  <th scope="col" className="p-4">
+                    Medico
+                  </th>
+                  <th scope="col" className="p-4">
+                    Periodo
+                  </th>
+                  <th scope="col" className="p-4">
+                    Motivo
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((r: any) => {
+                  const starts = r.new_starts_at ?? r.old_starts_at;
+                  const ends = r.new_ends_at ?? r.old_ends_at;
+                  return (
+                    <tr key={r.id} className="border-border/60 border-b last:border-0">
+                      <td className="p-4 whitespace-nowrap">{formatDateTime(r.created_at)}</td>
+                      <td className="p-4">
+                        <Badge variant={ACTION_VARIANT[r.action] ?? "secondary"}>
+                          {ACTION_LABEL[r.action] ?? r.action}
+                        </Badge>
+                      </td>
+                      <td className="p-4">{r.actor_name}</td>
+                      <td className="p-4">{r.doctor_name}</td>
+                      <td className="p-4 whitespace-nowrap">
+                        {starts ? `${formatDateTime(starts)} → ${formatDateTime(ends)}` : "—"}
+                      </td>
+                      <td className="p-4">{r.new_reason ?? r.old_reason ?? "—"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
 
       <div className="flex flex-wrap items-center gap-3">
