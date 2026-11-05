@@ -122,10 +122,7 @@ function ReasonsPinned() {
       <div className="sticky top-[max(5rem,calc(50vh-19rem))] flex h-[38rem] items-center">
         <div className="mx-auto grid w-full max-w-6xl grid-cols-[1fr_1.15fr] items-center gap-16 px-5">
           <div>
-            <p className="text-muted-foreground text-xs font-semibold tracking-[0.2em] uppercase">
-              Perché noi
-            </p>
-            <h2 className="mt-4 max-w-md text-4xl font-semibold text-balance">
+            <h2 className="max-w-md text-4xl font-semibold text-balance">
               Perché i pazienti scelgono Longobardi
             </h2>
             <div className="relative mt-10 pl-7">
@@ -519,10 +516,6 @@ function Index() {
           <h2 id="prima-dopo-title" className="text-3xl font-semibold md:text-4xl">
             Prima e dopo
           </h2>
-          <p className="text-muted-foreground mt-3 max-w-2xl">
-            Casi reali di sbiancamento e riabilitazione estetica, pubblicati con il consenso dei
-            pazienti.
-          </p>
         </Reveal>
         <Reveal className="mt-10" variant="scale">
           <CompareSlider

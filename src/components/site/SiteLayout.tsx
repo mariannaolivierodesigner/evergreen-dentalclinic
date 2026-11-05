@@ -38,7 +38,6 @@ export function SiteLayout({
 }
 
 export function PageHeader({
-  eyebrow,
   title,
   description,
   children,
@@ -77,11 +76,6 @@ export function PageHeader({
           opacity: "calc(1 - var(--p) * 1.1)",
         }}
       >
-        {eyebrow && (
-          <p className="text-primary animate-fade-up mb-3 text-xs font-semibold tracking-[0.18em] uppercase">
-            {eyebrow}
-          </p>
-        )}
         <h1 className="max-w-3xl text-4xl font-semibold text-balance md:text-6xl">
           {(() => {
             // seconda parte del titolo in pesca (dopo la virgola, oppure le ultime due parole)

@@ -37,11 +37,7 @@ function ServiziPage() {
 
   return (
     <SiteLayout>
-      <PageHeader
-        eyebrow="Trattamenti"
-        title="Cure su misura, spiegate senza gergo"
-        description="Ogni percorso parte da una visita di valutazione con preventivo scritto. I prezzi indicati sono di partenza e vengono confermati dopo la diagnosi."
-      />
+      <PageHeader eyebrow="Trattamenti" title="Cure su misura, spiegate senza gergo" />
       <div className="mx-auto max-w-6xl px-5 py-16">
         <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s, i) => (
