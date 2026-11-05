@@ -258,15 +258,15 @@ function Index() {
           className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(11_14_13/0.85)_0%,rgb(11_14_13/0.4)_38%,transparent_70%),linear-gradient(180deg,rgb(11_14_13/0.78)_0%,rgb(11_14_13/0.4)_14%,transparent_32%)]"
         />
         <div className="absolute inset-0 mx-auto flex max-w-6xl flex-col items-center justify-end px-5 pb-20 text-center md:justify-center md:pt-16 md:pb-0">
-          <h1 className="text-[2.15rem] leading-[1.05] font-semibold whitespace-nowrap text-white sm:text-5xl lg:text-7xl">
+          <h1 className="text-[2.4rem] leading-[1.05] font-semibold whitespace-nowrap text-white sm:text-5xl lg:text-7xl">
             <Words className="font-semibold text-white" text="Liberi di" startDelay={250} />{" "}
             <Words className="font-semibold text-white" text="sorridere" startDelay={250 + 2 * 80} />
           </h1>
-          <div className="animate-fade-up mt-8 [animation-delay:1.1s]">
+          <div className="animate-fade-up mt-6 [animation-delay:1.1s] md:mt-8">
             <Button
               variant="outline"
               size="xl"
-              className="group border-white/60 bg-white/10 text-white backdrop-blur-md hover:border-white hover:bg-white/20 hover:text-white"
+              className="group h-11 gap-2 border-white/60 bg-white/10 px-5 text-[0.9375rem] text-white backdrop-blur-md hover:border-white hover:bg-white/20 hover:text-white md:h-12 md:px-6 md:text-base"
               asChild
             >
               <Link to="/servizi">

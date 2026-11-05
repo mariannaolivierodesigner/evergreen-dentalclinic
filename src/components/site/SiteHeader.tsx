@@ -93,7 +93,7 @@ export function SiteHeader() {
         <Logo
           symbolOnlyMobile
           ivoryMarkMobile={overlay}
-          className={overlay ? "text-white" : undefined}
+          className={overlay ? "text-[#ebeee7]" : undefined}
         />
 
         <nav
@@ -188,7 +188,7 @@ export function SiteHeader() {
           className={cn(
             "-mr-2 h-12 w-12 [&_svg]:!size-6",
             !compact && "md:hidden",
-            overlay && "text-white hover:bg-white/12 hover:text-white",
+            overlay && "text-[#ebeee7] hover:bg-white/12 hover:text-[#ebeee7]",
           )}
           aria-label={open ? "Chiudi menu" : "Apri menu"}
           aria-expanded={open}
