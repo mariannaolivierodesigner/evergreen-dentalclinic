@@ -260,7 +260,7 @@ function Index() {
           aria-hidden="true"
           className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(11_14_13/0.85)_0%,rgb(11_14_13/0.4)_38%,transparent_70%),linear-gradient(180deg,rgb(11_14_13/0.78)_0%,rgb(11_14_13/0.4)_14%,transparent_32%)]"
         />
-        <div className="absolute inset-0 mx-auto flex max-w-6xl flex-col items-center justify-end px-5 pb-20 text-center md:justify-center md:pt-16 md:pb-0">
+        <div className="absolute inset-0 mx-auto flex max-w-6xl flex-col items-center justify-end px-5 pb-20 text-center md:justify-center md:pt-16 md:pb-0 lg:flex-row lg:items-end lg:justify-between lg:pt-0 lg:pb-32 lg:text-left">
           <h1 className="text-[2.4rem] leading-[1.05] font-semibold whitespace-nowrap text-white sm:text-5xl lg:text-7xl">
             <Words className="font-semibold text-white" text="Liberi di" startDelay={250} />{" "}
             <Words
@@ -269,11 +269,11 @@ function Index() {
               startDelay={250 + 2 * 80}
             />
           </h1>
-          <div className="animate-fade-up mt-6 [animation-delay:1.1s] md:mt-8">
+          <div className="animate-fade-up mt-6 [animation-delay:1.1s] lg:mt-0 lg:mb-2">
             <Button
               variant="outline"
               size="xl"
-              className="group h-9 gap-1.5 [&_svg]:size-3.5 border-white/35 bg-white/5 px-4 text-[0.8125rem] font-normal text-white/90 backdrop-blur-sm hover:border-white/70 hover:bg-white/15 hover:text-white md:h-10 md:px-5 md:text-sm"
+              className="group border-white/40 bg-white/5 text-white backdrop-blur-sm hover:border-white/70 hover:bg-white/15 hover:text-white"
               asChild
             >
               <Link to="/servizi">
