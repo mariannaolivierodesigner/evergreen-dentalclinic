@@ -321,8 +321,8 @@ function Index() {
                 Cure serene, <span className="text-peach">spiegate passo dopo passo</span>
               </h2>
               <p className="text-muted-foreground mt-6 max-w-lg text-[0.95rem] leading-relaxed md:text-base">
-                Uno studio pensato anche per chi il dentista lo teme: tempi distesi, ogni passaggio
-                spiegato prima di farlo e la possibilità di fermarsi quando vuoi.
+                Uno studio pensato anche per chi il dentista lo teme: tempi distesi e ogni passaggio
+                spiegato prima di farlo.
               </p>
               <div className="mt-8">
                 <Button variant="hero" size="xl" className="sheen group" asChild>
