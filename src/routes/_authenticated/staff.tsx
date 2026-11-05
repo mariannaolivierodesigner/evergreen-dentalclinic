@@ -530,20 +530,22 @@ function StaffPage() {
               <ul className="space-y-3">
                 {(messages.data ?? []).map((m) => (
                   <li key={m.id} className="surface-card p-5">
-                    <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex items-baseline justify-between gap-3">
                       <p className="font-semibold">{m.name}</p>
-                      <span className="text-muted-foreground text-sm">{m.email}</span>
+                      <span className="text-muted-foreground shrink-0 text-xs">
+                        {formatDate(m.created_at)}
+                      </span>
+                    </div>
+                    <div className="mt-1 flex flex-col gap-0.5 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-4">
+                      <span className="text-muted-foreground break-all">{m.email}</span>
                       {m.phone ? (
                         <a
                           href={`tel:${m.phone}`}
-                          className="text-primary text-sm font-medium hover:underline"
+                          className="text-primary font-medium hover:underline"
                         >
                           {m.phone}
                         </a>
                       ) : null}
-                      <span className="text-muted-foreground ml-auto text-xs">
-                        {formatDate(m.created_at)}
-                      </span>
                     </div>
                     <p className="mt-2 text-sm leading-relaxed">{m.message}</p>
                   </li>

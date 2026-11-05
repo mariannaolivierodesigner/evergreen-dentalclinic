@@ -83,11 +83,8 @@ export function SiteHeader() {
       <div
         className={cn(
           "mx-auto flex h-18 max-w-6xl items-center justify-between px-5 py-3",
-          overlay &&
-            !compact &&
-            "h-16",
-          compact &&
-            "h-14",
+          overlay && !compact && "h-16",
+          compact && "h-14",
         )}
       >
         <Logo
@@ -186,7 +183,7 @@ export function SiteHeader() {
           variant="ghost"
           size="icon"
           className={cn(
-            "-mr-2 h-12 w-12 [&_svg]:!size-6",
+            "-mr-3 h-12 w-12 [&_svg]:!size-6",
             !compact && "md:hidden",
             overlay && "text-[#ebeee7] hover:bg-white/12 hover:text-[#ebeee7]",
           )}
@@ -261,7 +258,10 @@ function MobileDrawer({
           {isStaff && (
             <Link to="/staff" onClick={onClose} className={link}>
               Gestionale studio
-              <ArrowUpRight aria-hidden="true" className="h-5 w-5 text-[oklch(0.8_0.05_160)] opacity-70" />
+              <ArrowUpRight
+                aria-hidden="true"
+                className="h-5 w-5 text-[oklch(0.8_0.05_160)] opacity-70"
+              />
             </Link>
           )}
         </nav>

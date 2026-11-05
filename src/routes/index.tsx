@@ -191,7 +191,10 @@ function ReasonsPinned() {
                   />
                   <span className="bg-card text-foreground absolute bottom-5 left-6 grid h-14 w-14 place-items-center rounded-2xl shadow-[var(--shadow-soft)]">
                     <r.icon
-                      className={"h-6 w-6 transition-transform duration-700 " + (i === active ? "scale-110" : "scale-90")}
+                      className={
+                        "h-6 w-6 transition-transform duration-700 " +
+                        (i === active ? "scale-110" : "scale-90")
+                      }
                       aria-hidden="true"
                     />
                   </span>
@@ -260,13 +263,17 @@ function Index() {
         <div className="absolute inset-0 mx-auto flex max-w-6xl flex-col items-center justify-end px-5 pb-20 text-center md:justify-center md:pt-16 md:pb-0">
           <h1 className="text-[2.4rem] leading-[1.05] font-semibold whitespace-nowrap text-white sm:text-5xl lg:text-7xl">
             <Words className="font-semibold text-white" text="Liberi di" startDelay={250} />{" "}
-            <Words className="font-semibold text-white" text="sorridere" startDelay={250 + 2 * 80} />
+            <Words
+              className="font-semibold text-white"
+              text="sorridere"
+              startDelay={250 + 2 * 80}
+            />
           </h1>
           <div className="animate-fade-up mt-6 [animation-delay:1.1s] md:mt-8">
             <Button
               variant="outline"
               size="xl"
-              className="group h-11 gap-2 border-white/60 bg-white/10 px-5 text-[0.9375rem] text-white backdrop-blur-md hover:border-white hover:bg-white/20 hover:text-white md:h-12 md:px-6 md:text-base"
+              className="group h-9 gap-1.5 [&_svg]:size-3.5 border-white/35 bg-white/5 px-4 text-[0.8125rem] font-normal text-white/90 backdrop-blur-sm hover:border-white/70 hover:bg-white/15 hover:text-white md:h-10 md:px-5 md:text-sm"
               asChild
             >
               <Link to="/servizi">
@@ -313,7 +320,7 @@ function Index() {
               <h2 className="text-4xl leading-[1.05] font-semibold text-balance sm:text-5xl lg:text-6xl">
                 Cure serene, <span className="text-peach">spiegate passo dopo passo</span>
               </h2>
-              <p className="text-muted-foreground mt-6 max-w-lg text-lg leading-relaxed">
+              <p className="text-muted-foreground mt-6 max-w-lg text-[0.95rem] leading-relaxed md:text-base">
                 Uno studio pensato anche per chi il dentista lo teme: tempi distesi, ogni passaggio
                 spiegato prima di farlo e la possibilità di fermarsi quando vuoi.
               </p>
@@ -379,7 +386,7 @@ function Index() {
             </h2>
           </Reveal>
           <ScrollText
-            className="text-muted-foreground mt-4 max-w-2xl text-lg leading-relaxed"
+            className="text-muted-foreground mt-4 max-w-2xl text-[0.95rem] leading-relaxed md:text-base"
             text="Dalla prevenzione quotidiana alle riabilitazioni complesse, con un unico team che ti segue dall'inizio alla fine."
           />
         </div>
@@ -396,7 +403,9 @@ function Index() {
                   <div className="relative -mx-6 -mt-6 mb-9 aspect-[4/3] rounded-t-[inherit]">
                     <div className="absolute inset-0 overflow-hidden rounded-t-[inherit]">
                       <img
-                        src={TREATMENT_PHOTOS[s.slug] ?? TREATMENT_ORDER[i % TREATMENT_ORDER.length]}
+                        src={
+                          TREATMENT_PHOTOS[s.slug] ?? TREATMENT_ORDER[i % TREATMENT_ORDER.length]
+                        }
                         alt=""
                         loading="lazy"
                         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -547,8 +556,8 @@ function Index() {
               Prenota la tua visita in meno di due minuti
             </h2>
             <p className="text-muted-foreground mx-auto mt-4 max-w-xl">
-              Scegli il trattamento e l'orario che preferisci. Ricevi conferma immediata
-              e un promemoria il giorno prima.
+              Scegli il trattamento e l'orario che preferisci. Ricevi conferma immediata e un
+              promemoria il giorno prima.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Button variant="hero" size="xl" className="sheen" asChild>
