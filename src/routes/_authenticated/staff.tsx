@@ -249,7 +249,7 @@ function StaffPage() {
 
   return (
     <SiteLayout progress={false}>
-      <PageHeader title="Area riservata">
+      <PageHeader title="Area riservata" tone="dark">
         {isAdmin ? (
           <Button asChild variant="outline">
             <Link to="/staff-ruoli">

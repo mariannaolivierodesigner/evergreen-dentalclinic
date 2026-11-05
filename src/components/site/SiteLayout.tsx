@@ -42,17 +42,25 @@ export function PageHeader({
   title,
   description,
   children,
+  tone,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   children?: ReactNode;
+  tone?: "dark";
 }) {
+  const dark = tone === "dark";
   return (
     <ScrollVars
       as="section"
       mode="hero"
-      className="bg-calm border-border relative overflow-hidden border-b"
+      className={`border-border relative overflow-hidden border-b ${dark ? "band-dark" : "bg-calm"}`}
+      style={
+        dark
+          ? { background: "linear-gradient(135deg, #3a5c4b 0%, #1a2a22 42%, #0b0e0d 100%)" }
+          : undefined
+      }
     >
       <div
         aria-hidden="true"
