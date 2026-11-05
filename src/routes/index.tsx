@@ -374,10 +374,7 @@ function Index() {
       <section className="pt-20 pb-10" aria-labelledby="servizi-title">
         <div className="mx-auto max-w-6xl px-5">
           <Reveal>
-            <p className="text-primary text-xs font-semibold tracking-[0.18em] uppercase">
-              Trattamenti
-            </p>
-            <h2 id="servizi-title" className="mt-3 text-3xl font-semibold md:text-4xl">
+            <h2 id="servizi-title" className="text-3xl font-semibold md:text-4xl">
               Di cosa ci occupiamo
             </h2>
           </Reveal>
