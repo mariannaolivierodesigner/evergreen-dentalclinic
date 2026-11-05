@@ -72,12 +72,6 @@ function ChiSiamo() {
             di dodici persone, ma il criterio è rimasto lo stesso: nessun paziente esce dallo studio
             senza aver capito cosa gli succederà la volta dopo.
           </p>
-          <p className="text-muted-foreground mt-4 leading-relaxed">
-            Abbiamo progettato gli spazi con un architetto per togliere tutto ciò che rende
-            ansiogeno uno studio dentistico: rumori, odori, sale d'attesa affollate. Ogni
-            appuntamento ha una durata reale, così non ti troverai mai ad aspettare mezz'ora oltre
-            l'orario.
-          </p>
           <ul className="mt-8 space-y-4">
             {VALUES.map((v, i) => (
               <Reveal as="li" key={v.title} delay={i * 110} variant="left">
