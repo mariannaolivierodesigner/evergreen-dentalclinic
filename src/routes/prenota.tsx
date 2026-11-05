@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { PageHeader, SiteLayout } from "@/components/site/SiteLayout";
 import { ServiceIcon } from "@/components/site/ServiceIcon";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -79,7 +78,7 @@ function Prenota() {
   const [offset, setOffset] = useState(0);
   const [day, setDay] = useState<string>(isoDay(new Date()));
   const [slot, setSlot] = useState<string | null>(null);
-  const [note, setNote] = useState("");
+  const note = "";
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   // Identità paziente non ancora loggato: raccolta direttamente nel riepilogo,
@@ -358,19 +357,6 @@ function Prenota() {
                 </p>
               )}
             </div>
-
-            <div className="mt-6 max-w-xl">
-              <Label htmlFor="note">Vuoi dirci qualcosa prima della visita? (facoltativo)</Label>
-              <Textarea
-                id="note"
-                value={note}
-                maxLength={600}
-                rows={3}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="Es. ho molta ansia del dentista, preferirei una spiegazione passo passo."
-                className="mt-1.5"
-              />
-            </div>
           </section>
         </div>
 
@@ -529,12 +515,6 @@ function Prenota() {
               <div className="flex items-start justify-between gap-4 py-2.5">
                 <dt className="text-muted-foreground">Prezzo indicativo</dt>
                 <dd className="text-right font-medium">da {formatPrice(service.price_cents)}</dd>
-              </div>
-            )}
-            {note.trim() && (
-              <div className="py-2.5">
-                <dt className="text-muted-foreground">Nota per lo studio</dt>
-                <dd className="mt-1 whitespace-pre-line">{note.trim()}</dd>
               </div>
             )}
           </dl>
