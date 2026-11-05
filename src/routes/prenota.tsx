@@ -110,7 +110,6 @@ function Prenota() {
     onSuccess: () => {
       setConfirmOpen(false);
       setSlot(null);
-      setNote("");
       void queryClient.invalidateQueries({ queryKey: ["availability"] });
       void queryClient.invalidateQueries({ queryKey: ["my-appointments"] });
       void availability.refetch();
