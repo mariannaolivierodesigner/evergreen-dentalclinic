@@ -3,13 +3,20 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
+  CalendarDays,
   ChevronLeft,
   ChevronRight,
+  ClipboardList,
+  Clock,
   Download,
   FileText,
+  MessageSquare,
+  Palmtree,
   ShieldCheck,
+  Tag,
   Trash2,
   Upload,
+  Users,
 } from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader, SiteLayout } from "@/components/site/SiteLayout";
@@ -51,6 +58,9 @@ import { ServicesManager } from "@/components/site/ServicesManager";
 import { StaffCalendar } from "@/components/site/StaffCalendar";
 import { useRoles, useSession } from "@/hooks/useAuth";
 import { STATUS_LABEL, formatDate, formatPrice, formatTime, isoDay } from "@/lib/format";
+
+const tabTrigger =
+  "flex-1 gap-2 rounded-xl px-4 py-3 text-[0.95rem] font-medium data-[state=active]:font-semibold";
 
 export const Route = createFileRoute("/_authenticated/staff")({
   head: () => ({
@@ -217,33 +227,52 @@ function StaffPage() {
 
   return (
     <SiteLayout progress={false}>
-      <PageHeader
-        eyebrow="Gestionale"
-        title="Agenda dello studio"
-        description="Conferma gli appuntamenti, consulta l'anagrafica e rispondi ai messaggi in arrivo."
-      />
+      <PageHeader title="Area riservata">
+        {isAdmin ? (
+          <Button asChild variant="outline">
+            <Link to="/staff-ruoli">
+              <ShieldCheck /> Gestisci ruoli e permessi
+            </Link>
+          </Button>
+        ) : null}
+      </PageHeader>
 
       <div className="mx-auto max-w-6xl px-5 py-12">
-        {isAdmin ? (
-          <div className="mb-6">
-            <Button asChild variant="outline">
-              <Link to="/staff-ruoli">
-                <ShieldCheck /> Gestisci ruoli e permessi
-              </Link>
-            </Button>
-          </div>
-        ) : null}
         <Tabs defaultValue="agenda">
           <div className="-mx-5 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <TabsList>
-              <TabsTrigger value="agenda">Agenda</TabsTrigger>
-              <TabsTrigger value="calendario">Calendario</TabsTrigger>
-              <TabsTrigger value="pazienti">Pazienti</TabsTrigger>
-              <TabsTrigger value="documenti">Documenti</TabsTrigger>
-              <TabsTrigger value="listino">Listino</TabsTrigger>
-              <TabsTrigger value="indisponibilita">Ferie e permessi</TabsTrigger>
-              <TabsTrigger value="turni">Turni</TabsTrigger>
-              <TabsTrigger value="messaggi">Messaggi</TabsTrigger>
+            <TabsList className="h-auto w-full min-w-max justify-between gap-1 rounded-2xl p-1.5">
+              <TabsTrigger value="agenda" className={tabTrigger}>
+                <ClipboardList aria-hidden="true" className="size-[1.05rem]" />
+                Agenda
+              </TabsTrigger>
+              <TabsTrigger value="calendario" className={tabTrigger}>
+                <CalendarDays aria-hidden="true" className="size-[1.05rem]" />
+                Calendario
+              </TabsTrigger>
+              <TabsTrigger value="pazienti" className={tabTrigger}>
+                <Users aria-hidden="true" className="size-[1.05rem]" />
+                Pazienti
+              </TabsTrigger>
+              <TabsTrigger value="documenti" className={tabTrigger}>
+                <FileText aria-hidden="true" className="size-[1.05rem]" />
+                Documenti
+              </TabsTrigger>
+              <TabsTrigger value="listino" className={tabTrigger}>
+                <Tag aria-hidden="true" className="size-[1.05rem]" />
+                Listino
+              </TabsTrigger>
+              <TabsTrigger value="indisponibilita" className={tabTrigger}>
+                <Palmtree aria-hidden="true" className="size-[1.05rem]" />
+                Ferie e permessi
+              </TabsTrigger>
+              <TabsTrigger value="turni" className={tabTrigger}>
+                <Clock aria-hidden="true" className="size-[1.05rem]" />
+                Turni
+              </TabsTrigger>
+              <TabsTrigger value="messaggi" className={tabTrigger}>
+                <MessageSquare aria-hidden="true" className="size-[1.05rem]" />
+                Messaggi
+              </TabsTrigger>
             </TabsList>
           </div>
 
@@ -345,6 +374,12 @@ function StaffPage() {
                 </ul>
               )}
             </div>
+            <p className="text-muted-foreground mt-8 text-xs">
+              Fatturato indicativo di giornata:{" "}
+              {formatPrice(
+                (agenda.data ?? []).reduce((sum, a) => sum + (a.services?.price_cents ?? 0), 0),
+              )}
+            </p>
           </TabsContent>
 
           <TabsContent value="calendario" className="mt-6">
@@ -554,13 +589,6 @@ function StaffPage() {
             )}
           </TabsContent>
         </Tabs>
-
-        <p className="text-muted-foreground mt-10 text-xs">
-          Fatturato indicativo di giornata:{" "}
-          {formatPrice(
-            (agenda.data ?? []).reduce((sum, a) => sum + (a.services?.price_cents ?? 0), 0),
-          )}
-        </p>
       </div>
 
       <Dialog open={!!reminderTarget} onOpenChange={(o) => !o && setReminderTarget(null)}>

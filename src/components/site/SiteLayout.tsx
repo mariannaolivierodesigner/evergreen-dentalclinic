@@ -41,10 +41,12 @@ export function PageHeader({
   eyebrow,
   title,
   description,
+  children,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
+  children?: ReactNode;
 }) {
   return (
     <ScrollVars
@@ -82,7 +84,12 @@ export function PageHeader({
             if (!head || !tail) return <Words text={title} />;
             return (
               <>
-                <Words text={head} /> <Words className="text-peach" text={tail} startDelay={head.split(" ").length * 70} />
+                <Words text={head} />{" "}
+                <Words
+                  className="text-peach"
+                  text={tail}
+                  startDelay={head.split(" ").length * 70}
+                />
               </>
             );
           })()}
@@ -92,6 +99,7 @@ export function PageHeader({
             {description}
           </p>
         )}
+        {children && <div className="animate-fade-up mt-6 [animation-delay:500ms]">{children}</div>}
       </div>
     </ScrollVars>
   );

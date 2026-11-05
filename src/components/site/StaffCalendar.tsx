@@ -241,7 +241,7 @@ export function StaffCalendar() {
 
   return (
     <div>
-      <div className="surface-card mb-6 grid gap-4 p-5 sm:grid-cols-2 lg:grid-cols-4 print:hidden">
+      <div className="surface-card mb-6 grid gap-4 p-5 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1fr_auto] print:hidden">
         <div className="grid gap-2">
           <Label>Medico</Label>
           <Select value={doctorId} onValueChange={setDoctorId}>
@@ -281,9 +281,10 @@ export function StaffCalendar() {
             onChange={(e) => setTo(e.target.value)}
           />
         </div>
-        <div className="flex flex-wrap items-end gap-2">
+        <div className="flex flex-wrap items-end gap-2 sm:col-span-2 xl:col-span-1 xl:flex-nowrap">
           <Button
             variant="outline"
+            className="whitespace-nowrap"
             onClick={() => {
               const today = isoDay(new Date());
               setFrom(today);
@@ -294,6 +295,7 @@ export function StaffCalendar() {
           </Button>
           <Button
             variant="outline"
+            className="whitespace-nowrap"
             onClick={() => {
               const now = new Date();
               const first = isoDay(new Date(now.getFullYear(), now.getMonth(), 1));

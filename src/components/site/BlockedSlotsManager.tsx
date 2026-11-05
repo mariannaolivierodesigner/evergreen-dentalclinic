@@ -213,10 +213,7 @@ export function BlockedSlotsManager() {
   return (
     <div>
       <div className="mb-6 flex flex-wrap items-center gap-3">
-        <p className="text-muted-foreground flex-1 text-sm">
-          Ferie, permessi e chiusure: gli orari inseriti spariscono subito dalla prenotazione
-          online.
-        </p>
+        <div className="flex-1" />
         <Button onClick={openNew}>
           <Plus /> Nuovo periodo
         </Button>
