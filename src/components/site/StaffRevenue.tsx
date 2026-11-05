@@ -69,14 +69,14 @@ export function StaffRevenue() {
   return (
     <div>
       <div className="flex flex-wrap items-end gap-4">
-        <div className="bg-muted inline-flex gap-1 rounded-2xl p-1.5">
+        <div className="bg-muted flex w-full gap-1 rounded-2xl p-1.5 sm:inline-flex sm:w-auto">
           {PERIODS.map((p) => (
             <button
               key={p.id}
               type="button"
               onClick={() => setPeriod(p.id)}
               className={cn(
-                "cursor-pointer rounded-xl px-4 py-2.5 text-[0.95rem] font-medium transition-all",
+                "flex-1 cursor-pointer rounded-xl px-2 py-2.5 sm:px-4 text-[0.95rem] font-medium transition-all sm:flex-none",
                 period === p.id
                   ? "bg-background text-foreground font-semibold shadow"
                   : "text-muted-foreground hover:text-foreground",
@@ -138,9 +138,7 @@ export function StaffRevenue() {
             </li>
           ))}
         </ul>
-      ) : (
-        <p className="text-muted-foreground mt-6 text-sm">Nessuna visita in questo periodo.</p>
-      )}
+      ) : null}
     </div>
   );
 }

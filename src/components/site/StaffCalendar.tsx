@@ -311,8 +311,12 @@ export function StaffCalendar() {
       </div>
 
       <div className="mb-6 flex flex-wrap items-center gap-3 print:hidden">
-        <Tabs value={view} onValueChange={(v) => setView(v as "day" | "month")}>
-          <TabsList>
+        <Tabs
+          value={view}
+          onValueChange={(v) => setView(v as "day" | "month")}
+          className="w-full sm:w-auto"
+        >
+          <TabsList className="grid w-full grid-cols-2 sm:inline-flex sm:w-auto">
             <TabsTrigger value="day">Giorno</TabsTrigger>
             <TabsTrigger value="month">Mese</TabsTrigger>
           </TabsList>

@@ -303,7 +303,7 @@ function StaffPage() {
           </div>
 
           <TabsContent value="agenda" className="mt-6">
-            <div className="bg-muted mb-4 inline-flex gap-1 rounded-2xl p-1.5">
+            <div className="bg-muted mb-4 flex w-full gap-1 rounded-2xl p-1.5 sm:inline-flex sm:w-auto">
               {(
                 [
                   ["day", "Giorno"],
@@ -315,7 +315,7 @@ function StaffPage() {
                   key={id}
                   type="button"
                   onClick={() => setAgendaPeriod(id)}
-                  className={`cursor-pointer rounded-xl px-4 py-2 text-sm font-medium transition-all ${
+                  className={`flex-1 cursor-pointer rounded-xl px-4 py-2 text-sm font-medium transition-all sm:flex-none ${
                     agendaPeriod === id
                       ? "bg-background text-foreground font-semibold shadow"
                       : "text-muted-foreground hover:text-foreground"
@@ -334,7 +334,7 @@ function StaffPage() {
               >
                 <ChevronLeft />
               </Button>
-              <p className="font-display flex-1 text-lg font-semibold capitalize">
+              <p className="font-display flex-1 text-center text-lg font-semibold capitalize sm:text-left">
                 {agendaPeriod === "day"
                   ? formatDate(`${day}T12:00:00`)
                   : agendaPeriod === "week"
@@ -356,11 +356,7 @@ function StaffPage() {
             <div className="mt-6">
               {agenda.isPending ? (
                 <Skeleton className="h-40 w-full rounded-3xl" />
-              ) : (agenda.data ?? []).length === 0 ? (
-                <p className="text-muted-foreground text-sm">
-                  Nessun appuntamento in questo periodo.
-                </p>
-              ) : (
+              ) : (agenda.data ?? []).length === 0 ? null : (
                 <ul className="space-y-3">
                   {(agenda.data ?? []).map((a, idx, arr) => (
                     <li key={a.id} className="space-y-3 list-none">
