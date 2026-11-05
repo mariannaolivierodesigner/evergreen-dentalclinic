@@ -75,11 +75,7 @@ function Contatti() {
 
   return (
     <SiteLayout>
-      <PageHeader
-        eyebrow="Contatti"
-        title="Contatti"
-        description="Per urgenze chiama: rispondiamo negli orari di apertura e teniamo sempre uno slot libero al mattino."
-      />
+      <PageHeader eyebrow="Contatti" title="Contatti" />
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[1fr_1.1fr]">
         <Reveal variant="left" className="h-full">
           <ul className="flex h-full flex-col gap-5">
