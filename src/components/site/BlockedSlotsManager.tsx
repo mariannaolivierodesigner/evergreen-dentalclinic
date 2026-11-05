@@ -212,18 +212,15 @@ export function BlockedSlotsManager() {
 
   return (
     <div>
-      <div className="mb-6 flex flex-wrap items-center gap-3">
-        <div className="flex-1" />
-        <Button onClick={openNew}>
+      <div className="mb-6 flex sm:justify-end">
+        <Button onClick={openNew} className="w-full sm:w-auto">
           <Plus /> Nuovo periodo
         </Button>
       </div>
 
       {slots.isPending ? (
         <Skeleton className="h-40 w-full rounded-3xl" />
-      ) : (slots.data ?? []).length === 0 ? (
-        <p className="text-muted-foreground text-sm">Nessuna indisponibilità registrata.</p>
-      ) : (
+      ) : (slots.data ?? []).length === 0 ? null : (
         <ul className="space-y-3">
           {(slots.data ?? []).map((s) => (
             <li key={s.id} className="surface-card flex flex-wrap items-center gap-4 p-5">
