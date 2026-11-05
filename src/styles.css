@@ -499,7 +499,7 @@
   color: #f1f0ea;
 }
 .site-dark :is(h1, h2) {
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: -0.025em;
 }
 .site-dark ::selection {
