@@ -147,11 +147,6 @@ export function SiteHeader() {
                 <DropdownMenuItem asChild>
                   <Link to="/area-personale">Area personale</Link>
                 </DropdownMenuItem>
-                {isStaff && (
-                  <DropdownMenuItem asChild>
-                    <Link to="/staff">Gestionale studio</Link>
-                  </DropdownMenuItem>
-                )}
                 {isStaff && canInstall && (
                   <DropdownMenuItem onSelect={promptInstall}>
                     <Download aria-hidden="true" /> Installa app
@@ -195,21 +190,13 @@ export function SiteHeader() {
         </Button>
       </div>
 
-      {open && <MobileDrawer onClose={() => setOpen(false)} isStaff={isStaff} signedIn={!!user} />}
+      {open && <MobileDrawer onClose={() => setOpen(false)} signedIn={!!user} />}
     </header>
   );
 }
 
 /** Menu laterale (mobile): pannello che scorre da destra su sfondo sfocato. */
-function MobileDrawer({
-  onClose,
-  isStaff,
-  signedIn,
-}: {
-  onClose: () => void;
-  isStaff: boolean;
-  signedIn: boolean;
-}) {
+function MobileDrawer({ onClose, signedIn }: { onClose: () => void; signedIn: boolean }) {
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -255,15 +242,6 @@ function MobileDrawer({
               />
             </Link>
           ))}
-          {isStaff && (
-            <Link to="/staff" onClick={onClose} className={link}>
-              Gestionale studio
-              <ArrowUpRight
-                aria-hidden="true"
-                className="h-5 w-5 text-[oklch(0.8_0.05_160)] opacity-70"
-              />
-            </Link>
-          )}
         </nav>
         <div className="mt-auto space-y-3 pt-8">
           <Button variant="hero" className="w-full" size="lg" asChild>
