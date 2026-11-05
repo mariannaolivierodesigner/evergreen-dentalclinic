@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { toast } from "sonner";
-import { PageHeader, SiteLayout } from "@/components/site/SiteLayout";
+import { SiteLayout } from "@/components/site/SiteLayout";
 import { Reveal } from "@/components/site/Reveal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -75,8 +75,7 @@ function Contatti() {
 
   return (
     <SiteLayout>
-      <PageHeader eyebrow="Contatti" title="Contatti" />
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[1fr_1.1fr]">
+      <div className="mx-auto grid max-w-6xl gap-10 px-5 pt-28 pb-16 md:pt-36 lg:grid-cols-[1fr_1.1fr]">
         <Reveal variant="left" className="h-full">
           <ul className="flex h-full flex-col gap-5">
             {[
