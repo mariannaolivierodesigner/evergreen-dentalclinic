@@ -62,7 +62,7 @@ import { useRoles, useSession } from "@/hooks/useAuth";
 import { STATUS_LABEL, formatDate, formatPrice, formatTime, isoDay } from "@/lib/format";
 
 const tabTrigger =
-  "flex-1 gap-1.5 rounded-xl px-3 py-3 text-[0.9rem] font-medium data-[state=active]:font-semibold";
+  "flex-col gap-1.5 whitespace-normal rounded-xl px-1.5 py-3 text-center text-[0.78rem] leading-tight font-medium data-[state=active]:font-semibold sm:text-[0.85rem] lg:flex-1 lg:flex-row lg:whitespace-nowrap lg:px-3 lg:text-[0.9rem]";
 
 export const Route = createFileRoute("/_authenticated/staff")({
   head: () => ({
@@ -261,42 +261,42 @@ function StaffPage() {
 
       <div className="mx-auto max-w-6xl px-5 py-12">
         <Tabs defaultValue="agenda">
-          <div className="-mx-5 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <TabsList className="h-auto w-full min-w-max justify-between gap-1 rounded-2xl p-1.5">
+          <div className="pb-1">
+            <TabsList className="grid h-auto w-full grid-cols-3 gap-1.5 rounded-2xl p-1.5 sm:grid-cols-5 lg:flex lg:justify-between lg:gap-1">
               <TabsTrigger value="agenda" className={tabTrigger}>
-                <ClipboardList aria-hidden="true" className="size-[1.05rem]" />
+                <ClipboardList aria-hidden="true" className="size-[1.35rem] lg:size-[1.05rem]" />
                 Agenda
               </TabsTrigger>
               <TabsTrigger value="calendario" className={tabTrigger}>
-                <CalendarDays aria-hidden="true" className="size-[1.05rem]" />
+                <CalendarDays aria-hidden="true" className="size-[1.35rem] lg:size-[1.05rem]" />
                 Calendario
               </TabsTrigger>
               <TabsTrigger value="pazienti" className={tabTrigger}>
-                <Users aria-hidden="true" className="size-[1.05rem]" />
+                <Users aria-hidden="true" className="size-[1.35rem] lg:size-[1.05rem]" />
                 Pazienti
               </TabsTrigger>
               <TabsTrigger value="documenti" className={tabTrigger}>
-                <FileText aria-hidden="true" className="size-[1.05rem]" />
+                <FileText aria-hidden="true" className="size-[1.35rem] lg:size-[1.05rem]" />
                 Documenti
               </TabsTrigger>
               <TabsTrigger value="listino" className={tabTrigger}>
-                <Tag aria-hidden="true" className="size-[1.05rem]" />
+                <Tag aria-hidden="true" className="size-[1.35rem] lg:size-[1.05rem]" />
                 Listino
               </TabsTrigger>
               <TabsTrigger value="indisponibilita" className={tabTrigger}>
-                <Palmtree aria-hidden="true" className="size-[1.05rem]" />
+                <Palmtree aria-hidden="true" className="size-[1.35rem] lg:size-[1.05rem]" />
                 Ferie e permessi
               </TabsTrigger>
               <TabsTrigger value="turni" className={tabTrigger}>
-                <Clock aria-hidden="true" className="size-[1.05rem]" />
+                <Clock aria-hidden="true" className="size-[1.35rem] lg:size-[1.05rem]" />
                 Turni
               </TabsTrigger>
               <TabsTrigger value="fatturato" className={tabTrigger}>
-                <Euro aria-hidden="true" className="size-[1.05rem]" />
+                <Euro aria-hidden="true" className="size-[1.35rem] lg:size-[1.05rem]" />
                 Fatturato
               </TabsTrigger>
               <TabsTrigger value="messaggi" className={tabTrigger}>
-                <MessageSquare aria-hidden="true" className="size-[1.05rem]" />
+                <MessageSquare aria-hidden="true" className="size-[1.35rem] lg:size-[1.05rem]" />
                 Messaggi
               </TabsTrigger>
             </TabsList>
