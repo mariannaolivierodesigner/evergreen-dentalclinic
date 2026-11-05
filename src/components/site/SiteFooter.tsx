@@ -8,7 +8,7 @@ import { Logo } from "./Logo";
 export function SiteFooter({ className }: { className?: string }) {
   return (
     <footer className={cn("band-dark border-border border-t", className)}>
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-4">
+      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-2 lg:grid-cols-4">
         <div className="md:col-span-1">
           <Logo />
           <p className="text-muted-foreground mt-4 text-sm leading-relaxed">

@@ -95,7 +95,7 @@ export function SiteHeader() {
 
         <nav
           aria-label="Navigazione principale"
-          className={cn("hidden items-center gap-1", !compact && "md:flex")}
+          className={cn("hidden items-center gap-1", !compact && "lg:flex")}
         >
           {NAV.map((item) => (
             <Link
@@ -118,7 +118,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className={cn("hidden items-center gap-2", !compact && "md:flex")}>
+        <div className={cn("hidden items-center gap-2", !compact && "lg:flex")}>
           <Button variant="hero" asChild>
             <Link to="/prenota">
               <CalendarPlus aria-hidden="true" /> Prenota una visita
@@ -184,7 +184,7 @@ export function SiteHeader() {
           size="icon"
           className={cn(
             "-mr-3 h-12 w-12 [&_svg]:!size-6",
-            !compact && "md:hidden",
+            !compact && "lg:hidden",
             overlay && "text-[#ebeee7] hover:bg-white/12 hover:text-[#ebeee7]",
           )}
           aria-label={open ? "Chiudi menu" : "Apri menu"}
