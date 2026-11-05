@@ -77,7 +77,7 @@ function Contatti() {
     <SiteLayout>
       <PageHeader
         eyebrow="Contatti"
-        title="Parliamone"
+        title="Contatti"
         description="Per urgenze chiama: rispondiamo negli orari di apertura e teniamo sempre uno slot libero al mattino."
       />
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[1fr_1.1fr]">
