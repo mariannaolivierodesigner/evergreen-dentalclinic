@@ -413,11 +413,11 @@ function Prenota() {
 
           {!user && (
             <div className="border-border space-y-4 border-b pb-5">
-              <p className="text-muted-foreground text-xs">
-                {accountExists
-                  ? "Hai già un account con questa email: inserisci la password per continuare."
-                  : "Ci servono pochi dati per confermare la prenotazione — ti creiamo subito un accesso alla tua area personale, senza bisogno di scegliere una password."}
-              </p>
+              {accountExists && (
+                <p className="text-muted-foreground text-xs">
+                  Hai già un account con questa email: inserisci la password per continuare.
+                </p>
+              )}
               {!accountExists && (
                 <>
                   <div>
