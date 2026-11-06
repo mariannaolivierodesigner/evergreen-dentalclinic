@@ -75,7 +75,7 @@ function Contatti() {
 
   return (
     <SiteLayout>
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 pt-28 pb-16 md:pt-36 lg:grid-cols-[1fr_1.1fr]">
+      <div className="mx-auto grid max-w-6xl gap-10 px-5 pt-8 pb-16 md:pt-12 lg:grid-cols-[1fr_1.1fr]">
         <Reveal variant="left" className="h-full">
           <ul className="flex h-full flex-col gap-5">
             {[
