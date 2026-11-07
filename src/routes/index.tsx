@@ -256,7 +256,7 @@ function Index() {
           aria-hidden="true"
           className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(11_14_13/0.85)_0%,rgb(11_14_13/0.4)_38%,transparent_70%),linear-gradient(180deg,rgb(11_14_13/0.78)_0%,rgb(11_14_13/0.4)_14%,transparent_32%)]"
         />
-        <div className="absolute inset-0 flex items-center justify-center px-5 text-center">
+        <div className="absolute inset-0 mx-auto flex max-w-6xl flex-col items-start justify-end px-5 pb-[8svh] text-left md:justify-center md:pb-0 md:pt-16">
           <h1 className="hero-payoff text-[3.5rem] leading-[1.02] font-semibold tracking-[-0.035em] text-white sm:text-7xl lg:text-[7.5rem]">
             <span className="sr-only">Studio Dentistico Longobardi — </span>
             <span className="max-sm:block">
@@ -273,6 +273,22 @@ function Index() {
               </span>
             </span>
           </h1>
+          <div className="animate-fade-up mt-7 [animation-delay:1.5s] md:mt-9">
+            <Button
+              variant="outline"
+              size="xl"
+              className="group border-white/40 bg-white/5 text-white backdrop-blur-sm hover:border-white/70 hover:bg-white/15 hover:text-white"
+              asChild
+            >
+              <Link to="/servizi">
+                Scopri i trattamenti{" "}
+                <ArrowRight
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
+              </Link>
+            </Button>
+          </div>
         </div>
         <div
           aria-hidden="true"
