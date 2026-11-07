@@ -256,7 +256,24 @@ function Index() {
           aria-hidden="true"
           className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgb(11_14_13/0.85)_0%,rgb(11_14_13/0.4)_38%,transparent_70%),linear-gradient(180deg,rgb(11_14_13/0.78)_0%,rgb(11_14_13/0.4)_14%,transparent_32%)]"
         />
-        <h1 className="sr-only">Studio Dentistico Longobardi — Liberi di sorridere</h1>
+        <div className="absolute inset-0 flex items-center justify-center px-5 text-center">
+          <h1 className="hero-payoff text-[3.5rem] leading-[1.02] font-semibold tracking-[-0.035em] text-white sm:text-7xl lg:text-[7.5rem]">
+            <span className="sr-only">Studio Dentistico Longobardi — </span>
+            <span className="max-sm:block">
+              <span className="payoff-word" style={{ "--d": "350ms" } as React.CSSProperties}>
+                Liberi
+              </span>{" "}
+              <span className="payoff-word" style={{ "--d": "520ms" } as React.CSSProperties}>
+                di
+              </span>
+            </span>{" "}
+            <span className="max-sm:block">
+              <span className="payoff-word" style={{ "--d": "760ms" } as React.CSSProperties}>
+                sorridere
+              </span>
+            </span>
+          </h1>
+        </div>
         <div
           aria-hidden="true"
           className="animate-fade-up absolute right-5 bottom-12 grid h-12 w-12 max-sm:hidden place-items-center rounded-full border border-white/30 bg-white/15 text-white backdrop-blur-xl [animation-delay:1.4s] md:right-10 md:bottom-16"
